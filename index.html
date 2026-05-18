@@ -458,7 +458,9 @@
       </div>
 
       <div class="panel lotto-card">
-        <select id="lotto"></select>
+        <select id="lotto">
+          <option value="" selected>กรุณาเลือกหวย</option>
+        </select>
         <span class="close-time" id="closeTime">--:--</span>
       </div>
 
@@ -641,7 +643,6 @@
       placeholder.value = "";
       placeholder.textContent = "กรุณาเลือกหวย";
       placeholder.selected = true;
-      placeholder.disabled = true;
       els.lotto.appendChild(placeholder);
       state.lottos.forEach(function (lotto) {
         var opt = document.createElement("option");
