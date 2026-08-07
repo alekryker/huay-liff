@@ -1,4 +1,12 @@
-<style>
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#B91C1C">
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <title>แทงหวย</title>
+  <style>
   :root {
     color-scheme: light;
 
@@ -1734,3 +1742,1189 @@
     }
   }
 </style>
+</head>
+<body>
+  <main class="app">
+    <header class="brand">
+      <div class="brand-row">
+        <div>
+          <div class="eyebrow">LINE LIFF</div>
+          <div class="logo">ส่งโพยหวย</div>
+        </div>
+        <div class="status" id="status">กำลังโหลด</div>
+      </div>
+      <div class="notice"><span class="notice-mark"></span><span>ส่งโพยกลับเข้าแชท LINE</span></div>
+      <div class="liff-gate" id="liffGate">
+        <div class="liff-gate-text" id="liffGateText">ต้องเปิดผ่าน LINE LIFF เพื่อส่งโพยกลับเข้าแชท</div>
+        <button class="open-line" id="openLine" type="button">เปิดใน LINE</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <div class="topline">
+        <button class="back" id="close" type="button">‹ หน้าแทงหวย</button>
+        <button class="rules" type="button">กติกา &amp; วิธีเล่น</button>
+      </div>
+
+      <div class="panel lotto-card">
+        <select id="lotto">
+          <option value="" selected>กรุณาเลือกหวย</option>
+        </select>
+        <span class="close-time" id="closeTime">--:--</span>
+      </div>
+
+      <div class="panel bet-grid" id="betGrid">
+        <button class="bet-btn three" type="button" data-mode="three_top">3 ตัวบน</button>
+        <button class="bet-btn three" type="button" data-mode="three_tod">3 ตัวโต๊ด</button>
+        <button class="bet-btn three" type="button" data-mode="three_return">3 ตัวกลับ</button>
+        <button class="bet-btn two active" type="button" data-mode="two_top">2 ตัวบน</button>
+        <button class="bet-btn two" type="button" data-mode="two_bottom">2 ตัวล่าง</button>
+        <button class="bet-btn two" type="button" data-mode="two_return">2 ตัวกลับ</button>
+        <button class="bet-btn two" type="button" data-mode="two_19_gate">19 ประตู</button>
+        <button class="bet-btn two" type="button" data-mode="two_double">เลขเบิ้ล</button>
+      </div>
+
+      <div class="panel choice-panel">
+        <div class="choice-title">รายการที่เลือก</div>
+        <div class="choice-value" id="choiceValue">2 ตัวบน</div>
+      </div>
+
+      <div class="digit-title">ระบุตัวเลข</div>
+      <div class="slots" id="slots"></div>
+
+      <div class="keypad">
+        <button class="key" type="button" data-digit="1">1</button>
+        <button class="key" type="button" data-digit="2">2</button>
+        <button class="key" type="button" data-digit="3">3</button>
+        <button class="key" type="button" data-digit="4">4</button>
+        <button class="key" type="button" data-digit="5">5</button>
+        <button class="key" type="button" data-digit="6">6</button>
+        <button class="key" type="button" data-digit="7">7</button>
+        <button class="key" type="button" data-digit="8">8</button>
+        <button class="key" type="button" data-digit="9">9</button>
+        <button class="key wide" type="button" data-digit="0">0</button>
+        <button class="key danger" type="button" data-action="backspace">⌫</button>
+      </div>
+
+      <div class="entries" id="entries"></div>
+    </section>
+
+    <section class="sticky-price">
+      <div class="price-head">
+        <div class="price-title">ใส่ราคา</div>
+        <div class="count-pill" id="countPill">ไม่มี รายการ</div>
+      </div>
+      <div class="bulk-price">
+        <div class="bulk-title">ใส่ราคาเท่ากันหมด</div>
+        <div class="price-row">
+          <input class="price-input" id="priceInput" type="number" min="0" step="1" inputmode="numeric" placeholder="จำนวน">
+          <button class="quick" type="button" data-price="5">5</button>
+          <button class="quick" type="button" data-price="10">10</button>
+          <button class="quick" type="button" data-price="20">20</button>
+          <button class="quick" type="button" data-price="50">50</button>
+          <button class="quick" type="button" data-price="100">100</button>
+        </div>
+      </div>
+      <div class="totals">
+        <div class="total-box"><span class="total-label">รวมยอดแทง</span><div class="total-value" id="totalText">0.00</div></div>
+      </div>
+      <div class="submit-row">
+        <button class="submit" id="submit" type="button">ส่งโพย</button>
+        <button class="clear-all" id="clearAll" type="button">ล้างทั้งหมด</button>
+      </div>
+      <div class="error" id="error"></div>
+    </section>
+  </main>
+  <div class="loading" id="loading"><div class="spinner"></div></div>
+  <div class="confirm-overlay" id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="confirm-dialog">
+      <div class="confirm-head">
+        <div>
+          <div class="confirm-title" id="confirmTitle">ตรวจสอบโพยก่อนส่ง</div>
+          <div class="confirm-subtitle" id="confirmSubtitle">กรุณาตรวจรายการให้ถูกต้องก่อนยืนยัน</div>
+        </div>
+        <button class="confirm-close" id="confirmClose" type="button" aria-label="ปิด">×</button>
+      </div>
+      <div class="confirm-body" id="confirmBody"></div>
+      <div class="confirm-foot">
+        <button class="confirm-cancel" id="confirmCancel" type="button">แก้ไข</button>
+        <button class="confirm-submit" id="confirmSubmit" type="button">ยืนยันส่งโพย</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite">เพิ่มสำเร็จ</div>
+
+  <script>
+    var API = "https://script.google.com/macros/s/AKfycbxM3tDfZW_Xq5Du6UAp7qF3AkRwwq6qRt6x3xJ45SVVcXk_XtZJfRRVa6FvRSW5KOVWvA/exec";
+    var LIFF_ID = "2001131713-eX8LdlBi";
+    var modes = {
+      three_top: { label: "3 ตัวบน", len: 3, kind: "three", top: true, bottom: false, reverse: false },
+      three_tod: { label: "3 ตัวโต๊ด", len: 3, kind: "three", top: false, bottom: true, reverse: false },
+      three_return: { label: "3 ตัวกลับ", len: 3, kind: "three", top: true, bottom: false, reverse: true },
+      two_top: { label: "2 ตัวบน", len: 2, kind: "two", top: true, bottom: false, reverse: false },
+      two_bottom: { label: "2 ตัวล่าง", len: 2, kind: "two", top: false, bottom: true, reverse: false },
+      two_return: { label: "2 ตัวกลับ", len: 2, kind: "two", helper: true, reverse: true },
+      two_19_gate: { label: "19 ประตู", len: 1, kind: "two", helper: true, gate: true },
+      two_double: { label: "เลขเบิ้ล", len: 0, kind: "two", helper: true, instant: true }
+    };
+    var state = {
+      liffReady: false,
+      activeModes: ["two_top"],
+      digits: "",
+      entries: [],
+      lottos: [],
+      bank: null,
+      lastEntries: [],
+      pendingPayloads: null
+    };
+    var liffUrl = "";
+    var els = {};
+    var toastTimer = null;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      ["status","liffGate","liffGateText","openLine","lotto","closeTime","choiceValue","slots","entries","countPill","priceInput","totalText","submit","clearAll","error","loading","close","toast","confirmOverlay","confirmBody","confirmSubtitle","confirmClose","confirmCancel","confirmSubmit"].forEach(function (id) {
+        els[id] = document.getElementById(id);
+      });
+      document.getElementById("betGrid").addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-mode]");
+        if (btn) setMode(btn.dataset.mode);
+      });
+      document.querySelector(".keypad").addEventListener("click", function (event) {
+        var btn = event.target.closest("button");
+        if (!btn) return;
+        if (btn.dataset.digit) pushDigit(btn.dataset.digit);
+        if (btn.dataset.action === "backspace") backspace();
+      });
+      document.querySelectorAll(".quick").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          els.priceInput.value = btn.dataset.price;
+          applyPriceToAll();
+        });
+      });
+      els.priceInput.addEventListener("input", applyPriceToAll);
+      els.lotto.addEventListener("change", updateLottoCloseTime);
+      els.submit.addEventListener("click", submitOrder);
+      els.clearAll.addEventListener("click", clearAll);
+      els.close.addEventListener("click", closeWindow);
+      els.openLine.addEventListener("click", openInLine);
+      els.confirmClose.addEventListener("click", closeConfirmPopup);
+      els.confirmCancel.addEventListener("click", closeConfirmPopup);
+      els.confirmSubmit.addEventListener("click", confirmAndSendOrder);
+      els.confirmOverlay.addEventListener("click", function (event) {
+        if (event.target === els.confirmOverlay) closeConfirmPopup();
+      });
+      updateModeButtons();
+      updateChoiceText();
+      render();
+      apiGetBoot().then(initApp).catch(showError);
+    });
+
+    function apiGetBoot() {
+      return fetch(API + "?action=boot", { cache: "no-store" }).then(readApiJson);
+    }
+
+    function apiCreateLiffOrder(payload) {
+      return fetch(API, {
+        method: "POST",
+        headers: { "content-type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "createLiffOrder", payload: payload })
+      }).then(readApiJson);
+    }
+
+    function readApiJson(res) {
+      return res.text().then(function (text) {
+        var data;
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch (err) {
+          throw new Error(text && text.trim().charAt(0) === "<" ? "เชื่อมต่อ API ไม่สำเร็จ" : (text || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์"));
+        }
+        if (!res.ok || data.ok === false) throw new Error(data.error || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์");
+        return data;
+      });
+    }
+
+    function initApp(data) {
+      state.lottos = data.lottos || [];
+      state.bank = data.bank || null;
+      els.lotto.innerHTML = "";
+      var placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "กรุณาเลือกหวย";
+      placeholder.selected = true;
+      els.lotto.appendChild(placeholder);
+      state.lottos.forEach(function (lotto) {
+        var opt = document.createElement("option");
+        opt.value = lotto.name;
+        opt.textContent = lotto.name;
+        opt.dataset.closeTime = lotto.closeTime;
+        els.lotto.appendChild(opt);
+      });
+      if (!state.lottos.length) {
+        var empty = document.createElement("option");
+        empty.value = "";
+        empty.textContent = "ยังไม่มีหวยที่เปิดรับ";
+        empty.disabled = true;
+        els.lotto.appendChild(empty);
+      }
+      updateLottoCloseTime();
+      initLiff(resolveLiffId(data));
+    }
+
+    function initLiff(liffId) {
+      if (!liffId) {
+        els.status.textContent = "ตั้งค่า LIFF";
+        showLiffGate("ยังไม่พบ LIFF ID สำหรับส่งโพยกลับเข้าแชท");
+        return;
+      }
+      liffUrl = "https://liff.line.me/" + encodeURIComponent(liffId);
+      if (!window.liff || !liff.init) {
+        els.status.textContent = "LIFF ไม่พร้อม";
+        showLiffGate("LIFF SDK ยังโหลดไม่พร้อม กรุณาเปิดผ่าน LINE อีกครั้ง");
+        return;
+      }
+      liff.init({ liffId: liffId, withLoginOnExternalBrowser: true }).then(function () {
+        state.liffReady = true;
+        if (liff.isInClient()) {
+          els.status.textContent = "พร้อมส่ง";
+          hideLiffGate();
+        } else {
+          els.status.textContent = "ทดสอบ";
+          showLiffGate("ทดสอบหน้าเว็บได้ แต่ส่งโพยกลับแชทต้องเปิดผ่าน LINE LIFF");
+        }
+      }).catch(function (err) {
+        els.status.textContent = "LIFF ไม่พร้อม";
+        showLiffGate("LIFF ยังไม่พร้อม กรุณาลองเปิดผ่าน LINE อีกครั้ง");
+        showError(err);
+      });
+    }
+
+    function resolveLiffId(data) {
+      var fromBoot = data && data.liffId ? String(data.liffId) : "";
+      var fromQuery = getUrlValue("liffId") || getUrlValue("liff_id") || getUrlValue("liff");
+      var fromHash = getHashValue("liffId") || getHashValue("liff_id") || getHashValue("liff");
+      var fromReferrer = "";
+      var refMatch = (document.referrer || "").match(/liff\.line\.me\/([^/?#]+)/);
+      if (refMatch) fromReferrer = decodeURIComponent(refMatch[1]);
+      var fromStorage = readStorage("liffId");
+      var id = cleanLiffId(fromBoot || fromQuery || fromHash || fromReferrer || fromStorage || LIFF_ID);
+      if (id) writeStorage("liffId", id);
+      return id;
+    }
+
+    function cleanLiffId(value) {
+      return String(value || "").trim().replace(/^https:\/\/liff\.line\.me\//, "").split(/[?#]/)[0];
+    }
+
+    function getUrlValue(key) {
+      try {
+        return new URLSearchParams(window.location.search).get(key) || "";
+      } catch (err) {
+        return "";
+      }
+    }
+
+    function getHashValue(key) {
+      try {
+        return new URLSearchParams((window.location.hash || "").replace(/^#\??/, "")).get(key) || "";
+      } catch (err) {
+        return "";
+      }
+    }
+
+    function readStorage(key) {
+      try {
+        return window.localStorage.getItem(key) || "";
+      } catch (err) {
+        return "";
+      }
+    }
+
+    function writeStorage(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (err) {}
+    }
+
+    function showLiffGate(message) {
+      els.liffGateText.textContent = message;
+      els.liffGate.classList.add("show");
+    }
+
+    function hideLiffGate() {
+      els.liffGate.classList.remove("show");
+    }
+
+    function openInLine() {
+      if (liffUrl) window.location.href = liffUrl;
+      else showError("ยังไม่พบ LIFF URL กรุณาตรวจค่า LIFF ID");
+    }
+
+    function canSendToChat() {
+      return state.liffReady && window.liff && typeof liff.sendMessages === "function" && liff.isInClient();
+    }
+
+    function updateLottoCloseTime() {
+      var opt = els.lotto.selectedOptions[0];
+      var close = opt ? opt.dataset.closeTime : "";
+      els.closeTime.textContent = close ? ("ปิด " + close) : "--:--";
+    }
+
+    function setMode(modeKey) {
+      var mode = modes[modeKey];
+      if (!mode) return;
+
+      var selected = getActiveModes();
+      var selectedLen = getActiveLen();
+      var index = selected.indexOf(modeKey);
+
+      if (mode.helper) {
+        if (mode.instant) {
+          addInstantHelperNumbers(modeKey, selected);
+          return;
+        }
+        selectedLen = getActiveBetLen();
+        if (selectedLen !== 2) selected = ["two_top"];
+        if (!selected.some(function (key) { return !modes[key].helper && modes[key].len === 2; })) {
+          selected = ["two_top"].concat(selected.filter(function (key) { return modes[key].helper; }));
+        }
+        state.activeModes = index >= 0
+          ? selected.filter(function (key) { return key !== modeKey; })
+          : selected.concat(modeKey);
+        updateModeButtons();
+        updateChoiceText();
+        renderSlots();
+        return;
+      }
+
+      selectedLen = getActiveBetLen();
+      if (selectedLen !== mode.len) {
+        state.activeModes = [modeKey];
+        state.digits = "";
+      } else if (modeKey === "three_return") {
+        state.activeModes = ["three_return"];
+      } else if (index >= 0) {
+        if (selected.length > 1) state.activeModes = selected.filter(function (key) { return key !== modeKey; });
+      } else {
+        state.activeModes = selected.filter(function (key) { return key !== "three_return"; }).concat(modeKey);
+      }
+
+      updateModeButtons();
+      updateChoiceText();
+      renderSlots();
+    }
+
+    function getActiveModes() {
+      var selected = state.activeModes.filter(function (modeKey) { return !!modes[modeKey]; });
+      if (!selected.length) selected = ["two_top"];
+      state.activeModes = selected;
+      return selected;
+    }
+
+    function getActiveLen() {
+      var selected = getActiveModes();
+      if (selected.indexOf("two_19_gate") >= 0) return 1;
+      return getActiveBetLen();
+    }
+
+    function getActiveBetLen() {
+      var selected = getActiveModes();
+      var primary = selected.find(function (modeKey) { return !modes[modeKey].helper; }) || selected[0];
+      return modes[primary].len;
+    }
+
+    function updateModeButtons() {
+      var selected = getActiveModes();
+      document.querySelectorAll("[data-mode]").forEach(function (btn) {
+        btn.classList.toggle("active", selected.indexOf(btn.dataset.mode) >= 0);
+      });
+    }
+
+    function updateChoiceText() {
+      els.choiceValue.textContent = getActiveModes().map(function (modeKey) {
+        return modes[modeKey].label;
+      }).join(" + ");
+    }
+
+    function pushDigit(digit) {
+      var max = getActiveLen();
+      if (state.digits.length >= max) state.digits = "";
+      state.digits += digit;
+      renderSlots();
+      if (state.digits.length === max) addCurrentNumber();
+    }
+
+    function backspace() {
+      state.digits = state.digits.slice(0, -1);
+      renderSlots();
+    }
+
+    function addCurrentNumber() {
+      var selected = getActiveModes();
+      var len = getActiveLen();
+      if (state.digits.length !== len) {
+        showError("กรุณาใส่เลขให้ครบ " + len + " ตัว");
+        return;
+      }
+      var returnAssist = selected.indexOf("two_return") >= 0;
+      var gateAssist = selected.indexOf("two_19_gate") >= 0;
+      var betModes = selected.filter(function (modeKey) { return !modes[modeKey].helper; });
+      if (!betModes.length && (returnAssist || gateAssist)) betModes = ["two_top"];
+      var addedCount = 0;
+      betModes.forEach(function (modeKey) {
+        expandNumbers(state.digits, modes[modeKey], { returnAssist: returnAssist, gateAssist: gateAssist }).forEach(function (num) {
+          if (addEntry(num, modeKey, num, { allowDuplicate: gateAssist })) addedCount++;
+        });
+      });
+      state.digits = "";
+      els.error.textContent = "";
+      if (addedCount) showToast("เพิ่มสำเร็จ");
+      render();
+    }
+
+    function addInstantHelperNumbers(modeKey, selected) {
+      var helper = modes[modeKey];
+      if (!helper || !helper.instant) return;
+      var betModes = selected.filter(function (key) {
+        return modes[key] && !modes[key].helper && modes[key].kind === helper.kind;
+      });
+      if (!betModes.length) {
+        betModes = ["two_top"];
+        state.activeModes = ["two_top"];
+      }
+      var addedCount = 0;
+      betModes.forEach(function (betModeKey) {
+        getDoubleNumbers().forEach(function (num) {
+          if (addEntry(num, betModeKey, num)) addedCount++;
+        });
+      });
+      state.digits = "";
+      els.error.textContent = "";
+      if (addedCount) showToast("เพิ่มสำเร็จ");
+      updateModeButtons();
+      updateChoiceText();
+      render();
+    }
+
+    function expandNumbers(num, mode, assists) {
+      var returnAssist = assists && assists.returnAssist;
+      var gateAssist = assists && assists.gateAssist;
+      if (gateAssist && mode.len === 2) return getNineteenGateNumbers(num);
+      if (returnAssist && mode.len === 2) return unique([num, num[1] + num[0]]);
+      if (!mode.reverse) return [num];
+      if (mode.len === 2) return unique([num, num[1] + num[0]]);
+      return unique(permutations(num.split("")).map(function (parts) { return parts.join(""); }));
+    }
+
+    function getNineteenGateNumbers(digit) {
+      var out = [];
+      for (var i = 0; i <= 9; i++) {
+        var other = String(i);
+        out.push(digit + other);
+        if (other !== digit) out.push(other + digit);
+      }
+      return out;
+    }
+
+    function getDoubleNumbers() {
+      var out = [];
+      for (var i = 0; i <= 9; i++) out.push(String(i) + String(i));
+      return out;
+    }
+
+    function permutations(parts) {
+      if (parts.length <= 1) return [parts];
+      var out = [];
+      parts.forEach(function (part, index) {
+        var rest = parts.slice(0, index).concat(parts.slice(index + 1));
+        permutations(rest).forEach(function (perm) { out.push([part].concat(perm)); });
+      });
+      return out;
+    }
+
+    function unique(list) {
+      var seen = {};
+      return list.filter(function (item) {
+        if (seen[item]) return false;
+        seen[item] = true;
+        return true;
+      });
+    }
+
+    function addEntry(number, modeKey, displayNumber, options) {
+      var allowDuplicate = options && options.allowDuplicate;
+      var exists = state.entries.some(function (entry) {
+        return entry.number === number && entry.mode === modeKey;
+      });
+      if (allowDuplicate || !exists) {
+        state.entries.push({ id: Date.now() + "-" + Math.random(), number: number, displayNumber: displayNumber || number, mode: modeKey, price: Number(els.priceInput.value || 0) || 0 });
+        return true;
+      }
+      return false;
+    }
+
+    function repeatLast() {
+      if (!state.lastEntries.length) return showError("ยังไม่มีโพยเก่าในหน้านี้");
+      state.entries = state.lastEntries.map(function (entry) {
+        return { id: Date.now() + "-" + Math.random(), number: entry.number, displayNumber: entry.displayNumber || entry.number, mode: entry.mode, price: entry.price };
+      });
+      render();
+    }
+
+    function applyPriceToAll() {
+      var price = Number(els.priceInput.value || 0) || 0;
+      state.entries.forEach(function (entry) { entry.price = price; });
+      render();
+    }
+
+    function removeEntry(id) {
+      state.entries = state.entries.filter(function (entry) { return entry.id !== id; });
+      render();
+    }
+
+    function removeEntrySet(modeKey, displayNumber) {
+      state.entries = state.entries.filter(function (entry) {
+        return entry.mode !== modeKey || (entry.displayNumber || entry.number) !== displayNumber;
+      });
+      render();
+    }
+
+    function clearAll() {
+      if (state.entries.length) state.lastEntries = state.entries.slice();
+      state.entries = [];
+      state.digits = "";
+      state.pendingPayloads = null;
+      closeConfirmPopup();
+      render();
+    }
+
+    function render() {
+      renderSlots();
+      renderEntries();
+      renderTotals();
+    }
+
+    function renderSlots() {
+      var len = getActiveLen();
+      els.slots.innerHTML = "";
+      for (var i = 0; i < len; i++) {
+        var div = document.createElement("div");
+        div.className = "slot";
+        div.textContent = state.digits[i] || "";
+        els.slots.appendChild(div);
+      }
+    }
+
+    function renderEntries() {
+      els.entries.innerHTML = "";
+      var groups = groupEntries();
+      Object.keys(groups).forEach(function (modeKey) {
+        var group = document.createElement("section");
+        group.className = "entry-group";
+        var title = document.createElement("div");
+        title.className = "entry-title";
+        title.textContent = modes[modeKey].label;
+        group.appendChild(title);
+
+        var table = document.createElement("table");
+        table.className = "entry-table";
+        table.innerHTML = "<thead><tr><th>##</th><th>ตัวเลข</th><th>เงินแทง</th><th>ลบ</th></tr></thead>";
+        var body = document.createElement("tbody");
+        getVisibleEntries(modeKey, groups[modeKey]).forEach(function (entry, index) {
+          var tr = document.createElement("tr");
+          tr.innerHTML = "<td>" + (index + 1) + ".</td><td class=\"num-cell\">" + (entry.displayNumber || entry.number) + "</td><td></td><td></td>";
+          var priceInput = document.createElement("input");
+          priceInput.className = "entry-price-input";
+          priceInput.type = "number";
+          priceInput.min = "0";
+          priceInput.step = "1";
+          priceInput.inputMode = "numeric";
+          priceInput.value = entry.price || 0;
+          priceInput.addEventListener("input", function () {
+            updateEntryPrice(entry, priceInput.value);
+          });
+          tr.children[2].appendChild(priceInput);
+          var del = document.createElement("button");
+          del.className = "del";
+          del.type = "button";
+          del.textContent = "⌫";
+          del.addEventListener("click", function () {
+            if (entry.mode === "two_return") removeEntrySet(entry.mode, entry.displayNumber || entry.number);
+            else removeEntry(entry.id);
+          });
+          tr.lastChild.appendChild(del);
+          body.appendChild(tr);
+        });
+        table.appendChild(body);
+        group.appendChild(table);
+        els.entries.appendChild(group);
+      });
+    }
+
+    function updateEntryPrice(entry, value) {
+      var price = Number(value || 0) || 0;
+      if (entry.mode === "two_return") {
+        state.entries.forEach(function (item) {
+          if (item.mode === entry.mode && (item.displayNumber || item.number) === (entry.displayNumber || entry.number)) {
+            item.price = price;
+          }
+        });
+      } else {
+        entry.price = price;
+      }
+      els.error.textContent = "";
+      renderTotals();
+    }
+
+    function groupEntries() {
+      return state.entries.reduce(function (acc, entry) {
+        if (!acc[entry.mode]) acc[entry.mode] = [];
+        acc[entry.mode].push(entry);
+        return acc;
+      }, {});
+    }
+
+    function getVisibleEntries(modeKey, entries) {
+      if (modeKey !== "two_return") return entries;
+      var seen = {};
+      return entries.filter(function (entry) {
+        var key = entry.displayNumber || entry.number;
+        if (seen[key]) return false;
+        seen[key] = true;
+        return true;
+      });
+    }
+
+    function renderTotals() {
+      var total = state.entries.reduce(function (sum, entry) { return sum + (Number(entry.price || 0) || 0); }, 0);
+      els.countPill.textContent = state.entries.length ? (state.entries.length + " รายการ") : "ไม่มี รายการ";
+      els.totalText.textContent = total.toFixed(2);
+      els.submit.disabled = !state.entries.length || total <= 0;
+    }
+
+    function buildPayload() {
+      var lottoName = els.lotto.value;
+      if (!lottoName) throw new Error("กรุณาเลือกหวย");
+      if (!state.entries.length) throw new Error("กรุณาเลือกเลข");
+
+      var groups = groupEntries();
+      var payloads = [];
+      var selectedOption = els.lotto.selectedOptions && els.lotto.selectedOptions[0];
+      var closeTime = selectedOption ? (selectedOption.dataset.closeTime || "") : "";
+      Object.keys(groups).forEach(function (modeKey) {
+        var mode = modes[modeKey];
+        if (!mode || mode.helper) return;
+        var priceGroups = groupEntriesByPrice(groups[modeKey]);
+        Object.keys(priceGroups).forEach(function (priceKey) {
+          var price = Number(priceKey || 0) || 0;
+          if (price <= 0) throw new Error("กรุณาใส่ราคา");
+          var numbers = priceGroups[priceKey].map(function (entry) { return entry.number; }).join(" ");
+          payloads.push({
+            modeKey: modeKey,
+            label: mode.label,
+            lottoName: lottoName,
+            closeTime: closeTime,
+            kind: mode.kind,
+            numbers: numbers,
+            top: mode.top ? price : 0,
+            bottom: mode.bottom ? price : 0
+          });
+        });
+      });
+      return payloads;
+    }
+
+    function groupEntriesByPrice(entries) {
+      return entries.reduce(function (acc, entry) {
+        var price = String(Number(entry.price || 0) || 0);
+        if (!acc[price]) acc[price] = [];
+        acc[price].push(entry);
+        return acc;
+      }, {});
+    }
+
+    function getGroupPrice(entries) {
+      return entries.reduce(function (max, entry) {
+        return Math.max(max, Number(entry.price || 0) || 0);
+      }, 0);
+    }
+
+    function submitOrder() {
+      var payloads;
+      try {
+        payloads = buildPayload();
+      } catch (err) {
+        return showError(err);
+      }
+      state.pendingPayloads = payloads;
+      renderConfirmPopup(payloads);
+      openConfirmPopup();
+    }
+
+    function confirmAndSendOrder() {
+      var payloads = state.pendingPayloads;
+      if (!payloads || !payloads.length) {
+        closeConfirmPopup();
+        return showError("ไม่พบรายการสำหรับส่งโพย");
+      }
+      if (!canSendToChat()) {
+        closeConfirmPopup();
+        showLiffGate("ต้องเปิดผ่าน LINE LIFF ก่อนส่งโพยกลับเข้าแชท");
+        els.error.textContent = "กดปุ่ม เปิดใน LINE แล้วส่งโพยอีกครั้ง";
+        return;
+      }
+      closeConfirmPopup(false);
+      setLoading(true);
+      Promise.all(payloads.map(apiCreateLiffOrder)).then(function (results) {
+        var messages = [];
+        results.forEach(function (res) {
+          messages = messages.concat(extractLineMessages(res));
+        });
+        sendToLine(buildCombinedOrderMessages(payloads, messages));
+      }).catch(function (err) {
+        setLoading(false);
+        showError(err);
+      });
+    }
+
+    function openConfirmPopup() {
+      els.confirmOverlay.classList.add("show");
+    }
+
+    function closeConfirmPopup(clearPending) {
+      els.confirmOverlay.classList.remove("show");
+      if (clearPending !== false) state.pendingPayloads = null;
+    }
+
+    function renderConfirmPopup(payloads) {
+      els.confirmBody.innerHTML = "";
+      var lottoName = payloads[0] && payloads[0].lottoName || "";
+      var closeTime = payloads[0] && payloads[0].closeTime || "";
+      var totalCount = 0;
+      var totalAmount = 0;
+      payloads.forEach(function (item) {
+        var numbers = getPayloadNumbers(item);
+        var price = (Number(item.top || 0) || 0) + (Number(item.bottom || 0) || 0);
+        totalCount += numbers.length;
+        totalAmount += numbers.length * price;
+      });
+      els.confirmSubtitle.textContent = lottoName + (closeTime ? " • ปิด " + closeTime : "");
+
+      var summary = document.createElement("div");
+      summary.className = "confirm-summary";
+      summary.appendChild(createSummaryBox("หวย", lottoName || "-"));
+      summary.appendChild(createSummaryBox("จำนวน", totalCount + " รายการ"));
+      summary.appendChild(createSummaryBox("รวมเงิน", numberWithCommas(totalAmount) + " บาท"));
+      els.confirmBody.appendChild(summary);
+
+      payloads.forEach(function (item) {
+        var numbers = getPayloadNumbers(item);
+        var price = (Number(item.top || 0) || 0) + (Number(item.bottom || 0) || 0);
+        var subtotal = numbers.length * price;
+        var group = document.createElement("section");
+        group.className = "confirm-group";
+
+        var head = document.createElement("div");
+        head.className = "confirm-group-head";
+        var title = document.createElement("div");
+        title.textContent = item.label || getOrderFlexModeLabel({ mode: getFlexModeCode(item.modeKey) });
+        var meta = document.createElement("div");
+        meta.className = "confirm-group-meta";
+        meta.textContent = numbers.length + " ตัว • " + getPayloadPriceText(item) + " • " + numberWithCommas(subtotal) + " บาท";
+        head.appendChild(title);
+        head.appendChild(meta);
+
+        var nums = document.createElement("div");
+        nums.className = "confirm-numbers";
+        nums.textContent = numbers.join(" ");
+
+        group.appendChild(head);
+        group.appendChild(nums);
+        els.confirmBody.appendChild(group);
+      });
+    }
+
+    function createSummaryBox(label, value) {
+      var box = document.createElement("div");
+      box.className = "summary-box";
+      var labelEl = document.createElement("div");
+      labelEl.className = "summary-label";
+      labelEl.textContent = label;
+      var valueEl = document.createElement("div");
+      valueEl.className = "summary-value";
+      valueEl.textContent = value;
+      box.appendChild(labelEl);
+      box.appendChild(valueEl);
+      return box;
+    }
+
+    function getPayloadNumbers(item) {
+      return String(item && item.numbers || "").split(/\s+/).filter(Boolean);
+    }
+
+    function getPayloadPriceText(item) {
+      var top = Number(item && item.top || 0) || 0;
+      var bottom = Number(item && item.bottom || 0) || 0;
+      if (top && bottom) return "บน " + top + " / ล่าง " + bottom;
+      if (top) return top + " บาท";
+      if (bottom) return bottom + " บาท";
+      return "0 บาท";
+    }
+
+    function buildCombinedOrderMessages(payloads, fallbackMessages) {
+      var local = buildCombinedOrderFlex(payloads);
+      if (local) return [local];
+      return fallbackMessages;
+    }
+
+    function buildCombinedOrderFlex(payloads) {
+      if (!payloads || !payloads.length) return null;
+      var lottoName = payloads[0].lottoName || "โพยหวย";
+      var closeTime = payloads[0].closeTime || "";
+      var groupsByMode = groupEntries();
+      var groups = payloads.map(function (item) {
+        var numbers = String(item.numbers || "").split(/\s+/).filter(Boolean);
+        return {
+          mode: getFlexModeCode(item.modeKey),
+          top: Number(item.top || 0) || 0,
+          bottom: Number(item.bottom || 0) || 0,
+          numbers: numbers,
+          subtotal: numbers.length * ((Number(item.top || 0) || 0) + (Number(item.bottom || 0) || 0))
+        };
+      }).filter(function (group) {
+        return group.numbers.length;
+      });
+      var displayGroups = mergeOrderFlexGroups(groups);
+      var uniqueNumbers = {};
+      var totalAmount = 0;
+      var groupBlocks = [];
+
+      displayGroups.forEach(function (group, index) {
+        group.numbers.forEach(function (number) { uniqueNumbers[number] = true; });
+        totalAmount += group.subtotal;
+        groupBlocks.push({
+          type: "box",
+          layout: "horizontal",
+          margin: index === 0 ? "none" : "lg",
+          contents: [
+            { type: "text", text: getOrderFlexModeLabel(group), color: "#DC2626", size: "sm", weight: "bold", flex: 0 },
+            { type: "text", text: "บน " + group.top + " ล่าง " + group.bottom, color: "#9CA3AF", size: "xs", align: "end" }
+          ]
+        });
+        groupBlocks.push({
+          type: "box",
+          layout: "horizontal",
+          margin: "xs",
+          contents: [
+            { type: "text", text: group.numbers.length + " ตัว", color: "#9CA3AF", size: "xs", flex: 0 },
+            { type: "text", text: "= " + numberWithCommas(group.subtotal) + " บาท", color: "#6B7280", size: "xs", align: "end", weight: "bold" }
+          ]
+        });
+        groupBlocks.push({
+          type: "box",
+          layout: "vertical",
+          margin: "sm",
+          paddingAll: "10px",
+          backgroundColor: "#FEF2F2",
+          cornerRadius: "8px",
+          contents: [
+            { type: "text", text: group.numbers.join(" "), color: "#7F1D1D", weight: "bold", size: "sm", wrap: true }
+          ]
+        });
+      });
+
+      var bank = state.bank || {};
+      var bankNumber = bank.number || "5054158114";
+      var bankName = bank.name || "น.ส. ทิพวรรณ ฮุ่งเมือง";
+      var bankTitle = bank.bank || "ไทยพาณิชย์ (SCB)";
+
+      var header = {
+        type: "box",
+        layout: "vertical",
+        paddingAll: "20px",
+        backgroundColor: "#B91C1C",
+        contents: [
+          { type: "text", text: lottoName, color: "#FFFFFF", weight: "bold", size: "xl" },
+          {
+            type: "box",
+            layout: "horizontal",
+            margin: "sm",
+            contents: [
+              { type: "text", text: "ปิด " + (closeTime || "--:--"), color: "#FEE2E2", size: "sm", flex: 0 },
+              { type: "text", text: "• " + Object.keys(uniqueNumbers).length + " ตัว", color: "#FEE2E2", size: "sm", margin: "sm", flex: 0 }
+            ]
+          }
+        ]
+      };
+
+      var gradientStrip = {
+        type: "box",
+        layout: "vertical",
+        contents: [
+          { type: "box", layout: "vertical", contents: [{ type: "filler" }], height: "3px", backgroundColor: "#DC2626" },
+          { type: "box", layout: "vertical", contents: [{ type: "filler" }], height: "3px", backgroundColor: "#EF4444" },
+          { type: "box", layout: "vertical", contents: [{ type: "filler" }], height: "3px", backgroundColor: "#FCA5A5" }
+        ]
+      };
+
+      var totalBox = {
+        type: "box",
+        layout: "vertical",
+        paddingAll: "16px",
+        backgroundColor: "#FEF2F2",
+        cornerRadius: "10px",
+        contents: [
+          { type: "text", text: "ยอดโอน", color: "#DC2626", size: "sm", align: "center", weight: "bold" },
+          {
+            type: "box",
+            layout: "baseline",
+            margin: "xs",
+            justifyContent: "center",
+            contents: [
+              { type: "text", text: numberWithCommas(totalAmount), color: "#B91C1C", size: "3xl", weight: "bold", flex: 0 },
+              { type: "text", text: " บาท", color: "#DC2626", size: "md", weight: "bold", flex: 0 }
+            ]
+          }
+        ]
+      };
+
+      var accountBox = {
+        type: "box",
+        layout: "vertical",
+        margin: "md",
+        paddingAll: "14px",
+        backgroundColor: "#FFF7F7",
+        cornerRadius: "10px",
+        borderColor: "#FCA5A5",
+        borderWidth: "1px",
+        contents: [
+          { type: "text", text: "บัญชีโอน", color: "#DC2626", size: "xs", weight: "bold" },
+          { type: "text", text: bankNumber, color: "#7F1D1D", size: "xl", weight: "bold", margin: "xs", wrap: true },
+          { type: "text", text: bankTitle, color: "#991B1B", size: "sm", margin: "xs", wrap: true },
+          { type: "text", text: bankName, color: "#991B1B", size: "sm", margin: "xs", wrap: true },
+          {
+            type: "button",
+            style: "secondary",
+            height: "sm",
+            margin: "md",
+            action: {
+              type: "clipboard",
+              label: "คัดลอกเลขบัญชี",
+              clipboardText: bankNumber
+            }
+          }
+        ]
+      };
+
+      return {
+        type: "flex",
+        altText: lottoName + " รวม " + totalAmount + " บาท",
+        contents: {
+          type: "bubble",
+          size: "kilo",
+          header: header,
+          hero: gradientStrip,
+          body: {
+            type: "box",
+            layout: "vertical",
+            paddingAll: "20px",
+            backgroundColor: "#FFFFFF",
+            contents: groupBlocks.concat([
+              { type: "separator", margin: "lg", color: "#FCA5A5" },
+              totalBox,
+              accountBox
+            ])
+          }
+        }
+      };
+    }
+
+    function getFlexModeCode(modeKey) {
+      if (modeKey === "two_top") return "บ";
+      if (modeKey === "two_bottom") return "ล";
+      if (modeKey === "three_top") return "ตรง";
+      if (modeKey === "three_tod") return "โต๊ด";
+      if (modeKey === "three_return") return "3กลับ";
+      return modeKey || "";
+    }
+
+    function getOrderFlexModeLabel(group) {
+      var mode = String(group && group.mode || "");
+      if (mode === "บล") return "บนล่าง";
+      if (mode === "บลก") return "บนล่างกลับ";
+      if (mode === "บ") return "บน";
+      if (mode === "ล") return "ล่าง";
+      if (mode === "ตรง") return "3 ตรง";
+      if (mode === "ตท") return "3 ตรง+โต๊ด";
+      if (mode === "โต๊ด") return "3 โต๊ด";
+      if (mode === "ตอง") return "เลขตอง";
+      return mode;
+    }
+
+    function mergeOrderFlexGroups(groups) {
+      var merged = [];
+      var indexByKey = {};
+      groups.forEach(function (group) {
+        var key = [group.mode, group.top, group.bottom].join("|");
+        if (indexByKey[key] === undefined) {
+          indexByKey[key] = merged.length;
+          merged.push({
+            mode: group.mode,
+            top: group.top,
+            bottom: group.bottom,
+            numbers: group.numbers.slice(),
+            subtotal: group.subtotal
+          });
+          return;
+        }
+        var target = merged[indexByKey[key]];
+        target.numbers = target.numbers.concat(group.numbers);
+        target.subtotal += group.subtotal;
+      });
+      return merged;
+    }
+
+    function numberWithCommas(value) {
+      return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function sendToLine(messages) {
+      var safeMessages = mergeFlexMessages(messages.map(normalizeLineMessage).filter(Boolean));
+      if (!safeMessages.length) return showError("สร้าง Flex ไม่สำเร็จ");
+      if (!canSendToChat()) {
+        setLoading(false);
+        showLiffGate("ต้องเปิดผ่าน LINE LIFF ก่อนส่งโพยกลับเข้าแชท");
+        els.error.textContent = "กดปุ่ม เปิดใน LINE แล้วส่งโพยอีกครั้ง";
+        return;
+      }
+      ensureChatWritePermission().then(function () {
+        return liff.sendMessages(safeMessages);
+      }).then(function () {
+        state.lastEntries = state.entries.slice();
+        state.pendingPayloads = null;
+        setLoading(false);
+        liff.closeWindow();
+      }).catch(function (err) {
+        setLoading(false);
+        showError(err);
+      });
+    }
+
+    function extractLineMessages(res) {
+      if (!res) return [];
+      if (Array.isArray(res)) return res;
+      if (Array.isArray(res.messages)) return res.messages;
+      if (Array.isArray(res.flex)) return res.flex;
+      return [res.flex || res.message || res];
+    }
+
+    function normalizeLineMessage(message) {
+      if (!message) return null;
+      if (typeof message === "string") {
+        try {
+          message = JSON.parse(message);
+        } catch (err) {
+          return null;
+        }
+      }
+      if (message.type === "flex") {
+        if (!message.altText) message.altText = "โพยหวย";
+        return message;
+      }
+      if (message.contents) {
+        return { type: "flex", altText: message.altText || "โพยหวย", contents: message.contents };
+      }
+      if (message.type === "bubble" || message.type === "carousel" || message.body || message.hero) {
+        return { type: "flex", altText: "โพยหวย", contents: message };
+      }
+      return null;
+    }
+
+    function mergeFlexMessages(messages) {
+      var bubbles = [];
+      messages.forEach(function (message) {
+        var cleaned = sanitizeFlexMessage(message);
+        if (!cleaned || cleaned.type !== "flex" || !cleaned.contents) return;
+        if (cleaned.contents.type === "carousel" && Array.isArray(cleaned.contents.contents)) {
+          bubbles = bubbles.concat(cleaned.contents.contents);
+        } else {
+          bubbles.push(cleaned.contents);
+        }
+      });
+      if (!bubbles.length) return [];
+      if (bubbles.length === 1) return [{ type: "flex", altText: "โพยหวย", contents: bubbles[0] }];
+      return [{
+        type: "flex",
+        altText: "โพยหวย",
+        contents: { type: "carousel", contents: bubbles.slice(0, 12) }
+      }];
+    }
+
+    function sanitizeFlexMessage(message) {
+      if (!message) return null;
+      var clone = JSON.parse(JSON.stringify(message));
+      stripFlexDetails(clone.contents);
+      return clone;
+    }
+
+    function stripFlexDetails(node) {
+      if (!node || typeof node !== "object") return false;
+      if (Array.isArray(node.contents)) {
+        node.contents = node.contents.filter(function (child) {
+          return !stripFlexDetails(child);
+        });
+      }
+      var text = typeof node.text === "string" ? node.text : "";
+      return /รายละเอียด|จ่าย|ชนะ/.test(text);
+    }
+
+    function ensureChatWritePermission() {
+      if (!window.liff || !liff.permission || typeof liff.permission.query !== "function") {
+        return Promise.resolve();
+      }
+      return liff.permission.query("chat_message.write").then(function (permission) {
+        if (!permission || permission.state === "granted") return;
+        if (typeof liff.permission.requestAll === "function") return liff.permission.requestAll();
+        throw new Error("LIFF ยังไม่ได้เปิดสิทธิ์ chat_message.write");
+      });
+    }
+
+    function closeWindow() {
+      if (state.liffReady && liff.isInClient()) liff.closeWindow();
+      else window.close();
+    }
+
+    function setLoading(on) {
+      var total = state.entries.reduce(function (sum, entry) { return sum + (Number(entry.price || 0) || 0); }, 0);
+      els.loading.classList.toggle("show", !!on);
+      els.submit.disabled = !!on || !state.entries.length || total <= 0;
+    }
+
+    function showError(err) {
+      setLoading(false);
+      els.error.textContent = formatError(err);
+    }
+
+    function showToast(message) {
+      if (!els.toast) return;
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () {
+        els.toast.classList.remove("show");
+      }, 1400);
+    }
+
+    function formatError(err) {
+      if (!err) return "เกิดข้อผิดพลาด";
+      if (err.message) return err.message;
+      if (err.code) return "LINE error: " + err.code;
+      try {
+        return JSON.stringify(err);
+      } catch (jsonErr) {
+        return String(err);
+      }
+    }
+  </script>
+</body>
+</html>
