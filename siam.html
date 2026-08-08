@@ -27,9 +27,9 @@
       --red-soft-2: #fff7f8;
 
       --green: #22c55e;
-      --line-green: #06c755;
 
       --ink: #18181b;
+      --ink-soft: #3f3f46;
       --muted: #71717a;
 
       --line: #e4e4e7;
@@ -41,11 +41,8 @@
       --radius: 18px;
       --radius-lg: 24px;
 
-      --shadow:
-        0 8px 26px rgba(24,24,27,.06);
-
-      --shadow-red:
-        0 10px 26px rgba(201,21,45,.20);
+      --shadow: 0 8px 26px rgba(24,24,27,.06);
+      --shadow-red: 0 10px 26px rgba(201,21,45,.20);
     }
 
     * {
@@ -63,7 +60,7 @@
       background:
         radial-gradient(
           circle at top,
-          rgba(220,38,38,.06),
+          rgba(220,38,38,.055),
           transparent 330px
         ),
         var(--bg);
@@ -82,15 +79,13 @@
     }
 
     button,
-    input,
-    select {
+    input {
       font: inherit;
     }
 
     button {
       cursor: pointer;
       touch-action: manipulation;
-
       transition:
         transform .12s ease,
         opacity .15s ease,
@@ -107,8 +102,7 @@
       transform: none;
     }
 
-    input,
-    select {
+    input {
       outline: none;
     }
 
@@ -121,29 +115,35 @@
     .app {
       width: 100%;
       max-width: 680px;
-
       min-height: 100vh;
-
       margin: 0 auto;
+    }
 
-      padding-bottom:
-        calc(140px + env(safe-area-inset-bottom));
+    .screen {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .screen.active {
+      display: block;
     }
 
 
-    /* ========================================================
-       LOTTO HERO
-    ======================================================== */
+    /* =====================================================
+       หน้าเลือกหวย
+    ===================================================== */
 
-    .lotto-hero {
+    .select-header {
       position: relative;
 
       padding:
-        calc(18px + env(safe-area-inset-top))
-        14px
-        22px;
+        calc(28px + env(safe-area-inset-top))
+        18px
+        25px;
 
       overflow: hidden;
+
+      color: #fff;
 
       background:
         radial-gradient(
@@ -153,27 +153,23 @@
         ),
         radial-gradient(
           circle at 0% 100%,
-          rgba(0,0,0,.12),
-          transparent 44%
+          rgba(0,0,0,.11),
+          transparent 46%
         ),
         linear-gradient(
           140deg,
-          #771323 0%,
-          #a81730 45%,
+          #721221 0%,
+          #a81730 48%,
           #df2341 100%
         );
 
-      border-radius:
-        0
-        0
-        30px
-        30px;
+      border-radius: 0 0 30px 30px;
 
       box-shadow:
-        0 12px 32px rgba(153,27,46,.23);
+        0 12px 32px rgba(153,27,46,.21);
     }
 
-    .lotto-hero::after {
+    .select-header::after {
       content: "";
 
       position: absolute;
@@ -181,197 +177,335 @@
       width: 230px;
       height: 230px;
 
-      right: -125px;
-      bottom: -150px;
+      right: -120px;
+      bottom: -145px;
 
+      border: 34px solid rgba(255,255,255,.035);
       border-radius: 50%;
-
-      border: 35px solid rgba(255,255,255,.035);
-
-      pointer-events: none;
     }
 
-    .lotto-heading {
+    .select-eyebrow {
       position: relative;
-      z-index: 1;
+      z-index: 2;
 
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-
-      gap: 10px;
-
-      margin-bottom: 10px;
-    }
-
-    .lotto-label-small {
-      color: rgba(255,255,255,.62);
+      color: rgba(255,255,255,.63);
 
       font-size: 10px;
       font-weight: 900;
 
-      letter-spacing: .13em;
+      letter-spacing: .15em;
     }
 
-    .lotto-heading-title {
+    .select-title {
+      position: relative;
+      z-index: 2;
+
       margin-top: 3px;
 
-      color: #fff;
-
-      font-size: 25px;
+      font-size: 31px;
       font-weight: 950;
 
       line-height: 1.2;
     }
 
-    .mini-status {
-      display: none;
-    }
-
-
-    /* ========================================================
-       LOTTO SELECT
-    ======================================================== */
-
-    .lotto-select-card {
+    .select-subtitle {
       position: relative;
       z-index: 2;
 
-      padding: 7px;
+      margin-top: 6px;
 
-      border: 1px solid rgba(255,255,255,.17);
-      border-radius: 18px;
+      color: rgba(255,255,255,.72);
 
-      background: rgba(255,255,255,.13);
-
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      font-size: 12px;
+      font-weight: 700;
     }
 
-    .lotto-select-inner {
-      min-height: 67px;
+    .lotto-screen-body {
+      padding:
+        15px
+        11px
+        calc(25px + env(safe-area-inset-bottom));
+    }
+
+    .lotto-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+    }
+
+    .lotto-card-button {
+      position: relative;
+
+      width: 100%;
+      min-height: 88px;
+
+      padding: 11px 12px;
 
       display: grid;
 
       grid-template-columns:
+        55px
         minmax(0,1fr)
         auto;
 
-      gap: 8px;
-
       align-items: center;
 
-      padding:
-        8px
-        9px
-        8px
-        13px;
+      gap: 11px;
 
-      border-radius: 14px;
+      border: 1.5px solid #78be5d;
+      border-radius: 17px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f8fff4,
+          #eff9e9
+        );
+
+      color: #18181b;
+
+      text-align: left;
+
+      box-shadow:
+        0 4px 13px rgba(46,125,50,.055);
+    }
+
+    .lotto-card-button.closed {
+      opacity: .55;
+      filter: grayscale(.4);
+    }
+
+    .lotto-card-button.closed:active {
+      transform: none;
+    }
+
+    .lotto-flag {
+      width: 55px;
+      height: 43px;
+
+      overflow: hidden;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 7px;
 
       background: #fff;
 
+      font-size: 35px;
+
+      line-height: 1;
+
       box-shadow:
-        0 8px 22px rgba(80,0,15,.16);
+        0 2px 7px rgba(0,0,0,.08);
     }
 
-    .lotto-select {
+    .lotto-center {
       min-width: 0;
-      width: 100%;
+    }
 
-      border: 0;
+    .lotto-name {
+      overflow: hidden;
 
-      background: transparent;
+      color: #111;
 
-      color: var(--red-dark);
-
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 950;
 
       line-height: 1.3;
+
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
-    .lotto-select:disabled {
-      opacity: 1;
+    .lotto-close-text {
+      margin-top: 5px;
 
-      color: var(--red-dark);
+      color: #3f3f46;
 
-      -webkit-text-fill-color: var(--red-dark);
+      font-size: 12px;
+      font-weight: 700;
+
+      font-variant-numeric: tabular-nums;
     }
 
-    .close-block {
-      min-width: 78px;
+    .lotto-right {
+      min-width: 83px;
 
       display: grid;
 
       justify-items: end;
 
-      gap: 3px;
+      gap: 6px;
     }
 
-    .close-time {
-      min-height: 33px;
+    .lotto-date {
+      color: #3f3f46;
 
-      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 700;
 
-      display: inline-flex;
+      white-space: nowrap;
 
-      align-items: center;
-      justify-content: center;
+      font-variant-numeric: tabular-nums;
+    }
 
-      border-radius: 999px;
+    .lotto-countdown {
+      color: #53b632;
 
-      background:
-        linear-gradient(
-          135deg,
-          #b4142c,
-          #e11d3c
-        );
+      font-size: 13px;
+      font-weight: 900;
+
+      white-space: nowrap;
+
+      font-variant-numeric: tabular-nums;
+    }
+
+    .lotto-countdown.closed {
+      color: #dc2626;
+    }
+
+    .lotto-empty {
+      padding: 35px 20px;
+
+      border: 1px dashed #d4d4d8;
+      border-radius: 18px;
+
+      background: #fff;
+
+      color: #a1a1aa;
+
+      text-align: center;
+
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+
+    /* =====================================================
+       Header หน้าการแทง
+    ===================================================== */
+
+    .selected-header {
+      position: sticky;
+      top: 0;
+
+      z-index: 45;
+
+      padding:
+        calc(12px + env(safe-area-inset-top))
+        12px
+        12px;
 
       color: #fff;
 
-      font-size: 10px;
-      font-weight: 900;
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(255,255,255,.15),
+          transparent 38%
+        ),
+        linear-gradient(
+          135deg,
+          #701524,
+          #b41630
+        );
 
-      white-space: nowrap;
+      box-shadow:
+        0 8px 25px rgba(153,27,46,.20);
     }
 
-    .countdown {
-      color: var(--green);
+    .selected-header-row {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+    }
+
+    .back-lotto {
+      width: 43px;
+      height: 43px;
+
+      flex: 0 0 auto;
+
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 13px;
+
+      background: rgba(255,255,255,.11);
+
+      color: #fff;
+
+      font-size: 29px;
+
+      line-height: 1;
+    }
+
+    .selected-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .selected-label {
+      color: rgba(255,255,255,.58);
+
+      font-size: 9px;
+      font-weight: 900;
+
+      letter-spacing: .08em;
+    }
+
+    .selected-name {
+      margin-top: 2px;
+
+      overflow: hidden;
+
+      color: #fff;
+
+      font-size: 20px;
+      font-weight: 950;
+
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .selected-meta {
+      margin-top: 4px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 6px;
+
+      color: rgba(255,255,255,.72);
 
       font-size: 10px;
-      font-weight: 900;
+      font-weight: 800;
+    }
+
+    .selected-countdown {
+      color: #86efac;
+
+      font-weight: 950;
 
       font-variant-numeric: tabular-nums;
-
-      white-space: nowrap;
     }
 
-
-    /* ========================================================
-       LIFF GATE
-    ======================================================== */
-
     .liff-gate {
-      position: relative;
-      z-index: 2;
-
       display: none;
 
       margin-top: 9px;
 
-      padding: 10px;
+      padding: 9px;
 
       align-items: center;
       justify-content: space-between;
 
-      gap: 9px;
-
-      border-radius: 14px;
-
-      background: rgba(0,0,0,.17);
+      gap: 8px;
 
       border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+
+      background: rgba(0,0,0,.16);
     }
 
     .liff-gate.show {
@@ -379,56 +513,46 @@
     }
 
     .liff-gate-text {
-      color: #fff;
-
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 750;
 
       line-height: 1.4;
     }
 
     .open-line {
-      min-height: 39px;
+      min-height: 37px;
 
       flex: 0 0 auto;
 
-      padding: 6px 12px;
+      padding: 6px 11px;
 
       border: 0;
-      border-radius: 11px;
+      border-radius: 10px;
 
       background: #06c755;
 
       color: #fff;
 
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 900;
     }
 
 
-    /* ========================================================
+    /* =====================================================
        CONTENT
-    ======================================================== */
+    ===================================================== */
 
-    .content {
+    .bet-content {
       padding:
-        13px
+        12px
         11px
-        18px;
+        calc(140px + env(safe-area-inset-bottom));
     }
 
 
-    /* ========================================================
+    /* =====================================================
        MODE
-    ======================================================== */
-
-    .mode-sticky {
-      position: sticky;
-
-      top: calc(7px + env(safe-area-inset-top));
-
-      z-index: 30;
-    }
+    ===================================================== */
 
     .mode-tabs {
       padding: 4px;
@@ -440,16 +564,12 @@
 
       gap: 3px;
 
-      border: 1px solid rgba(228,228,231,.9);
+      border: 1px solid var(--line);
       border-radius: 17px;
 
-      background: rgba(255,255,255,.95);
+      background: #fff;
 
-      box-shadow:
-        0 7px 22px rgba(0,0,0,.07);
-
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
     }
 
     .mode-btn {
@@ -475,7 +595,7 @@
       background:
         linear-gradient(
           145deg,
-          #aa1328,
+          #ab1328,
           #e11d3b
         );
 
@@ -486,9 +606,9 @@
     }
 
 
-    /* ========================================================
+    /* =====================================================
        PANEL
-    ======================================================== */
+    ===================================================== */
 
     .panel {
       margin-top: 11px;
@@ -505,6 +625,7 @@
 
     .panel-head {
       display: flex;
+
       align-items: center;
       justify-content: space-between;
 
@@ -512,8 +633,6 @@
     }
 
     .panel-title {
-      color: #18181b;
-
       font-size: 17px;
       font-weight: 950;
     }
@@ -542,11 +661,6 @@
 
       line-height: 1.4;
     }
-
-
-    /* ========================================================
-       NUMBER INPUT
-    ======================================================== */
 
     .number-input-wrap {
       position: relative;
@@ -611,16 +725,16 @@
 
       color: var(--red-main);
 
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 950;
 
       pointer-events: none;
     }
 
 
-    /* ========================================================
+    /* =====================================================
        PREVIEW
-    ======================================================== */
+    ===================================================== */
 
     .preview {
       margin-top: 14px;
@@ -628,6 +742,7 @@
 
     .preview-head {
       display: flex;
+
       align-items: center;
       justify-content: space-between;
 
@@ -719,10 +834,14 @@
       cursor: default;
     }
 
+    .number-chip.locked:active {
+      transform: none;
+    }
 
-    /* ========================================================
+
+    /* =====================================================
        TOOLS
-    ======================================================== */
+    ===================================================== */
 
     .tools {
       margin-top: 11px;
@@ -770,9 +889,9 @@
     }
 
 
-    /* ========================================================
+    /* =====================================================
        PRICE
-    ======================================================== */
+    ===================================================== */
 
     .price-section {
       margin-top: 16px;
@@ -860,11 +979,6 @@
       font-weight: 850;
     }
 
-
-    /* ========================================================
-       LIVE TOTAL
-    ======================================================== */
-
     .live-total {
       margin-top: 9px;
 
@@ -873,6 +987,7 @@
       padding: 8px 12px;
 
       display: flex;
+
       align-items: center;
       justify-content: space-between;
 
@@ -903,11 +1018,6 @@
 
       font-variant-numeric: tabular-nums;
     }
-
-
-    /* ========================================================
-       ADD BILL
-    ======================================================== */
 
     .add-bill {
       width: 100%;
@@ -955,21 +1065,19 @@
     }
 
 
-    /* ========================================================
+    /* =====================================================
        BILLS
-    ======================================================== */
+    ===================================================== */
 
     .bills-section {
       margin-top: 13px;
     }
 
     .bills-head {
-      padding:
-        0
-        2px
-        7px;
+      padding: 0 2px 7px;
 
       display: flex;
+
       align-items: center;
       justify-content: space-between;
 
@@ -1025,6 +1133,7 @@
       padding: 10px 12px;
 
       display: flex;
+
       align-items: center;
       justify-content: space-between;
 
@@ -1110,9 +1219,9 @@
     }
 
 
-    /* ========================================================
+    /* =====================================================
        BOTTOM
-    ======================================================== */
+    ===================================================== */
 
     .bottom-bar {
       position: fixed;
@@ -1149,6 +1258,7 @@
       padding: 8px 12px;
 
       display: flex;
+
       align-items: center;
       justify-content: space-between;
 
@@ -1229,9 +1339,9 @@
     }
 
 
-    /* ========================================================
+    /* =====================================================
        CONFIRM
-    ======================================================== */
+    ===================================================== */
 
     .confirm-overlay {
       position: fixed;
@@ -1267,11 +1377,7 @@
         minmax(0,1fr)
         auto;
 
-      border-radius:
-        24px
-        24px
-        0
-        0;
+      border-radius: 24px 24px 0 0;
 
       background: #fff;
 
@@ -1283,6 +1389,7 @@
       padding: 16px;
 
       display: flex;
+
       align-items: flex-start;
       justify-content: space-between;
 
@@ -1385,6 +1492,7 @@
       padding: 9px 11px;
 
       display: flex;
+
       align-items: center;
       justify-content: space-between;
 
@@ -1478,9 +1586,9 @@
     }
 
 
-    /* ========================================================
-       LOADING
-    ======================================================== */
+    /* =====================================================
+       LOADING + TOAST
+    ===================================================== */
 
     .loading {
       position: fixed;
@@ -1489,7 +1597,6 @@
       z-index: 150;
 
       display: none;
-
       place-items: center;
 
       background: rgba(255,255,255,.72);
@@ -1511,17 +1618,8 @@
 
       border-radius: 50%;
 
-      animation:
-        spin
-        .7s
-        linear
-        infinite;
+      animation: spin .7s linear infinite;
     }
-
-
-    /* ========================================================
-       TOAST
-    ======================================================== */
 
     .toast {
       position: fixed;
@@ -1565,7 +1663,6 @@
 
 
     @media (min-width: 600px) {
-
       body {
         padding-top: 18px;
       }
@@ -1573,57 +1670,36 @@
       .app {
         overflow: hidden;
 
-        border:
-          1px
-          solid
-          var(--line);
-
-        border-radius:
-          28px
-          28px
-          0
-          0;
+        border: 1px solid var(--line);
+        border-radius: 28px 28px 0 0;
 
         background: var(--bg);
       }
 
-      .lotto-hero {
-        border-radius:
-          0
-          0
-          28px
-          28px;
+      .lotto-grid {
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
       }
 
       .confirm-overlay {
         align-items: center;
-
         padding: 18px;
       }
 
       .confirm-dialog {
         border-radius: 24px;
       }
-
     }
 
-
     @media (max-width: 380px) {
-
       .mode-btn {
         font-size: 11px;
-      }
-
-      .lotto-select {
-        font-size: 16px;
       }
 
       .confirm-summary {
         grid-template-columns: 1fr;
       }
-
     }
-
 
     @keyframes spin {
       to {
@@ -1637,105 +1713,147 @@
 
 <main class="app">
 
-  <!-- ======================================================
-       เลือกหวยบนพื้นหลังแดง
-  ======================================================= -->
 
-  <header class="lotto-hero">
+  <!-- =====================================================
+       SCREEN 1 : เลือกหวย
+  ====================================================== -->
 
-    <div class="lotto-heading">
+  <section
+    class="screen active"
+    id="lottoScreen"
+  >
 
-      <div>
+    <header class="select-header">
 
-        <div class="lotto-label-small">
-          LOTTERY
-        </div>
-
-        <div class="lotto-heading-title">
-          เลือกหวย
-        </div>
-
+      <div class="select-eyebrow">
+        LOTTERY
       </div>
 
-      <span
-        class="mini-status"
-        id="status"
-      >
-        กำลังโหลด
-      </span>
-
-    </div>
-
-
-    <div class="lotto-select-card">
-
-      <div class="lotto-select-inner">
-
-        <select
-          class="lotto-select"
-          id="lotto"
-        >
-          <option value="">
-            กำลังโหลดหวย...
-          </option>
-        </select>
-
-
-        <div class="close-block">
-
-          <div
-            class="close-time"
-            id="closeTime"
-          >
-            --:--
-          </div>
-
-          <div
-            class="countdown"
-            id="countdown"
-          >
-            --:--:--
-          </div>
-
-        </div>
-
+      <div class="select-title">
+        เลือกหวย
       </div>
 
-    </div>
+      <div class="select-subtitle">
+        เลือกรายการที่ต้องการแทง
+      </div>
+
+    </header>
 
 
-    <div
-      class="liff-gate"
-      id="liffGate"
-    >
+    <div class="lotto-screen-body">
 
       <div
-        class="liff-gate-text"
-        id="liffGateText"
-      >
-        ต้องเปิดผ่าน LINE
-      </div>
+        class="lotto-grid"
+        id="lottoGrid"
+      ></div>
 
-      <button
-        class="open-line"
-        id="openLine"
-        type="button"
+
+      <div
+        class="lotto-empty"
+        id="lottoEmpty"
+        style="display:none"
       >
-        เปิดใน LINE
-      </button>
+        ยังไม่มีหวยที่เปิดรับ
+      </div>
 
     </div>
 
-  </header>
+  </section>
 
 
-  <section class="content">
+  <!-- =====================================================
+       SCREEN 2 : แทงหวย
+  ====================================================== -->
 
-    <!-- ======================================================
-         MODE
-    ======================================================= -->
+  <section
+    class="screen"
+    id="betScreen"
+  >
 
-    <div class="mode-sticky">
+
+    <!-- หวยที่เลือก -->
+
+    <header class="selected-header">
+
+      <div class="selected-header-row">
+
+        <button
+          class="back-lotto"
+          id="backLotto"
+          type="button"
+        >
+          ‹
+        </button>
+
+
+        <div class="selected-info">
+
+          <div class="selected-label">
+            หวยที่เลือก
+          </div>
+
+          <div
+            class="selected-name"
+            id="selectedLottoName"
+          >
+            -
+          </div>
+
+          <div class="selected-meta">
+
+            <span
+              id="selectedCloseTime"
+            >
+              ปิด --:--
+            </span>
+
+            <span>
+              •
+            </span>
+
+            <span
+              class="selected-countdown"
+              id="selectedCountdown"
+            >
+              --:--:--
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="liff-gate"
+        id="liffGate"
+      >
+
+        <div
+          class="liff-gate-text"
+          id="liffGateText"
+        >
+          ต้องเปิดผ่าน LINE ก่อนส่งโพย
+        </div>
+
+        <button
+          class="open-line"
+          id="openLine"
+          type="button"
+        >
+          เปิดใน LINE
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <div class="bet-content">
+
+
+      <!-- MODE -->
 
       <div class="mode-tabs">
 
@@ -1773,249 +1891,281 @@
 
       </div>
 
-    </div>
 
+      <!-- INPUT -->
 
-    <!-- ======================================================
-         INPUT
-    ======================================================= -->
+      <section class="panel">
 
-    <section class="panel">
+        <div class="panel-head">
 
-      <div class="panel-head">
-
-        <div class="panel-title">
-          กรอกเลข
-        </div>
-
-        <div
-          class="number-count"
-          id="numberCount"
-        >
-          0 ตัว
-        </div>
-
-      </div>
-
-
-      <div
-        class="input-help"
-        id="inputHelp"
-      >
-        พิมพ์ 2 ตัว หรือวาง 82/89/80/83 ได้ทันที
-      </div>
-
-
-      <div class="number-input-wrap">
-
-        <input
-          class="number-input"
-          id="numberInput"
-          type="text"
-          inputmode="numeric"
-          autocomplete="off"
-          autocapitalize="off"
-          spellcheck="false"
-          placeholder="เช่น 82 หรือ 82/89/80/83"
-        >
-
-        <div class="input-icon">
-          123
-        </div>
-
-      </div>
-
-
-      <!-- ====================================================
-           PREVIEW
-      ===================================================== -->
-
-      <div class="preview">
-
-        <div class="preview-head">
-
-          <div class="preview-title">
-            เลขที่กำลังแทง
+          <div class="panel-title">
+            กรอกเลข
           </div>
 
+          <div
+            class="number-count"
+            id="numberCount"
+          >
+            0 ตัว
+          </div>
+
+        </div>
+
+
+        <div
+          class="input-help"
+          id="inputHelp"
+        >
+          พิมพ์ 2 ตัว หรือวางโพยได้ทันที
+        </div>
+
+
+        <div class="number-input-wrap">
+
+          <input
+            class="number-input"
+            id="numberInput"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder="เช่น 82 หรือ 82/89/80/83"
+          >
+
+          <div class="input-icon">
+            123
+          </div>
+
+        </div>
+
+
+        <!-- PREVIEW -->
+
+        <div class="preview">
+
+          <div class="preview-head">
+
+            <div class="preview-title">
+              เลขที่กำลังแทง
+            </div>
+
+            <button
+              class="clear-preview"
+              id="clearPreview"
+              type="button"
+            >
+              ล้างเลข
+            </button>
+
+          </div>
+
+
+          <div
+            class="chips empty"
+            id="chips"
+          >
+
+            <span class="empty-text">
+              ยังไม่มีเลข
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- TOOL -->
+
+        <div class="tools">
+
           <button
-            class="clear-preview"
-            id="clearPreview"
+            class="tool-btn primary"
+            id="reverseBtn"
             type="button"
           >
-            ล้างเลข
+            ↔ กลับเลข
+          </button>
+
+          <button
+            class="tool-btn"
+            id="doubleBtn"
+            type="button"
+          >
+            + เลขเบิ้ล
           </button>
 
         </div>
 
 
-        <div
-          class="chips empty"
-          id="chips"
-        >
+        <!-- PRICE -->
 
-          <span class="empty-text">
-            ยังไม่มีเลข
-          </span>
+        <div class="price-section">
 
-        </div>
-
-      </div>
-
-
-      <!-- ====================================================
-           TOOLS
-      ===================================================== -->
-
-      <div class="tools">
-
-        <button
-          class="tool-btn primary"
-          id="reverseBtn"
-          type="button"
-        >
-          ↔ กลับเลข
-        </button>
-
-
-        <button
-          class="tool-btn"
-          id="doubleBtn"
-          type="button"
-        >
-          + เลขเบิ้ล
-        </button>
-
-      </div>
-
-
-      <!-- ====================================================
-           PRICE
-      ===================================================== -->
-
-      <div class="price-section">
-
-        <div class="price-title">
-          ใส่ราคา
-        </div>
-
-
-        <div
-          class="price-grid"
-          id="priceGrid"
-        >
-
-          <div class="price-field">
-
-            <label
-              class="price-label"
-              id="priceLabelA"
-            >
-              บน
-            </label>
-
-            <input
-              class="price-input"
-              id="priceA"
-              type="number"
-              min="0"
-              step="1"
-              inputmode="numeric"
-              placeholder="0"
-            >
-
+          <div class="price-title">
+            ใส่ราคา
           </div>
 
 
           <div
-            class="price-field"
-            id="priceFieldB"
+            class="price-grid"
+            id="priceGrid"
           >
 
-            <label
-              class="price-label"
-              id="priceLabelB"
-            >
-              ล่าง
-            </label>
+            <div class="price-field">
 
-            <input
-              class="price-input"
-              id="priceB"
-              type="number"
-              min="0"
-              step="1"
-              inputmode="numeric"
-              placeholder="0"
+              <label
+                class="price-label"
+                id="priceLabelA"
+              >
+                บน
+              </label>
+
+              <input
+                class="price-input"
+                id="priceA"
+                type="number"
+                min="0"
+                step="1"
+                inputmode="numeric"
+                placeholder="0"
+              >
+
+            </div>
+
+
+            <div
+              class="price-field"
+              id="priceFieldB"
             >
+
+              <label
+                class="price-label"
+                id="priceLabelB"
+              >
+                ล่าง
+              </label>
+
+              <input
+                class="price-input"
+                id="priceB"
+                type="number"
+                min="0"
+                step="1"
+                inputmode="numeric"
+                placeholder="0"
+              >
+
+            </div>
 
           </div>
 
+
+          <div class="live-total">
+
+            <div class="live-total-label">
+              ยอดรายการนี้
+            </div>
+
+            <div
+              class="live-total-value"
+              id="liveTotal"
+            >
+              0 บาท
+            </div>
+
+          </div>
+
+
+          <button
+            class="add-bill"
+            id="addBill"
+            type="button"
+            disabled
+          >
+            เพิ่มบิล
+          </button>
+
+
+          <div
+            class="error"
+            id="error"
+          ></div>
+
         </div>
 
+      </section>
 
-        <div class="live-total">
 
-          <div class="live-total-label">
-            ยอดรายการนี้
+      <!-- BILL -->
+
+      <section class="bills-section">
+
+        <div class="bills-head">
+
+          <div class="bills-title">
+            รายการบิล
           </div>
 
           <div
-            class="live-total-value"
-            id="liveTotal"
+            class="bills-count"
+            id="billsCount"
           >
-            0 บาท
+            0 บิล
           </div>
 
         </div>
 
 
-        <button
-          class="add-bill"
-          id="addBill"
-          type="button"
-          disabled
-        >
-          เพิ่มบิล
-        </button>
-
-
         <div
-          class="error"
-          id="error"
+          class="bill-list"
+          id="billList"
         ></div>
 
-      </div>
+      </section>
 
-    </section>
+    </div>
 
 
-    <!-- ======================================================
-         BILL
-    ======================================================= -->
+    <!-- FIXED BOTTOM -->
 
-    <section class="bills-section">
+    <section class="bottom-bar">
 
-      <div class="bills-head">
+      <div class="grand-total">
 
-        <div class="bills-title">
-          รายการบิล
+        <div class="grand-label">
+          รวมยอดแทงทั้งหมด
         </div>
 
         <div
-          class="bills-count"
-          id="billsCount"
+          class="grand-value"
+          id="grandTotal"
         >
-          0 บิล
+          0 บาท
         </div>
 
       </div>
 
 
-      <div
-        class="bill-list"
-        id="billList"
-      ></div>
+      <div class="bottom-actions">
+
+        <button
+          class="clear-bills"
+          id="clearBills"
+          type="button"
+        >
+          ล้างทั้งหมด
+        </button>
+
+        <button
+          class="submit-bills"
+          id="submitBills"
+          type="button"
+        >
+          ยืนยันโพย
+        </button>
+
+      </div>
 
     </section>
 
@@ -2024,54 +2174,9 @@
 </main>
 
 
-<!-- ========================================================
-     BOTTOM
-========================================================= -->
-
-<section class="bottom-bar">
-
-  <div class="grand-total">
-
-    <div class="grand-label">
-      รวมยอดแทงทั้งหมด
-    </div>
-
-    <div
-      class="grand-value"
-      id="grandTotal"
-    >
-      0 บาท
-    </div>
-
-  </div>
-
-
-  <div class="bottom-actions">
-
-    <button
-      class="clear-bills"
-      id="clearBills"
-      type="button"
-    >
-      ล้างทั้งหมด
-    </button>
-
-    <button
-      class="submit-bills"
-      id="submitBills"
-      type="button"
-    >
-      ยืนยันโพย
-    </button>
-
-  </div>
-
-</section>
-
-
-<!-- ========================================================
+<!-- =====================================================
      CONFIRM
-========================================================= -->
+====================================================== -->
 
 <div
   class="confirm-overlay"
@@ -2091,9 +2196,7 @@
         <div
           class="confirm-subtitle"
           id="confirmSubtitle"
-        >
-          ตรวจเลขและยอดก่อนส่งเข้า LINE
-        </div>
+        ></div>
 
       </div>
 
@@ -2124,7 +2227,6 @@
       >
         แก้ไข
       </button>
-
 
       <button
         class="confirm-submit"
@@ -2159,9 +2261,9 @@
 
 <script>
 
-  /* =========================================================
+  /* =====================================================
      CONFIG
-  ========================================================= */
+  ====================================================== */
 
   var API =
     "https://script.google.com/macros/s/AKfycbxM3tDfZW_Xq5Du6UAp7qF3AkRwwq6qRt6x3xJ45SVVcXk_XtZJfRRVa6FvRSW5KOVWvA/exec";
@@ -2174,114 +2276,58 @@
   var MODES = {
 
     two: {
-
-      label:
-        "2 ตัว",
-
-      len:
-        2,
-
-      reverse:
-        true,
-
-      double:
-        true,
-
-      priceA:
-        "บน",
-
-      priceB:
-        "ล่าง"
-
+      label: "2 ตัว",
+      len: 2,
+      reverse: true,
+      double: true,
+      priceA: "บน",
+      priceB: "ล่าง"
     },
-
 
     three: {
-
-      label:
-        "3 ตัว",
-
-      len:
-        3,
-
-      reverse:
-        true,
-
-      double:
-        false,
-
-      priceA:
-        "ตรง",
-
-      priceB:
-        "โต๊ด"
-
+      label: "3 ตัว",
+      len: 3,
+      reverse: true,
+      double: false,
+      priceA: "ตรง",
+      priceB: "โต๊ด"
     },
-
 
     six: {
-
-      label:
-        "6 กลับ",
-
-      len:
-        3,
-
-      reverse:
-        false,
-
-      double:
-        false,
-
-      priceA:
-        "บนตรง",
-
-      priceB:
-        null
-
+      label: "6 กลับ",
+      len: 3,
+      reverse: false,
+      double: false,
+      priceA: "บนตรง",
+      priceB: null
     },
 
-
     gate19: {
-
-      label:
-        "19 ประตู",
-
-      len:
-        1,
-
-      reverse:
-        false,
-
-      double:
-        false,
-
-      priceA:
-        "บน",
-
-      priceB:
-        "ล่าง"
-
+      label: "19 ประตู",
+      len: 1,
+      reverse: false,
+      double: false,
+      priceA: "บน",
+      priceB: "ล่าง"
     }
 
   };
 
-
-  /* =========================================================
-     STATE
-  ========================================================= */
 
   var state = {
 
     liffReady:
       false,
 
+    selectedLotto:
+      null,
+
     mode:
       "two",
 
 
     /*
-     * เลขต้นฉบับที่ผู้ใช้กรอก
+     * ตัวเลขต้นฉบับ
      */
 
     sourceNumbers:
@@ -2289,9 +2335,8 @@
 
 
     /*
-     * เลขสำหรับแสดง
-     *
-     * ตัดเลขซ้ำได้
+     * ตัวเลขที่โชว์หน้าจอ
+     * สามารถตัดเลขซ้ำ
      */
 
     currentNumbers:
@@ -2303,7 +2348,7 @@
      *
      * ห้าม unique ข้าม source
      *
-     * ใช้ตัวนี้ในการคำนวณเงิน
+     * ใช้คำนวณเงินจริง
      */
 
     betNumbers:
@@ -2315,7 +2360,6 @@
 
     threeReverseActive:
       false,
-
 
     bills:
       [],
@@ -2340,7 +2384,7 @@
     "";
 
 
-  var countdownTimer =
+  var timer =
     null;
 
 
@@ -2348,20 +2392,26 @@
     null;
 
 
-  /* =========================================================
+  /* =====================================================
      INIT
-  ========================================================= */
+  ====================================================== */
 
   document.addEventListener(
     "DOMContentLoaded",
     function () {
 
       [
-        "status",
+        "lottoScreen",
+        "betScreen",
 
-        "lotto",
-        "closeTime",
-        "countdown",
+        "lottoGrid",
+        "lottoEmpty",
+
+        "backLotto",
+
+        "selectedLottoName",
+        "selectedCloseTime",
+        "selectedCountdown",
 
         "liffGate",
         "liffGateText",
@@ -2369,7 +2419,6 @@
 
         "numberInput",
         "inputHelp",
-
         "numberCount",
         "chips",
         "clearPreview",
@@ -2438,9 +2487,9 @@
   );
 
 
-  /* =========================================================
+  /* =====================================================
      EVENTS
-  ========================================================= */
+  ====================================================== */
 
   function bindEvents() {
 
@@ -2464,6 +2513,12 @@
 
         }
       );
+
+
+    els.backLotto.addEventListener(
+      "click",
+      backToLotto
+    );
 
 
     els.numberInput.addEventListener(
@@ -2520,18 +2575,6 @@
     );
 
 
-    els.lotto.addEventListener(
-      "change",
-      function () {
-
-        updateLottoInfo();
-
-        clearError();
-
-      }
-    );
-
-
     els.openLine.addEventListener(
       "click",
       openInLine
@@ -2575,17 +2618,16 @@
   }
 
 
-  /* =========================================================
+  /* =====================================================
      API
-  ========================================================= */
+  ====================================================== */
 
   function apiGetBoot() {
 
     return fetch(
       API + "?action=boot",
       {
-        cache:
-          "no-store"
+        cache: "no-store"
       }
     )
     .then(
@@ -2655,19 +2697,13 @@
           } catch (err) {
 
             throw new Error(
-
               text &&
-              text
-                .trim()
-                .charAt(0) === "<"
-
+              text.trim().charAt(0) === "<"
                 ? "เชื่อมต่อ API ไม่สำเร็จ"
-
                 : (
                     text ||
                     "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์"
                   )
-
             );
 
           }
@@ -2694,9 +2730,9 @@
   }
 
 
-  /* =========================================================
+  /* =====================================================
      BOOT
-  ========================================================= */
+  ====================================================== */
 
   function initBoot(
     data
@@ -2712,7 +2748,9 @@
       null;
 
 
-    renderLottos();
+    renderLottoCards();
+
+    showLottoScreen();
 
 
     initLiff(
@@ -2722,158 +2760,370 @@
   }
 
 
-  function renderLottos() {
+  /* =====================================================
+     LOTTO SELECT
+  ====================================================== */
 
-    els.lotto.innerHTML =
+  function renderLottoCards() {
+
+    els.lottoGrid.innerHTML =
       "";
-
-
-    var placeholder =
-      document.createElement(
-        "option"
-      );
-
-
-    placeholder.value =
-      "";
-
-
-    placeholder.textContent =
-      "กรุณาเลือกหวย";
-
-
-    els.lotto.appendChild(
-      placeholder
-    );
-
-
-    state.lottos.forEach(
-      function (lotto) {
-
-        var option =
-          document.createElement(
-            "option"
-          );
-
-
-        option.value =
-          lotto.name;
-
-
-        option.textContent =
-          lotto.name;
-
-
-        option.dataset.closeTime =
-          lotto.closeTime ||
-          "";
-
-
-        option.dataset.closeAt =
-          lotto.closeAt ||
-          lotto.closeDateTime ||
-          lotto.closeDatetime ||
-          "";
-
-
-        option.dataset.drawDate =
-          lotto.drawDate ||
-          lotto.date ||
-          "";
-
-
-        els.lotto.appendChild(
-          option
-        );
-
-      }
-    );
 
 
     if (
       !state.lottos.length
     ) {
 
-      var empty =
-        document.createElement(
-          "option"
-        );
+      els.lottoEmpty.style.display =
+        "block";
 
-
-      empty.value =
-        "";
-
-
-      empty.textContent =
-        "ยังไม่มีหวยที่เปิดรับ";
-
-
-      empty.disabled =
-        true;
-
-
-      els.lotto.appendChild(
-        empty
-      );
+      return;
 
     }
 
 
-    updateLottoInfo();
-
-  }
-
-
-  /* =========================================================
-     LOTTO INFO
-  ========================================================= */
-
-  function updateLottoInfo() {
-
-    var option =
-      els.lotto.selectedOptions[0];
+    els.lottoEmpty.style.display =
+      "none";
 
 
-    var closeTime =
-      option
-        ? (
-            option.dataset.closeTime ||
-            ""
-          )
-        : "";
+    state.lottos.forEach(
+      function (lotto) {
+
+        var button =
+          document.createElement(
+            "button"
+          );
 
 
-    els.closeTime.textContent =
-      closeTime
-        ? (
-            "ปิด " +
-            closeTime
-          )
-        : "--:--";
+        button.type =
+          "button";
 
 
-    startCountdown(
-      option
+        button.className =
+          "lotto-card-button";
+
+
+        var flag =
+          document.createElement(
+            "div"
+          );
+
+
+        flag.className =
+          "lotto-flag";
+
+
+        flag.textContent =
+          getLottoFlag(
+            lotto.name
+          );
+
+
+        var center =
+          document.createElement(
+            "div"
+          );
+
+
+        center.className =
+          "lotto-center";
+
+
+        var name =
+          document.createElement(
+            "div"
+          );
+
+
+        name.className =
+          "lotto-name";
+
+
+        name.textContent =
+          lotto.name;
+
+
+        var close =
+          document.createElement(
+            "div"
+          );
+
+
+        close.className =
+          "lotto-close-text";
+
+
+        close.textContent =
+          getLottoDateText(
+            lotto
+          ) +
+          " " +
+          (
+            lotto.closeTime ||
+            "--:--"
+          );
+
+
+        center.appendChild(
+          name
+        );
+
+
+        center.appendChild(
+          close
+        );
+
+
+        var right =
+          document.createElement(
+            "div"
+          );
+
+
+        right.className =
+          "lotto-right";
+
+
+        var date =
+          document.createElement(
+            "div"
+          );
+
+
+        date.className =
+          "lotto-date";
+
+
+        date.textContent =
+          getLottoDateText(
+            lotto
+          );
+
+
+        var countdown =
+          document.createElement(
+            "div"
+          );
+
+
+        countdown.className =
+          "lotto-countdown";
+
+
+        countdown._lotto =
+          lotto;
+
+
+        right.appendChild(
+          date
+        );
+
+
+        right.appendChild(
+          countdown
+        );
+
+
+        button.appendChild(
+          flag
+        );
+
+
+        button.appendChild(
+          center
+        );
+
+
+        button.appendChild(
+          right
+        );
+
+
+        button.addEventListener(
+          "click",
+          function () {
+
+            var target =
+              getLottoCloseTarget(
+                lotto
+              );
+
+
+            if (
+              target &&
+              target.getTime() <= Date.now()
+            ) {
+
+              return;
+
+            }
+
+
+            chooseLotto(
+              lotto
+            );
+
+          }
+        );
+
+
+        button._lotto =
+          lotto;
+
+
+        els.lottoGrid.appendChild(
+          button
+        );
+
+      }
     );
 
+
+    startLottoListTimer();
+
   }
 
 
-  function startCountdown(
-    option
-  ) {
+  function startLottoListTimer() {
 
     clearInterval(
-      countdownTimer
+      timer
     );
 
 
+    updateAllLottoCountdowns();
+
+
+    timer =
+      setInterval(
+        updateAllLottoCountdowns,
+        1000
+      );
+
+  }
+
+
+  function updateAllLottoCountdowns() {
+
+    document
+      .querySelectorAll(
+        ".lotto-countdown"
+      )
+      .forEach(
+        function (element) {
+
+          var lotto =
+            element._lotto;
+
+
+          if (!lotto) {
+            return;
+          }
+
+
+          var target =
+            getLottoCloseTarget(
+              lotto
+            );
+
+
+          renderCountdown(
+            element,
+            target
+          );
+
+        }
+      );
+
+
+    document
+      .querySelectorAll(
+        ".lotto-card-button"
+      )
+      .forEach(
+        function (button) {
+
+          var lotto =
+            button._lotto;
+
+
+          if (!lotto) {
+            return;
+          }
+
+
+          var target =
+            getLottoCloseTarget(
+              lotto
+            );
+
+
+          var closed =
+            !!(
+              target &&
+              target.getTime() <=
+              Date.now()
+            );
+
+
+          button.classList.toggle(
+            "closed",
+            closed
+          );
+
+        }
+      );
+
+  }
+
+
+  function chooseLotto(
+    lotto
+  ) {
+
+    state.selectedLotto =
+      lotto;
+
+
+    els.selectedLottoName.textContent =
+      lotto.name;
+
+
+    els.selectedCloseTime.textContent =
+      "ปิด " +
+      (
+        lotto.closeTime ||
+        "--:--"
+      );
+
+
+    showBetScreen();
+
+
+    clearInterval(
+      timer
+    );
+
+
+    updateSelectedCountdown();
+
+
+    timer =
+      setInterval(
+        updateSelectedCountdown,
+        1000
+      );
+
+  }
+
+
+  function updateSelectedCountdown() {
+
     if (
-      !option ||
-      !option.value
+      !state.selectedLotto
     ) {
 
-      els.countdown.textContent =
+      els.selectedCountdown.textContent =
         "--:--:--";
 
       return;
@@ -2881,40 +3131,27 @@
     }
 
 
-    updateCountdown(
-      option
+    renderCountdown(
+      els.selectedCountdown,
+      getLottoCloseTarget(
+        state.selectedLotto
+      )
     );
-
-
-    countdownTimer =
-      setInterval(
-        function () {
-
-          updateCountdown(
-            option
-          );
-
-        },
-        1000
-      );
 
   }
 
 
-  function updateCountdown(
-    option
+  function renderCountdown(
+    element,
+    target
   ) {
 
-    var target =
-      getCloseTarget(
-        option
-      );
+    if (
+      !target
+    ) {
 
-
-    if (!target) {
-
-      els.countdown.textContent =
-        "";
+      element.textContent =
+        "--:--:--";
 
       return;
 
@@ -2930,12 +3167,13 @@
       diff <= 0
     ) {
 
-      els.countdown.textContent =
+      element.textContent =
         "ปิดรับแล้ว";
 
 
-      els.countdown.style.color =
-        "#fecaca";
+      element.classList.add(
+        "closed"
+      );
 
 
       return;
@@ -2943,11 +3181,12 @@
     }
 
 
-    els.countdown.style.color =
-      "#4ade80";
+    element.classList.remove(
+      "closed"
+    );
 
 
-    var totalSeconds =
+    var seconds =
       Math.floor(
         diff / 1000
       );
@@ -2955,57 +3194,130 @@
 
     var hours =
       Math.floor(
-        totalSeconds /
-        3600
+        seconds / 3600
       );
 
 
     var minutes =
       Math.floor(
         (
-          totalSeconds %
+          seconds %
           3600
         ) /
         60
       );
 
 
-    var seconds =
-      totalSeconds %
-      60;
+    var remain =
+      seconds % 60;
 
 
-    els.countdown.textContent =
+    element.textContent =
       pad2(hours) +
       ":" +
       pad2(minutes) +
       ":" +
-      pad2(seconds);
+      pad2(remain);
 
   }
 
 
-  function getCloseTarget(
-    option
+  function showLottoScreen() {
+
+    els.betScreen.classList.remove(
+      "active"
+    );
+
+
+    els.lottoScreen.classList.add(
+      "active"
+    );
+
+
+    startLottoListTimer();
+
+
+    window.scrollTo(
+      0,
+      0
+    );
+
+  }
+
+
+  function showBetScreen() {
+
+    els.lottoScreen.classList.remove(
+      "active"
+    );
+
+
+    els.betScreen.classList.add(
+      "active"
+    );
+
+
+    window.scrollTo(
+      0,
+      0
+    );
+
+  }
+
+
+  function backToLotto() {
+
+    if (
+      state.bills.length
+    ) {
+
+      showError(
+        "กรุณาล้างบิลทั้งหมดก่อนเปลี่ยนหวย"
+      );
+
+      return;
+
+    }
+
+
+    state.selectedLotto =
+      null;
+
+
+    clearCurrent();
+
+    clearPrices();
+
+    showLottoScreen();
+
+  }
+
+
+  /* =====================================================
+     DATE
+  ====================================================== */
+
+  function getLottoCloseTarget(
+    lotto
   ) {
 
-    if (!option) {
+    if (!lotto) {
       return null;
     }
 
 
-    var closeAt =
-      String(
-        option.dataset.closeAt ||
-        ""
-      ).trim();
+    var full =
+      lotto.closeAt ||
+      lotto.closeDateTime ||
+      lotto.closeDatetime ||
+      "";
 
 
-    if (closeAt) {
+    if (full) {
 
       var parsed =
         parseDateTimeValue(
-          closeAt
+          full
         );
 
 
@@ -3016,25 +3328,27 @@
     }
 
 
+    var dateText =
+      lotto.drawDate ||
+      lotto.date ||
+      "";
+
+
     var closeTime =
+      lotto.closeTime ||
+      "";
+
+
+    var timeMatch =
       String(
-        option.dataset.closeTime ||
-        ""
-      ).trim();
-
-
-    if (!closeTime) {
-      return null;
-    }
-
-
-    var match =
-      closeTime.match(
+        closeTime
+      )
+      .match(
         /(\d{1,2}):(\d{2})/
       );
 
 
-    if (!match) {
+    if (!timeMatch) {
       return null;
     }
 
@@ -3043,19 +3357,67 @@
       new Date();
 
 
-    var target =
-      new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        Number(match[1]),
-        Number(match[2]),
-        0,
-        0
+    var day =
+      now.getDate();
+
+
+    var month =
+      now.getMonth();
+
+
+    var year =
+      now.getFullYear();
+
+
+    var dateMatch =
+      String(
+        dateText
+      )
+      .match(
+        /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/
       );
 
 
-    return target;
+    if (dateMatch) {
+
+      day =
+        Number(
+          dateMatch[1]
+        );
+
+
+      month =
+        Number(
+          dateMatch[2]
+        ) - 1;
+
+
+      year =
+        Number(
+          dateMatch[3]
+        );
+
+    }
+
+
+    return new Date(
+
+      year,
+      month,
+      day,
+
+      Number(
+        timeMatch[1]
+      ),
+
+      Number(
+        timeMatch[2]
+      ),
+
+      0,
+      0
+
+    );
 
   }
 
@@ -3092,47 +3454,191 @@
     }
 
 
-    /*
-     * DD-MM-YYYY HH:mm
-     */
-
-    var dmy =
+    var match =
       value.match(
         /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})\s+(\d{1,2}):(\d{2})/
       );
 
 
-    if (dmy) {
-
-      return new Date(
-
-        Number(dmy[3]),
-
-        Number(dmy[2]) - 1,
-
-        Number(dmy[1]),
-
-        Number(dmy[4]),
-
-        Number(dmy[5]),
-
-        0,
-
-        0
-
-      );
-
+    if (!match) {
+      return null;
     }
 
 
-    return null;
+    return new Date(
+
+      Number(match[3]),
+
+      Number(match[2]) - 1,
+
+      Number(match[1]),
+
+      Number(match[4]),
+
+      Number(match[5]),
+
+      0,
+      0
+
+    );
 
   }
 
 
-  /* =========================================================
+  function getLottoDateText(
+    lotto
+  ) {
+
+    var value =
+      lotto.drawDate ||
+      lotto.date ||
+      "";
+
+
+    if (value) {
+      return value;
+    }
+
+
+    var target =
+      getLottoCloseTarget(
+        lotto
+      );
+
+
+    if (!target) {
+      return "-";
+    }
+
+
+    return (
+      pad2(
+        target.getDate()
+      ) +
+      "-" +
+      pad2(
+        target.getMonth() + 1
+      ) +
+      "-" +
+      target.getFullYear()
+    );
+
+  }
+
+
+  /* =====================================================
+     FLAG
+  ====================================================== */
+
+  function getLottoFlag(
+    name
+  ) {
+
+    name =
+      String(
+        name || ""
+      )
+      .toLowerCase();
+
+
+    if (
+      /ฮานอย|เวียดนาม/.test(
+        name
+      )
+    ) {
+      return "🇻🇳";
+    }
+
+
+    if (
+      /ลาว/.test(
+        name
+      )
+    ) {
+      return "🇱🇦";
+    }
+
+
+    if (
+      /ดาวโจนส์|อเมริกา|usa/.test(
+        name
+      )
+    ) {
+      return "🇺🇸";
+    }
+
+
+    if (
+      /จีน/.test(
+        name
+      )
+    ) {
+      return "🇨🇳";
+    }
+
+
+    if (
+      /ฮั่งเส็ง|ฮ่องกง/.test(
+        name
+      )
+    ) {
+      return "🇭🇰";
+    }
+
+
+    if (
+      /นิเคอิ|ญี่ปุ่น/.test(
+        name
+      )
+    ) {
+      return "🇯🇵";
+    }
+
+
+    if (
+      /ไต้หวัน/.test(
+        name
+      )
+    ) {
+      return "🇹🇼";
+    }
+
+
+    if (
+      /เกาหลี/.test(
+        name
+      )
+    ) {
+      return "🇰🇷";
+    }
+
+
+    if (
+      /สิงคโปร์/.test(
+        name
+      )
+    ) {
+      return "🇸🇬";
+    }
+
+
+    if (
+      /ไทย|รัฐบาล/.test(
+        name
+      )
+    ) {
+      return "🇹🇭";
+    }
+
+
+    return "🎟️";
+
+  }
+
+
+  /* =====================================================
      LIFF
-  ========================================================= */
+  ====================================================== */
 
   function initLiff(
     liffId
@@ -3150,12 +3656,8 @@
       !liff.init
     ) {
 
-      els.status.textContent =
-        "LIFF ไม่พร้อม";
-
-
       showLiffGate(
-        "LIFF SDK ยังไม่พร้อม กรุณาเปิดผ่าน LINE"
+        "LIFF SDK ยังไม่พร้อม"
       );
 
       return;
@@ -3183,20 +3685,12 @@
           liff.isInClient()
         ) {
 
-          els.status.textContent =
-            "พร้อมส่ง";
-
-
           hideLiffGate();
 
         } else {
 
-          els.status.textContent =
-            "หน้าเว็บ";
-
-
           showLiffGate(
-            "ต้องเปิดผ่าน LINE ก่อนยืนยันส่งโพย"
+            "การส่งโพยเข้าแชทต้องเปิดผ่าน LINE"
           );
 
         }
@@ -3204,19 +3698,10 @@
       }
     )
     .catch(
-      function (err) {
-
-        els.status.textContent =
-          "LIFF ไม่พร้อม";
-
+      function () {
 
         showLiffGate(
-          "กรุณาเปิดผ่าน LINE อีกครั้ง"
-        );
-
-
-        showError(
-          err
+          "กรุณาเปิดหน้านี้ผ่าน LINE"
         );
 
       }
@@ -3234,18 +3719,6 @@
         "function" &&
       liff.isInClient()
     );
-
-  }
-
-
-  function openInLine() {
-
-    if (liffUrl) {
-
-      window.location.href =
-        liffUrl;
-
-    }
 
   }
 
@@ -3274,9 +3747,21 @@
   }
 
 
-  /* =========================================================
+  function openInLine() {
+
+    if (liffUrl) {
+
+      window.location.href =
+        liffUrl;
+
+    }
+
+  }
+
+
+  /* =====================================================
      MODE
-  ========================================================= */
+  ====================================================== */
 
   function setMode(
     mode
@@ -3374,7 +3859,8 @@
 
 
     if (
-      state.mode === "two"
+      state.mode ===
+      "two"
     ) {
 
       els.inputHelp.textContent =
@@ -3388,7 +3874,8 @@
 
 
     if (
-      state.mode === "three"
+      state.mode ===
+      "three"
     ) {
 
       els.inputHelp.textContent =
@@ -3402,11 +3889,12 @@
 
 
     if (
-      state.mode === "six"
+      state.mode ===
+      "six"
     ) {
 
       els.inputHelp.textContent =
-        "กรอกเลข 3 ตัว ระบบสร้างเลขกลับให้อัตโนมัติและคิดแยกทุกชุด";
+        "กรอกเลข 3 ตัว ระบบสร้าง 6 กลับให้อัตโนมัติ";
 
 
       els.numberInput.placeholder =
@@ -3416,7 +3904,8 @@
 
 
     if (
-      state.mode === "gate19"
+      state.mode ===
+      "gate19"
     ) {
 
       els.inputHelp.textContent =
@@ -3447,7 +3936,8 @@
 
 
     if (
-      state.mode === "two"
+      state.mode ===
+      "two"
     ) {
 
       active =
@@ -3457,7 +3947,8 @@
 
 
     if (
-      state.mode === "three"
+      state.mode ===
+      "three"
     ) {
 
       active =
@@ -3480,9 +3971,9 @@
   }
 
 
-  /* =========================================================
-     NUMBER INPUT
-  ========================================================= */
+  /* =====================================================
+     INPUT
+  ====================================================== */
 
   function handleNumberInput() {
 
@@ -3501,18 +3992,19 @@
 
 
     /*
-     * ============================
      * 19 ประตู
-     * ไม่รับโพยหลายเลข
-     * ============================
+     * ไม่รับการวางโพยหลายเลข
      */
 
     if (
-      state.mode === "gate19"
+      state.mode ===
+      "gate19"
     ) {
 
       if (
-        /[^\d]/.test(raw)
+        /[^\d]/.test(
+          raw
+        )
       ) {
 
         els.numberInput.value =
@@ -3528,7 +4020,7 @@
       }
 
 
-      var gateDigits =
+      var gateDigit =
         raw.replace(
           /\D/g,
           ""
@@ -3536,7 +4028,8 @@
 
 
       if (
-        gateDigits.length > 1
+        gateDigit.length >
+        1
       ) {
 
         els.numberInput.value =
@@ -3553,11 +4046,12 @@
 
 
       if (
-        gateDigits.length === 1
+        gateDigit.length ===
+        1
       ) {
 
         addSourceNumber(
-          gateDigits
+          gateDigit
         );
 
 
@@ -3573,14 +4067,13 @@
 
 
     /*
-     * ============================
-     * มีตัวคั่น
-     * = Paste หลายเลข
-     * ============================
+     * วางโพย
      */
 
     if (
-      /[^\d]/.test(raw)
+      /[^\d]/.test(
+        raw
+      )
     ) {
 
       var numbers =
@@ -3606,7 +4099,7 @@
 
 
         /*
-         * วางเสร็จแล้วหายทันที
+         * วางเสร็จแล้วช่องหาย
          */
 
         els.numberInput.value =
@@ -3620,12 +4113,6 @@
     }
 
 
-    /*
-     * ============================
-     * มีแต่ตัวเลข
-     * ============================
-     */
-
     var digits =
       raw.replace(
         /\D/g,
@@ -3634,7 +4121,7 @@
 
 
     /*
-     * Paste ติดกัน
+     * Paste เลขติดกัน
      *
      * 82898083
      * =
@@ -3652,17 +4139,13 @@
         0
       ) {
 
-        var chunks =
-          [];
-
-
         for (
           var i = 0;
           i < digits.length;
           i += mode.len
         ) {
 
-          chunks.push(
+          addSourceNumber(
             digits.slice(
               i,
               i + mode.len
@@ -3670,17 +4153,6 @@
           );
 
         }
-
-
-        chunks.forEach(
-          function (number) {
-
-            addSourceNumber(
-              number
-            );
-
-          }
-        );
 
 
         els.numberInput.value =
@@ -3752,18 +4224,12 @@
         }
 
 
-        /*
-         * 828980
-         * len 2
-         * =
-         * 82 89 80
-         */
-
         if (
           group.length >
           length &&
           group.length %
-          length === 0
+          length ===
+          0
         ) {
 
           for (
@@ -3794,9 +4260,9 @@
   }
 
 
-  /* =========================================================
+  /* =====================================================
      ADD SOURCE
-  ========================================================= */
+  ====================================================== */
 
   function addSourceNumber(
     number
@@ -3827,7 +4293,7 @@
 
 
     /*
-     * ไม่รับ source เดิมซ้ำ
+     * ไม่เพิ่มเลขต้นฉบับเดิมซ้ำ
      */
 
     if (
@@ -3846,23 +4312,20 @@
     );
 
 
-    /* ==========================
-       2 ตัว
-    ========================== */
-
     if (
-      state.mode === "two"
+      state.mode ===
+      "two"
     ) {
 
       if (
         state.twoReverseActive
       ) {
 
-        rebuildTwoReverseNumbers();
+        rebuildTwoReverse();
 
       } else {
 
-        rebuildSimpleNumbers();
+        rebuildSimple();
 
       }
 
@@ -3872,23 +4335,20 @@
     }
 
 
-    /* ==========================
-       3 ตัว
-    ========================== */
-
     if (
-      state.mode === "three"
+      state.mode ===
+      "three"
     ) {
 
       if (
         state.threeReverseActive
       ) {
 
-        rebuildThreeReverseNumbers();
+        rebuildThreeReverse();
 
       } else {
 
-        rebuildSimpleNumbers();
+        rebuildSimple();
 
       }
 
@@ -3898,30 +4358,24 @@
     }
 
 
-    /* ==========================
-       6 กลับ
-    ========================== */
-
     if (
-      state.mode === "six"
+      state.mode ===
+      "six"
     ) {
 
-      rebuildSixNumbers();
+      rebuildSix();
 
       return;
 
     }
 
 
-    /* ==========================
-       19 ประตู
-    ========================== */
-
     if (
-      state.mode === "gate19"
+      state.mode ===
+      "gate19"
     ) {
 
-      rebuildGateNumbers();
+      rebuildGate19();
 
       return;
 
@@ -3930,11 +4384,7 @@
   }
 
 
-  /* =========================================================
-     NORMAL
-  ========================================================= */
-
-  function rebuildSimpleNumbers() {
+  function rebuildSimple() {
 
     state.betNumbers =
       state.sourceNumbers.slice();
@@ -3953,59 +4403,62 @@
   }
 
 
-  /* =========================================================
-     2 ตัว กลับเลข
-  ========================================================= */
+  /* =====================================================
+     2 ตัวกลับ
+  ====================================================== */
 
-  function rebuildTwoReverseNumbers() {
+  function getTwoReverseSet(
+    number
+  ) {
+
+    var reverse =
+      number.charAt(1) +
+      number.charAt(0);
+
+
+    if (
+      reverse ===
+      number
+    ) {
+
+      return [
+        number
+      ];
+
+    }
+
+
+    return [
+      number,
+      reverse
+    ];
+
+  }
+
+
+  function rebuildTwoReverse() {
 
     var bets =
       [];
 
 
     state.sourceNumbers.forEach(
-      function (sourceNumber) {
+      function (number) {
 
-        var reversed =
-          sourceNumber.charAt(1) +
-          sourceNumber.charAt(0);
-
-
-        /*
-         * 12
-         * =
-         * 12 21
-         *
-         * 11
-         * =
-         * 11
-         */
-
-        bets.push(
-          sourceNumber
-        );
-
-
-        if (
-          reversed !==
-          sourceNumber
-        ) {
-
-          bets.push(
-            reversed
+        bets =
+          bets.concat(
+            getTwoReverseSet(
+              number
+            )
           );
-
-        }
 
       }
     );
 
 
     /*
-     * สำคัญ:
-     *
-     * betNumbers ห้าม unique
-     * ข้าม source
+     * ห้าม unique
+     * ใช้สำหรับคิดเงิน
      */
 
     state.betNumbers =
@@ -4013,8 +4466,7 @@
 
 
     /*
-     * currentNumbers
-     * สำหรับแสดงผลเท่านั้น
+     * ใช้โชว์
      */
 
     state.currentNumbers =
@@ -4030,9 +4482,9 @@
   }
 
 
-  /* =========================================================
-     3 ตัว PERMUTATIONS
-  ========================================================= */
+  /* =====================================================
+     3 ตัวกลับ / 6 กลับ
+  ====================================================== */
 
   function getPermutations3(
     number
@@ -4071,25 +4523,28 @@
 
 
     /*
-     * unique เฉพาะ source เดียว
+     * ลำดับตาม 6 กลับ
      *
-     * 123 = 6
-     * 112 = 3
-     * 111 = 1
+     * 495
+     * 459
+     * 945
+     * 954
+     * 549
+     * 594
+     *
+     * 112 = 3 ตัว
+     * 111 = 1 ตัว
      */
 
     return unique([
 
       a + b + c,
-
       a + c + b,
 
       b + a + c,
-
       b + c + a,
 
       c + a + b,
-
       c + b + a
 
     ]);
@@ -4097,28 +4552,24 @@
   }
 
 
-  /* =========================================================
-     3 ตัว กลับเลข
-  ========================================================= */
-
-  function rebuildThreeReverseNumbers() {
+  function rebuildThreeReverse() {
 
     var bets =
       [];
 
 
     state.sourceNumbers.forEach(
-      function (sourceNumber) {
+      function (number) {
 
         /*
-         * ห้าม unique ระหว่าง
-         * คนละเลขต้นฉบับ
+         * แต่ละ source แยกกัน
+         * ห้าม unique ข้าม source
          */
 
         bets =
           bets.concat(
             getPermutations3(
-              sourceNumber
+              number
             )
           );
 
@@ -4143,35 +4594,29 @@
   }
 
 
-  /* =========================================================
-     6 กลับ
-  ========================================================= */
-
-  function rebuildSixNumbers() {
+  function rebuildSix() {
 
     var bets =
       [];
 
 
     state.sourceNumbers.forEach(
-      function (sourceNumber) {
+      function (number) {
 
         /*
-         * แต่ละ source คิดของใครของมัน
+         * สำคัญ
          *
-         * เช่น
+         * 495 = 6
+         * 549 = 6
          *
-         * 495 = 6 รายการ
-         * 549 = 6 รายการ
-         *
-         * ถึงเลขกลับจะชนกัน
-         * ก็ต้องคิดรวม 12 รายการ
+         * แม้ชุดเลขกลับเหมือนกัน
+         * ก็คิดเป็น 12 รายการ
          */
 
         bets =
           bets.concat(
             getPermutations3(
-              sourceNumber
+              number
             )
           );
 
@@ -4180,7 +4625,7 @@
 
 
     /*
-     * ใช้คิดเงินจริง
+     * ใช้คิดเงิน
      *
      * ห้าม unique
      */
@@ -4190,9 +4635,7 @@
 
 
     /*
-     * ใช้แสดง
-     *
-     * ตัดซ้ำได้
+     * ใช้โชว์เท่านั้น
      */
 
     state.currentNumbers =
@@ -4208,9 +4651,9 @@
   }
 
 
-  /* =========================================================
+  /* =====================================================
      19 ประตู
-  ========================================================= */
+  ====================================================== */
 
   function get19GateNumbers(
     digit
@@ -4258,7 +4701,7 @@
   }
 
 
-  function rebuildGateNumbers() {
+  function rebuildGate19() {
 
     var bets =
       [];
@@ -4295,9 +4738,9 @@
   }
 
 
-  /* =========================================================
+  /* =====================================================
      REVERSE BUTTON
-  ========================================================= */
+  ====================================================== */
 
   function reverseNumbers() {
 
@@ -4317,20 +4760,15 @@
     }
 
 
-    /* =========================
-       2 ตัว
-    ========================= */
-
     if (
-      state.mode === "two"
+      state.mode ===
+      "two"
     ) {
 
       if (
         state.twoReverseActive
       ) {
-
         return;
-
       }
 
 
@@ -4338,7 +4776,7 @@
         true;
 
 
-      rebuildTwoReverseNumbers();
+      rebuildTwoReverse();
 
       updateReverseButton();
 
@@ -4347,20 +4785,15 @@
     }
 
 
-    /* =========================
-       3 ตัว
-    ========================= */
-
     if (
-      state.mode === "three"
+      state.mode ===
+      "three"
     ) {
 
       if (
         state.threeReverseActive
       ) {
-
         return;
-
       }
 
 
@@ -4368,20 +4801,18 @@
         true;
 
 
-      rebuildThreeReverseNumbers();
+      rebuildThreeReverse();
 
       updateReverseButton();
-
-      return;
 
     }
 
   }
 
 
-  /* =========================================================
+  /* =====================================================
      DOUBLE
-  ========================================================= */
+  ====================================================== */
 
   function addDoubles() {
 
@@ -4389,9 +4820,7 @@
       state.mode !==
       "two"
     ) {
-
       return;
-
     }
 
 
@@ -4425,20 +4854,20 @@
       state.twoReverseActive
     ) {
 
-      rebuildTwoReverseNumbers();
+      rebuildTwoReverse();
 
     } else {
 
-      rebuildSimpleNumbers();
+      rebuildSimple();
 
     }
 
   }
 
 
-  /* =========================================================
-     RENDER CURRENT
-  ========================================================= */
+  /* =====================================================
+     PREVIEW
+  ====================================================== */
 
   function renderCurrentNumbers() {
 
@@ -4466,14 +4895,16 @@
 
 
       if (
-        state.mode === "six"
+        state.mode ===
+        "six"
       ) {
 
         empty.textContent =
-          "กรอกเลข 3 ตัว ระบบจะทำ 6 กลับให้อัตโนมัติ";
+          "กรอกเลข 3 ตัว ระบบสร้าง 6 กลับให้อัตโนมัติ";
 
       } else if (
-        state.mode === "gate19"
+        state.mode ===
+        "gate19"
       ) {
 
         empty.textContent =
@@ -4513,7 +4944,9 @@
           var chip;
 
 
-          if (locked) {
+          if (
+            locked
+          ) {
 
             chip =
               document.createElement(
@@ -4575,7 +5008,7 @@
 
   function updateNumberCount() {
 
-    var displayCount =
+    var showCount =
       state.currentNumbers.length;
 
 
@@ -4584,12 +5017,12 @@
 
 
     if (
-      betCount !==
-      displayCount
+      showCount !==
+      betCount
     ) {
 
       els.numberCount.textContent =
-        displayCount +
+        showCount +
         " เลข • " +
         betCount +
         " รายการ";
@@ -4597,7 +5030,7 @@
     } else {
 
       els.numberCount.textContent =
-        displayCount +
+        betCount +
         " ตัว";
 
     }
@@ -4609,24 +5042,20 @@
     number
   ) {
 
-    /*
-     * ลบทีละเลขได้เฉพาะ
-     * ก่อนกดกลับ
-     */
-
     state.sourceNumbers =
       state.sourceNumbers.filter(
         function (item) {
 
           return (
-            item !== number
+            item !==
+            number
           );
 
         }
       );
 
 
-    rebuildSimpleNumbers();
+    rebuildSimple();
 
   }
 
@@ -4653,14 +5082,8 @@
       false;
 
 
-    if (
-      els.numberInput
-    ) {
-
-      els.numberInput.value =
-        "";
-
-    }
+    els.numberInput.value =
+      "";
 
 
     renderCurrentNumbers();
@@ -4674,9 +5097,9 @@
   }
 
 
-  /* =========================================================
+  /* =====================================================
      PRICE
-  ========================================================= */
+  ====================================================== */
 
   function getPrice(
     value
@@ -4713,13 +5136,13 @@
       MODES[state.mode];
 
 
-    var a =
+    var priceA =
       getPrice(
         els.priceA.value
       );
 
 
-    var b =
+    var priceB =
       mode.priceB
         ? getPrice(
             els.priceB.value
@@ -4728,21 +5151,21 @@
 
 
     /*
-     * สำคัญมาก
+     * สำคัญ
      *
-     * ใช้ betNumbers
+     * ต้องคิดจาก betNumbers
      * ไม่ใช่ currentNumbers
      */
 
-    var betCount =
+    var count =
       state.betNumbers.length;
 
 
     var total =
-      betCount *
+      count *
       (
-        a +
-        b
+        priceA +
+        priceB
       );
 
 
@@ -4755,19 +5178,19 @@
 
     els.addBill.disabled =
       (
-        betCount === 0 ||
+        count === 0 ||
         (
-          a <= 0 &&
-          b <= 0
+          priceA <= 0 &&
+          priceB <= 0
         )
       );
 
   }
 
 
-  /* =========================================================
+  /* =====================================================
      ADD BILL
-  ========================================================= */
+  ====================================================== */
 
   function addBill() {
 
@@ -4775,11 +5198,11 @@
 
 
     if (
-      !els.lotto.value
+      !state.selectedLotto
     ) {
 
       showError(
-        "กรุณาเลือกหวยก่อน"
+        "กรุณาเลือกหวย"
       );
 
       return;
@@ -4792,7 +5215,7 @@
     ) {
 
       showError(
-        "กรุณากรอกเลขก่อน"
+        "กรุณากรอกเลข"
       );
 
       return;
@@ -4832,10 +5255,6 @@
     }
 
 
-    var option =
-      els.lotto.selectedOptions[0];
-
-
     var bill = {
 
       id:
@@ -4845,15 +5264,11 @@
         state.mode,
 
       lottoName:
-        els.lotto.value,
+        state.selectedLotto.name,
 
       closeTime:
-        option
-          ? (
-              option.dataset.closeTime ||
-              ""
-            )
-          : "",
+        state.selectedLotto.closeTime ||
+        "",
 
 
       sourceNumbers:
@@ -4861,7 +5276,7 @@
 
 
       /*
-       * สำหรับโชว์
+       * ตัวเลขสำหรับโชว์
        */
 
       numbers:
@@ -4869,7 +5284,7 @@
 
 
       /*
-       * สำหรับคำนวณจริง
+       * รายการจริงสำหรับคิดเงิน
        */
 
       betNumbers:
@@ -4915,6 +5330,7 @@
 
     renderBills();
 
+
     showToast(
       "เพิ่มบิลแล้ว"
     );
@@ -4922,9 +5338,9 @@
   }
 
 
-  /* =========================================================
-     RENDER BILLS
-  ========================================================= */
+  /* =====================================================
+     BILL
+  ====================================================== */
 
   function renderBills() {
 
@@ -5105,9 +5521,20 @@
           "click",
           function () {
 
-            deleteBill(
-              bill.id
-            );
+            state.bills =
+              state.bills.filter(
+                function (item) {
+
+                  return (
+                    item.id !==
+                    bill.id
+                  );
+
+                }
+              );
+
+
+            renderBills();
 
           }
         );
@@ -5146,8 +5573,6 @@
       " บิล";
 
 
-    updateLottoLock();
-
     updateGrandTotal();
 
   }
@@ -5161,7 +5586,7 @@
       MODES[bill.mode];
 
 
-    var prices =
+    var priceTexts =
       [];
 
 
@@ -5169,7 +5594,7 @@
       bill.priceA > 0
     ) {
 
-      prices.push(
+      priceTexts.push(
         mode.priceA +
         " " +
         bill.priceA
@@ -5183,7 +5608,7 @@
       bill.priceB > 0
     ) {
 
-      prices.push(
+      priceTexts.push(
         mode.priceB +
         " " +
         bill.priceB
@@ -5196,8 +5621,8 @@
 
 
     if (
-      bill.betCount !==
-      bill.numbers.length
+      bill.numbers.length !==
+      bill.betCount
     ) {
 
       countText =
@@ -5216,7 +5641,8 @@
 
 
     if (
-      bill.mode === "six"
+      bill.mode ===
+      "six"
     ) {
 
       return (
@@ -5224,23 +5650,24 @@
         " ชุด • " +
         countText +
         " • " +
-        prices.join(" / ")
+        priceTexts.join(" / ")
       );
 
     }
 
 
     if (
-      bill.mode === "gate19"
+      bill.mode ===
+      "gate19"
     ) {
 
       return (
-        "เลขตั้งต้น " +
+        "ตั้งต้น " +
         bill.sourceNumbers.join(", ") +
         " • " +
         countText +
         " • " +
-        prices.join(" / ")
+        priceTexts.join(" / ")
       );
 
     }
@@ -5253,7 +5680,7 @@
       return (
         countText +
         " • กลับเลข • " +
-        prices.join(" / ")
+        priceTexts.join(" / ")
       );
 
     }
@@ -5262,30 +5689,8 @@
     return (
       countText +
       " • " +
-      prices.join(" / ")
+      priceTexts.join(" / ")
     );
-
-  }
-
-
-  function deleteBill(
-    id
-  ) {
-
-    state.bills =
-      state.bills.filter(
-        function (bill) {
-
-          return (
-            bill.id !==
-            id
-          );
-
-        }
-      );
-
-
-    renderBills();
 
   }
 
@@ -5301,21 +5706,6 @@
     clearPrices();
 
     renderBills();
-
-  }
-
-
-  function updateLottoLock() {
-
-    /*
-     * พอมีบิลแล้ว
-     * ล็อกหวยไว้
-     * ป้องกันเปลี่ยนหวยกลางโพย
-     */
-
-    els.lotto.disabled =
-      state.bills.length >
-      0;
 
   }
 
@@ -5351,9 +5741,9 @@
   }
 
 
-  /* =========================================================
-     PAYLOAD
-  ========================================================= */
+  /* =====================================================
+     BUILD PAYLOAD
+  ====================================================== */
 
   function buildPayloads() {
 
@@ -5376,72 +5766,166 @@
       function (bill) {
 
 
-        /* ==========================================
+        /* ===============================================
            2 ตัว
-        ========================================== */
+        ================================================ */
 
         if (
-          bill.mode === "two"
+          bill.mode ===
+          "two"
         ) {
+
+
+          /*
+           * กรณีกดกลับ
+           *
+           * แยก source ทีละชุด
+           * ป้องกัน backend ตัดเลขซ้ำข้าม source
+           */
+
+          if (
+            bill.reverseApplied
+          ) {
+
+            bill.sourceNumbers.forEach(
+              function (source) {
+
+                var numbers =
+                  getTwoReverseSet(
+                    source
+                  );
+
+
+                if (
+                  bill.priceA > 0
+                ) {
+
+                  payloads.push(
+                    makePayload({
+
+                      modeKey:
+                        "two_top",
+
+                      label:
+                        "2 ตัวบน",
+
+                      bill:
+                        bill,
+
+                      numbers:
+                        numbers,
+
+                      betCount:
+                        numbers.length,
+
+                      subtotal:
+                        numbers.length *
+                        bill.priceA,
+
+                      priceText:
+                        "บน " +
+                        bill.priceA,
+
+                      top:
+                        bill.priceA,
+
+                      bottom:
+                        0
+
+                    })
+                  );
+
+                }
+
+
+                if (
+                  bill.priceB > 0
+                ) {
+
+                  payloads.push(
+                    makePayload({
+
+                      modeKey:
+                        "two_bottom",
+
+                      label:
+                        "2 ตัวล่าง",
+
+                      bill:
+                        bill,
+
+                      numbers:
+                        numbers,
+
+                      betCount:
+                        numbers.length,
+
+                      subtotal:
+                        numbers.length *
+                        bill.priceB,
+
+                      priceText:
+                        "ล่าง " +
+                        bill.priceB,
+
+                      top:
+                        0,
+
+                      bottom:
+                        bill.priceB
+
+                    })
+                  );
+
+                }
+
+              }
+            );
+
+
+            return;
+
+          }
 
 
           if (
             bill.priceA > 0
           ) {
 
-            payloads.push({
+            payloads.push(
+              makePayload({
 
-              modeKey:
-                "two_top",
+                modeKey:
+                  "two_top",
 
-              label:
-                "2 ตัวบน",
+                label:
+                  "2 ตัวบน",
 
-              lottoName:
-                bill.lottoName,
+                bill:
+                  bill,
 
-              closeTime:
-                bill.closeTime,
+                numbers:
+                  bill.betNumbers,
 
-              kind:
-                "two",
+                betCount:
+                  bill.betCount,
 
+                subtotal:
+                  bill.betCount *
+                  bill.priceA,
 
-              /*
-               * ส่งรายการจริง
-               * รวม duplicate bet ที่เกิดจาก
-               * source คนละชุด
-               */
+                priceText:
+                  "บน " +
+                  bill.priceA,
 
-              numbers:
-                bill.betNumbers.join(" "),
+                top:
+                  bill.priceA,
 
+                bottom:
+                  0
 
-              displayNumbers:
-                bill.numbers.slice(),
-
-
-              betCount:
-                bill.betCount,
-
-
-              subtotal:
-                bill.betCount *
-                bill.priceA,
-
-
-              priceText:
-                "บน " +
-                bill.priceA,
-
-
-              top:
-                bill.priceA,
-
-              bottom:
-                0
-
-            });
+              })
+            );
 
           }
 
@@ -5450,107 +5934,208 @@
             bill.priceB > 0
           ) {
 
-            payloads.push({
+            payloads.push(
+              makePayload({
 
-              modeKey:
-                "two_bottom",
+                modeKey:
+                  "two_bottom",
 
-              label:
-                "2 ตัวล่าง",
+                label:
+                  "2 ตัวล่าง",
 
-              lottoName:
-                bill.lottoName,
+                bill:
+                  bill,
 
-              closeTime:
-                bill.closeTime,
+                numbers:
+                  bill.betNumbers,
 
-              kind:
-                "two",
+                betCount:
+                  bill.betCount,
 
-              numbers:
-                bill.betNumbers.join(" "),
+                subtotal:
+                  bill.betCount *
+                  bill.priceB,
 
-              displayNumbers:
-                bill.numbers.slice(),
+                priceText:
+                  "ล่าง " +
+                  bill.priceB,
 
-              betCount:
-                bill.betCount,
+                top:
+                  0,
 
-              subtotal:
-                bill.betCount *
-                bill.priceB,
+                bottom:
+                  bill.priceB
 
-              priceText:
-                "ล่าง " +
-                bill.priceB,
-
-              top:
-                0,
-
-              bottom:
-                bill.priceB
-
-            });
+              })
+            );
 
           }
 
         }
 
 
-        /* ==========================================
+        /* ===============================================
            3 ตัว
-        ========================================== */
+        ================================================ */
 
         if (
-          bill.mode === "three"
+          bill.mode ===
+          "three"
         ) {
+
+
+          /*
+           * ถ้ากดกลับ
+           *
+           * แยก source ทีละชุด
+           *
+           * 495 กับ 549
+           * ต้องคิดคนละ 6 รายการ
+           */
+
+          if (
+            bill.reverseApplied
+          ) {
+
+            bill.sourceNumbers.forEach(
+              function (source) {
+
+                var numbers =
+                  getPermutations3(
+                    source
+                  );
+
+
+                if (
+                  bill.priceA > 0
+                ) {
+
+                  payloads.push(
+                    makePayload({
+
+                      modeKey:
+                        "three_top",
+
+                      label:
+                        "3 ตัวตรง",
+
+                      bill:
+                        bill,
+
+                      numbers:
+                        numbers,
+
+                      betCount:
+                        numbers.length,
+
+                      subtotal:
+                        numbers.length *
+                        bill.priceA,
+
+                      priceText:
+                        "ตรง " +
+                        bill.priceA,
+
+                      top:
+                        bill.priceA,
+
+                      bottom:
+                        0
+
+                    })
+                  );
+
+                }
+
+
+                if (
+                  bill.priceB > 0
+                ) {
+
+                  payloads.push(
+                    makePayload({
+
+                      modeKey:
+                        "three_tod",
+
+                      label:
+                        "3 ตัวโต๊ด",
+
+                      bill:
+                        bill,
+
+                      numbers:
+                        numbers,
+
+                      betCount:
+                        numbers.length,
+
+                      subtotal:
+                        numbers.length *
+                        bill.priceB,
+
+                      priceText:
+                        "โต๊ด " +
+                        bill.priceB,
+
+                      top:
+                        0,
+
+                      bottom:
+                        bill.priceB
+
+                    })
+                  );
+
+                }
+
+              }
+            );
+
+
+            return;
+
+          }
 
 
           if (
             bill.priceA > 0
           ) {
 
-            payloads.push({
+            payloads.push(
+              makePayload({
 
-              modeKey:
-                "three_top",
+                modeKey:
+                  "three_top",
 
-              label:
-                "3 ตัวตรง",
+                label:
+                  "3 ตัวตรง",
 
-              lottoName:
-                bill.lottoName,
+                bill:
+                  bill,
 
-              closeTime:
-                bill.closeTime,
+                numbers:
+                  bill.betNumbers,
 
-              kind:
-                "three",
+                betCount:
+                  bill.betCount,
 
-              numbers:
-                bill.betNumbers.join(" "),
+                subtotal:
+                  bill.betCount *
+                  bill.priceA,
 
-              displayNumbers:
-                bill.numbers.slice(),
+                priceText:
+                  "ตรง " +
+                  bill.priceA,
 
-              betCount:
-                bill.betCount,
+                top:
+                  bill.priceA,
 
-              subtotal:
-                bill.betCount *
-                bill.priceA,
+                bottom:
+                  0
 
-              priceText:
-                "ตรง " +
-                bill.priceA,
-
-              top:
-                bill.priceA,
-
-              bottom:
-                0
-
-            });
+              })
+            );
 
           }
 
@@ -5559,243 +6144,244 @@
             bill.priceB > 0
           ) {
 
-            payloads.push({
+            payloads.push(
+              makePayload({
 
-              modeKey:
-                "three_tod",
+                modeKey:
+                  "three_tod",
 
-              label:
-                "3 ตัวโต๊ด",
+                label:
+                  "3 ตัวโต๊ด",
 
-              lottoName:
-                bill.lottoName,
+                bill:
+                  bill,
 
-              closeTime:
-                bill.closeTime,
+                numbers:
+                  bill.betNumbers,
 
-              kind:
-                "three",
+                betCount:
+                  bill.betCount,
 
-              numbers:
-                bill.betNumbers.join(" "),
+                subtotal:
+                  bill.betCount *
+                  bill.priceB,
 
-              displayNumbers:
-                bill.numbers.slice(),
+                priceText:
+                  "โต๊ด " +
+                  bill.priceB,
 
-              betCount:
-                bill.betCount,
+                top:
+                  0,
 
-              subtotal:
-                bill.betCount *
-                bill.priceB,
+                bottom:
+                  bill.priceB
 
-              priceText:
-                "โต๊ด " +
-                bill.priceB,
-
-              top:
-                0,
-
-              bottom:
-                bill.priceB
-
-            });
+              })
+            );
 
           }
 
         }
 
 
-        /* ==========================================
+        /* ===============================================
            6 กลับ
-        ========================================== */
+        ================================================ */
 
         if (
-          bill.mode === "six"
+          bill.mode ===
+          "six"
         ) {
 
-          payloads.push({
+          /*
+           * สำคัญมาก
+           *
+           * แยกเลขต้นฉบับทีละตัว
+           *
+           * 495 = 6
+           * 549 = 6
+           *
+           * backend จะไม่สามารถตัด
+           * ทั้งสอง source รวมกันได้
+           */
 
-            modeKey:
-              "three_return",
+          bill.sourceNumbers.forEach(
+            function (source) {
 
-            label:
-              "6 กลับ",
-
-            lottoName:
-              bill.lottoName,
-
-            closeTime:
-              bill.closeTime,
-
-            kind:
-              "three",
-
-
-            /*
-             * API ส่งเลขต้นฉบับ
-             *
-             * เช่น
-             * 495 549 015 817 807
-             *
-             * ไม่ส่งเลขที่ขยายแล้วเข้า
-             * three_return ซ้ำ
-             */
-
-            numbers:
-              bill.sourceNumbers.join(" "),
+              var displayNumbers =
+                getPermutations3(
+                  source
+                );
 
 
-            /*
-             * Flex ใช้เลขที่ขยายแล้ว
-             */
+              payloads.push({
 
-            displayNumbers:
-              bill.numbers.slice(),
+                modeKey:
+                  "three_return",
 
+                label:
+                  "6 กลับ",
 
-            sourceNumbers:
-              bill.sourceNumbers.slice(),
+                lottoName:
+                  bill.lottoName,
 
+                closeTime:
+                  bill.closeTime,
 
-            /*
-             * ตัวอย่าง
-             *
-             * 5 source
-             * source ละ 6
-             * =
-             * 30 รายการ
-             */
-
-            betCount:
-              bill.betCount,
+                kind:
+                  "three",
 
 
-            subtotal:
-              bill.subtotal,
+                /*
+                 * ส่งต้นฉบับเพียงตัวเดียว
+                 * ให้ backend ทำ 6 กลับ
+                 */
+
+                numbers:
+                  source,
 
 
-            priceText:
-              "บนตรง " +
-              bill.priceA,
+                displayNumbers:
+                  displayNumbers.slice(),
 
 
-            top:
-              bill.priceA,
+                sourceNumbers:
+                  [
+                    source
+                  ],
 
-            bottom:
-              0
 
-          });
+                betCount:
+                  displayNumbers.length,
+
+
+                subtotal:
+                  displayNumbers.length *
+                  bill.priceA,
+
+
+                priceText:
+                  "บนตรง " +
+                  bill.priceA,
+
+
+                top:
+                  bill.priceA,
+
+                bottom:
+                  0
+
+              });
+
+            }
+          );
 
         }
 
 
-        /* ==========================================
+        /* ===============================================
            19 ประตู
-        ========================================== */
+        ================================================ */
 
         if (
-          bill.mode === "gate19"
+          bill.mode ===
+          "gate19"
         ) {
 
+          bill.sourceNumbers.forEach(
+            function (source) {
 
-          if (
-            bill.priceA > 0
-          ) {
-
-            payloads.push({
-
-              modeKey:
-                "two_top",
-
-              label:
-                "19 ประตู บน",
-
-              lottoName:
-                bill.lottoName,
-
-              closeTime:
-                bill.closeTime,
-
-              kind:
-                "two",
-
-              numbers:
-                bill.betNumbers.join(" "),
-
-              displayNumbers:
-                bill.numbers.slice(),
-
-              betCount:
-                bill.betCount,
-
-              subtotal:
-                bill.betCount *
-                bill.priceA,
-
-              priceText:
-                "บน " +
-                bill.priceA,
-
-              top:
-                bill.priceA,
-
-              bottom:
-                0
-
-            });
-
-          }
+              var numbers =
+                get19GateNumbers(
+                  source
+                );
 
 
-          if (
-            bill.priceB > 0
-          ) {
+              if (
+                bill.priceA > 0
+              ) {
 
-            payloads.push({
+                payloads.push(
+                  makePayload({
 
-              modeKey:
-                "two_bottom",
+                    modeKey:
+                      "two_top",
 
-              label:
-                "19 ประตู ล่าง",
+                    label:
+                      "19 ประตู บน",
 
-              lottoName:
-                bill.lottoName,
+                    bill:
+                      bill,
 
-              closeTime:
-                bill.closeTime,
+                    numbers:
+                      numbers,
 
-              kind:
-                "two",
+                    betCount:
+                      numbers.length,
 
-              numbers:
-                bill.betNumbers.join(" "),
+                    subtotal:
+                      numbers.length *
+                      bill.priceA,
 
-              displayNumbers:
-                bill.numbers.slice(),
+                    priceText:
+                      "บน " +
+                      bill.priceA,
 
-              betCount:
-                bill.betCount,
+                    top:
+                      bill.priceA,
 
-              subtotal:
-                bill.betCount *
-                bill.priceB,
+                    bottom:
+                      0
 
-              priceText:
-                "ล่าง " +
-                bill.priceB,
+                  })
+                );
 
-              top:
-                0,
+              }
 
-              bottom:
-                bill.priceB
 
-            });
+              if (
+                bill.priceB > 0
+              ) {
 
-          }
+                payloads.push(
+                  makePayload({
+
+                    modeKey:
+                      "two_bottom",
+
+                    label:
+                      "19 ประตู ล่าง",
+
+                    bill:
+                      bill,
+
+                    numbers:
+                      numbers,
+
+                    betCount:
+                      numbers.length,
+
+                    subtotal:
+                      numbers.length *
+                      bill.priceB,
+
+                    priceText:
+                      "ล่าง " +
+                      bill.priceB,
+
+                    top:
+                      0,
+
+                    bottom:
+                      bill.priceB
+
+                  })
+                );
+
+              }
+
+            }
+          );
 
         }
 
@@ -5808,11 +6394,58 @@
   }
 
 
-  /*
-   * ส่งเข้า API
-   *
-   * ตัด field ที่ใช้เฉพาะ UI/Flex ออก
-   */
+  function makePayload(
+    data
+  ) {
+
+    return {
+
+      modeKey:
+        data.modeKey,
+
+      label:
+        data.label,
+
+      lottoName:
+        data.bill.lottoName,
+
+      closeTime:
+        data.bill.closeTime,
+
+      kind:
+        MODES[
+          data.bill.mode
+        ].len === 3
+          ? "three"
+          : "two",
+
+      numbers:
+        data.numbers.join(
+          " "
+        ),
+
+      displayNumbers:
+        data.numbers.slice(),
+
+      betCount:
+        data.betCount,
+
+      subtotal:
+        data.subtotal,
+
+      priceText:
+        data.priceText,
+
+      top:
+        data.top,
+
+      bottom:
+        data.bottom
+
+    };
+
+  }
+
 
   function getApiPayload(
     item
@@ -5842,16 +6475,28 @@
         item.top,
 
       bottom:
-        item.bottom
+        item.bottom,
+
+
+      /*
+       * ส่ง metadata ไปด้วย
+       * backend จะใช้หรือไม่ใช้ก็ได้
+       */
+
+      betCount:
+        item.betCount,
+
+      subtotal:
+        item.subtotal
 
     };
 
   }
 
 
-  /* =========================================================
+  /* =====================================================
      CONFIRM
-  ========================================================= */
+  ====================================================== */
 
   function openConfirm() {
 
@@ -5906,15 +6551,6 @@
       "";
 
 
-    if (
-      !state.bills.length
-    ) {
-
-      return;
-
-    }
-
-
     var total =
       state.bills.reduce(
         function (
@@ -5949,12 +6585,10 @@
       );
 
 
-    var lottoName =
-      state.bills[0].lottoName;
-
-
     els.confirmSubtitle.textContent =
-      lottoName;
+      state.selectedLotto
+        ? state.selectedLotto.name
+        : "";
 
 
     var summary =
@@ -5969,28 +6603,39 @@
 
     summary.appendChild(
       createSummaryBox(
+
         "หวย",
-        lottoName
+
+        state.selectedLotto
+          ? state.selectedLotto.name
+          : "-"
+
       )
     );
 
 
     summary.appendChild(
       createSummaryBox(
+
         "จำนวน",
+
         totalBetCount +
         " รายการ"
+
       )
     );
 
 
     summary.appendChild(
       createSummaryBox(
+
         "รวม",
+
         numberWithCommas(
           total
         ) +
         " บาท"
+
       )
     );
 
@@ -6030,7 +6675,9 @@
 
 
         title.textContent =
-          MODES[bill.mode].label;
+          MODES[
+            bill.mode
+          ].label;
 
 
         var meta =
@@ -6110,41 +6757,41 @@
       "summary-box";
 
 
-    var labelElement =
+    var labelEl =
       document.createElement(
         "div"
       );
 
 
-    labelElement.className =
+    labelEl.className =
       "summary-label";
 
 
-    labelElement.textContent =
+    labelEl.textContent =
       label;
 
 
-    var valueElement =
+    var valueEl =
       document.createElement(
         "div"
       );
 
 
-    valueElement.className =
+    valueEl.className =
       "summary-value";
 
 
-    valueElement.textContent =
+    valueEl.textContent =
       value;
 
 
     box.appendChild(
-      labelElement
+      labelEl
     );
 
 
     box.appendChild(
-      valueElement
+      valueEl
     );
 
 
@@ -6153,9 +6800,9 @@
   }
 
 
-  /* =========================================================
-     CONFIRM + SEND
-  ========================================================= */
+  /* =====================================================
+     SEND
+  ====================================================== */
 
   function confirmAndSend() {
 
@@ -6163,9 +6810,7 @@
       !state.pendingPayloads ||
       !state.pendingPayloads.length
     ) {
-
       return;
-
     }
 
 
@@ -6208,11 +6853,9 @@
         function (item) {
 
           return apiCreateLiffOrder(
-
             getApiPayload(
               item
             )
-
           );
 
         }
@@ -6240,14 +6883,16 @@
         );
 
 
-        var messages =
-          buildCombinedOrderMessages(
-
-            payloads,
-
-            fallbackMessages
-
+        var flex =
+          buildCombinedOrderFlex(
+            payloads
           );
+
+
+        var messages =
+          flex
+            ? [flex]
+            : fallbackMessages;
 
 
         return sendToLine(
@@ -6274,44 +6919,19 @@
   }
 
 
-  /* =========================================================
-     FLEX
-  ========================================================= */
-
-  function buildCombinedOrderMessages(
-    payloads,
-    fallbackMessages
-  ) {
-
-    var local =
-      buildCombinedOrderFlex(
-        payloads
-      );
-
-
-    if (local) {
-
-      return [
-        local
-      ];
-
-    }
-
-
-    return fallbackMessages;
-
-  }
-
+  /* =====================================================
+     FLEX GROUP
+  ====================================================== */
 
   function mergeDisplayGroups(
     payloads
   ) {
 
-    var result =
+    var groups =
       [];
 
 
-    var map =
+    var indexByKey =
       {};
 
 
@@ -6342,44 +6962,37 @@
 
 
         if (
-          map[key] === undefined
+          indexByKey[key] ===
+          undefined
         ) {
 
-          map[key] =
-            result.length;
+          indexByKey[key] =
+            groups.length;
 
 
-          result.push({
+          groups.push({
 
             label:
               item.label,
 
             priceText:
-              item.priceText,
-
-            top:
-              Number(
-                item.top || 0
-              ) || 0,
-
-            bottom:
-              Number(
-                item.bottom || 0
-              ) || 0,
+              item.priceText ||
+              "",
 
             numbers:
               displayNumbers.slice(),
 
             betCount:
               Number(
-                item.betCount || 0
-              ) ||
-              displayNumbers.length,
+                item.betCount ||
+                displayNumbers.length
+              ),
 
             subtotal:
               Number(
-                item.subtotal || 0
-              ) || 0
+                item.subtotal ||
+                0
+              )
 
           });
 
@@ -6390,8 +7003,8 @@
 
 
         var target =
-          result[
-            map[key]
+          groups[
+            indexByKey[key]
           ];
 
 
@@ -6405,25 +7018,29 @@
 
         target.betCount +=
           Number(
-            item.betCount || 0
-          ) ||
-          displayNumbers.length;
+            item.betCount ||
+            displayNumbers.length
+          );
 
 
         target.subtotal +=
           Number(
-            item.subtotal || 0
-          ) ||
-          0;
+            item.subtotal ||
+            0
+          );
 
       }
     );
 
 
-    return result;
+    return groups;
 
   }
 
+
+  /* =====================================================
+     FLEX
+  ====================================================== */
 
   function buildCombinedOrderFlex(
     payloads
@@ -6455,15 +7072,15 @@
       );
 
 
-    var totalAmount =
+    var total =
       0;
 
 
-    var allUniqueNumbers =
-      {};
+    var totalBets =
+      0;
 
 
-    var groupBlocks =
+    var blocks =
       [];
 
 
@@ -6473,21 +7090,15 @@
         index
       ) {
 
-        totalAmount +=
+        total +=
           group.subtotal;
 
 
-        group.numbers.forEach(
-          function (number) {
-
-            allUniqueNumbers[number] =
-              true;
-
-          }
-        );
+        totalBets +=
+          group.betCount;
 
 
-        groupBlocks.push({
+        blocks.push({
 
           type:
             "box",
@@ -6527,8 +7138,7 @@
                 "text",
 
               text:
-                group.priceText ||
-                "",
+                group.priceText,
 
               color:
                 "#9CA3AF",
@@ -6549,8 +7159,8 @@
 
 
         if (
-          group.betCount !==
-          group.numbers.length
+          group.numbers.length !==
+          group.betCount
         ) {
 
           countText =
@@ -6568,7 +7178,7 @@
         }
 
 
-        groupBlocks.push({
+        blocks.push({
 
           type:
             "box",
@@ -6627,7 +7237,7 @@
         });
 
 
-        groupBlocks.push({
+        blocks.push({
 
           type:
             "box",
@@ -6707,7 +7317,7 @@
       altText:
         lottoName +
         " รวม " +
-        totalAmount +
+        total +
         " บาท",
 
       contents: {
@@ -6755,7 +7365,6 @@
                 true
             },
 
-
             {
               type:
                 "box",
@@ -6795,10 +7404,8 @@
 
                   text:
                     "• " +
-                    Object.keys(
-                      allUniqueNumbers
-                    ).length +
-                    " เลข",
+                    totalBets +
+                    " รายการ",
 
                   color:
                     "#FEE2E2",
@@ -6837,7 +7444,7 @@
             "#FFFFFF",
 
           contents:
-            groupBlocks.concat([
+            blocks.concat([
 
 
               {
@@ -6893,7 +7500,6 @@
                       "bold"
                   },
 
-
                   {
                     type:
                       "box",
@@ -6915,7 +7521,7 @@
 
                         text:
                           numberWithCommas(
-                            totalAmount
+                            total
                           ),
 
                         color:
@@ -7004,7 +7610,6 @@
                       "bold"
                   },
 
-
                   {
                     type:
                       "text",
@@ -7028,7 +7633,6 @@
                       true
                   },
 
-
                   {
                     type:
                       "text",
@@ -7049,7 +7653,6 @@
                       true
                   },
 
-
                   {
                     type:
                       "text",
@@ -7069,7 +7672,6 @@
                     wrap:
                       true
                   },
-
 
                   {
                     type:
@@ -7114,9 +7716,9 @@
   }
 
 
-  /* =========================================================
+  /* =====================================================
      SEND LINE
-  ========================================================= */
+  ====================================================== */
 
   function sendToLine(
     messages
@@ -7137,11 +7739,6 @@
     if (
       !safeMessages.length
     ) {
-
-      setLoading(
-        false
-      );
-
 
       throw new Error(
         "สร้าง Flex ไม่สำเร็จ"
@@ -7172,13 +7769,7 @@
           );
 
 
-          if (
-            liff.isInClient()
-          ) {
-
-            liff.closeWindow();
-
-          }
+          liff.closeWindow();
 
         }
       );
@@ -7200,9 +7791,7 @@
         res
       )
     ) {
-
       return res;
-
     }
 
 
@@ -7211,9 +7800,7 @@
         res.messages
       )
     ) {
-
       return res.messages;
-
     }
 
 
@@ -7222,18 +7809,14 @@
         res.flex
       )
     ) {
-
       return res.flex;
-
     }
 
 
     return [
-
       res.flex ||
       res.message ||
       res
-
     ];
 
   }
@@ -7311,10 +7894,8 @@
 
 
     if (
-      message.type ===
-        "bubble" ||
-      message.type ===
-        "carousel" ||
+      message.type === "bubble" ||
+      message.type === "carousel" ||
       message.body ||
       message.hero
     ) {
@@ -7357,9 +7938,7 @@
             "flex" ||
           !message.contents
         ) {
-
           return;
-
         }
 
 
@@ -7391,9 +7970,7 @@
     if (
       !bubbles.length
     ) {
-
       return [];
-
     }
 
 
@@ -7463,9 +8040,7 @@
         "chat_message.write"
       )
       .then(
-        function (
-          permission
-        ) {
+        function (permission) {
 
           if (
             !permission ||
@@ -7499,9 +8074,9 @@
   }
 
 
-  /* =========================================================
-     UI HELPERS
-  ========================================================= */
+  /* =====================================================
+     UI
+  ====================================================== */
 
   function setLoading(
     on
@@ -7578,9 +8153,7 @@
   ) {
 
     if (!err) {
-
       return "เกิดข้อผิดพลาด";
-
     }
 
 
@@ -7588,41 +8161,27 @@
       typeof err ===
       "string"
     ) {
-
       return err;
-
     }
 
 
     if (
       err.message
     ) {
-
       return err.message;
-
     }
 
 
-    try {
-
-      return JSON.stringify(
-        err
-      );
-
-    } catch (jsonErr) {
-
-      return String(
-        err
-      );
-
-    }
+    return String(
+      err
+    );
 
   }
 
 
-  /* =========================================================
-     BASIC HELPERS
-  ========================================================= */
+  /* =====================================================
+     HELPERS
+  ====================================================== */
 
   function unique(
     list
@@ -7638,9 +8197,7 @@
         if (
           seen[item]
         ) {
-
           return false;
-
         }
 
 
