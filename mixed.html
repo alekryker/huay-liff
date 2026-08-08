@@ -1,1 +1,1466 @@
+<!doctype html>
+<html lang="th">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" name="viewport"/>
+  <meta content="#991B1B" name="theme-color"/>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js">
+  </script>
+  <title>
+   ส่งโพยหวย
+  </title>
+  <style>
+:root {
+  --red: #c9152d;
+  --red2: #e11d35;
+  --deep: #791426;
+  --soft: #fff1f2;
+  --bg: #f6f6f8;
+  --card: #fff;
+  --ink: #18181b;
+  --muted: #71717a;
+  --line: #e4e4e7;
+  --green: #3aa92f;
+  --shadow: 0 8px 28px rgba(24,24,27,.06);
+}
 
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai",sans-serif;
+}
+
+button, input, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.985);
+}
+
+.app {
+  max-width: 720px;
+  min-height: 100vh;
+  margin: auto;
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+}
+
+.screen.active {
+  display: block;
+}
+
+.hero {
+  padding: calc(28px + env(safe-area-inset-top)) 18px 28px;
+  color: #fff;
+  background: radial-gradient(circle at 100% 0,rgba(255,255,255,.18),transparent 38%),linear-gradient(140deg,#701524,#aa1730 52%,#e42441);
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 12px 34px rgba(153,27,46,.2);
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  color: rgba(255,255,255,.62);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.15;
+  margin: 3px 0 0;
+}
+
+.hero p {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,.74);
+  margin: 7px 0 0;
+}
+
+.lotto-body {
+  padding: 14px 11px 30px;
+}
+
+.lotto-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.lotto {
+  width: 100%;
+  min-height: 86px;
+  border: 1.5px solid #9bd18c;
+  border-radius: 18px;
+  background: linear-gradient(135deg,#fbfff9,#f2fbed);
+  padding: 13px 14px;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.lotto.closed {
+  opacity: .5;
+  filter: saturate(.6);
+  pointer-events: none;
+}
+
+.lotto-name {
+  font-size: 17px;
+  font-weight: 950;
+}
+
+.lotto-meta {
+  font-size: 11px;
+  font-weight: 750;
+  color: #52525b;
+  margin-top: 6px;
+}
+
+.lotto-right {
+  text-align: right;
+}
+
+.lotto-date {
+  font-size: 10px;
+  font-weight: 800;
+  color: #52525b;
+}
+
+.countdown {
+  font-size: 13px;
+  font-weight: 950;
+  color: var(--green);
+  margin-top: 7px;
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  padding: 30px 15px;
+  background: #fff;
+  border: 1px dashed #d4d4d8;
+  border-radius: 16px;
+  text-align: center;
+  color: #a1a1aa;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding: calc(10px + env(safe-area-inset-top)) 11px 11px;
+  color: #fff;
+  background: linear-gradient(135deg,#701524,#b41630);
+  box-shadow: 0 8px 25px rgba(153,27,46,.2);
+}
+
+.toprow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px;
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  font-size: 28px;
+}
+
+.lotto-selected {
+  min-width: 0;
+  flex: 1;
+}
+
+.lotto-selected small {
+  display: block;
+  color: rgba(255,255,255,.58);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.selected-name {
+  font-size: 19px;
+  font-weight: 950;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selected-sub {
+  margin-top: 4px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  font-weight: 800;
+  color: rgba(255,255,255,.72);
+}
+
+.selected-count {
+  color: #86efac;
+}
+
+.liff-gate {
+  display: none;
+  margin-top: 8px;
+  padding: 8px 9px;
+  border-radius: 11px;
+  background: rgba(0,0,0,.16);
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.liff-gate.show {
+  display: flex;
+}
+
+.open-line {
+  border: 0;
+  border-radius: 9px;
+  background: #06c755;
+  color: #fff;
+  padding: 8px 11px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.content {
+  padding: 12px 11px calc(150px + env(safe-area-inset-bottom));
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+.card+.card {
+  margin-top: 11px;
+}
+
+.card-title {
+  font-size: 17px;
+  font-weight: 950;
+}
+
+.card-help {
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 650;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.slip {
+  width: 100%;
+  min-height: 230px;
+  margin-top: 10px;
+  resize: vertical;
+  border: 1.5px solid #d4d4d8;
+  border-radius: 16px;
+  padding: 13px 14px;
+  outline: none;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+  background: #fff;
+}
+
+.slip:focus {
+  border-color: var(--red2);
+  box-shadow: 0 0 0 3px rgba(225,29,53,.08);
+}
+
+.parse-actions {
+  display: grid;
+  grid-template-columns: .7fr 1.3fr;
+  gap: 8px;
+  margin-top: 9px;
+}
+
+.secondary, .primary {
+  min-height: 50px;
+  border-radius: 13px;
+  font-weight: 950;
+}
+
+.secondary {
+  border: 1px solid #fecdd3;
+  background: #fff;
+  color: #e11d48;
+}
+
+.primary {
+  border: 0;
+  background: linear-gradient(135deg,#b7142c,#e9213d);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(201,21,45,.18);
+}
+
+.parse-summary {
+  margin-top: 10px;
+  padding: 10px 11px;
+  border-radius: 13px;
+  background: #fafafa;
+  color: #52525b;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.error {
+  min-height: 18px;
+  margin-top: 7px;
+  color: #dc2626;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.groups-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin: 16px 2px 8px;
+}
+
+.groups-title {
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.groups-count {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.group-list {
+  display: grid;
+  gap: 10px;
+}
+
+.group {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 3px 14px rgba(0,0,0,.035);
+}
+
+.group-head {
+  padding: 11px 12px;
+  background: linear-gradient(90deg,#fff1f2,#fff);
+  border-bottom: 1px solid #fee2e2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.group-label {
+  font-size: 15px;
+  font-weight: 950;
+  color: #b91c1c;
+}
+
+.group-sub {
+  font-size: 10px;
+  font-weight: 800;
+  color: #71717a;
+  margin-top: 2px;
+}
+
+.delete {
+  border: 0;
+  background: #fff1f2;
+  color: #e11d48;
+  border-radius: 9px;
+  padding: 7px 9px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.group-body {
+  padding: 12px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  min-width: 49px;
+  padding: 8px 9px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.source-note {
+  font-size: 10px;
+  color: #71717a;
+  font-weight: 750;
+  margin-top: 8px;
+  line-height: 1.45;
+}
+
+.tools {
+  margin-top: 10px;
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.reverse {
+  min-height: 39px;
+  padding: 0 12px;
+  border: 1px solid #fecdd3;
+  border-radius: 11px;
+  background: #fff1f2;
+  color: #b91c1c;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.reverse.active {
+  background: #b91c1c;
+  color: #fff;
+  border-color: #b91c1c;
+}
+
+.price-title {
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid #f1f1f1;
+  font-size: 11px;
+  font-weight: 900;
+  color: #52525b;
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8px;
+  margin-top: 7px;
+}
+
+.price-grid.one {
+  grid-template-columns: 1fr;
+}
+
+.price-field {
+  position: relative;
+}
+
+.price-input {
+  width: 100%;
+  height: 58px;
+  border: 1.5px solid #d4d4d8;
+  border-radius: 14px;
+  padding: 20px 8px 5px;
+  text-align: center;
+  outline: none;
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.price-input:focus {
+  border-color: var(--red2);
+  box-shadow: 0 0 0 3px rgba(225,29,53,.08);
+}
+
+.price-label {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #a1a1aa;
+  font-size: 9px;
+  font-weight: 850;
+  pointer-events: none;
+}
+
+.group-total {
+  margin-top: 8px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: #fafafa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 850;
+  color: #71717a;
+}
+
+.group-total b {
+  font-size: 17px;
+  color: var(--red);
+  font-variant-numeric: tabular-nums;
+}
+
+.bottom {
+  position: fixed;
+  left: 50%;
+  bottom: calc(7px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 40;
+  width: min(calc(100% - 14px),706px);
+  padding: 9px;
+  border: 1px solid rgba(228,228,231,.9);
+  border-radius: 19px;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 12px 38px rgba(0,0,0,.15);
+}
+
+.grand {
+  min-height: 50px;
+  border-radius: 13px;
+  background: linear-gradient(135deg,#701524,#b41630);
+  color: #fff;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grand small {
+  font-size: 10px;
+  color: rgba(255,255,255,.72);
+  font-weight: 850;
+}
+
+.grand strong {
+  font-size: 21px;
+  font-weight: 950;
+}
+
+.send {
+  width: 100%;
+  min-height: 47px;
+  margin-top: 7px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#b7142c,#e9213d);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.send:disabled {
+  background: #d4d4d8;
+  color: #fff;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(5px);
+}
+
+.overlay.show {
+  display: flex;
+}
+
+.dialog {
+  width: min(100%,620px);
+  max-height: 88vh;
+  display: grid;
+  grid-template-rows: auto minmax(0,1fr) auto;
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  overflow: hidden;
+}
+
+.dialog-head {
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dialog-title {
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.dialog-sub {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 750;
+  margin-top: 3px;
+}
+
+.close {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #f4f4f5;
+  color: #52525b;
+  font-size: 22px;
+}
+
+.dialog-body {
+  padding: 12px;
+  background: #fafafa;
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+}
+
+.confirm-card {
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.confirm-card-head {
+  padding: 8px 10px;
+  background: #fff1f2;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 950;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.confirm-card-body {
+  padding: 9px 10px;
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.55;
+  color: #3f3f46;
+  word-break: break-word;
+}
+
+.dialog-foot {
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: .7fr 1.3fr;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.cancel, .confirm {
+  min-height: 48px;
+  border-radius: 13px;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.cancel {
+  border: 1px solid var(--line);
+  background: #f4f4f5;
+  color: #52525b;
+}
+
+.confirm {
+  border: 0;
+  background: linear-gradient(135deg,#b7142c,#e9213d);
+  color: #fff;
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: none;
+  place-items: center;
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(6px);
+}
+
+.loading.show {
+  display: grid;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 5px solid #fee2e2;
+  border-top-color: var(--red2);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+.toast {
+  position: fixed;
+  top: calc(14px + env(safe-area-inset-top));
+  left: 50%;
+  z-index: 150;
+  transform: translate(-50%,-8px);
+  opacity: 0;
+  pointer-events: none;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: #18181b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 850;
+  transition: .18s;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%,0);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (min-width:600px) {
+  body {
+    padding-top: 18px;
+  }
+  .app {
+    border: 1px solid var(--line);
+    border-radius: 28px 28px 0 0;
+    overflow: hidden;
+  }
+  .lotto-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .overlay {
+    align-items: center;
+    padding: 18px;
+  }
+  .dialog {
+    border-radius: 24px;
+  }
+}
+</style>
+ </head>
+ <body>
+  <main class="app">
+   <section class="screen active" id="lottoScreen">
+    <header class="hero">
+     <div class="eyebrow">
+      LOTTERY
+     </div>
+     <h1>
+      เลือกหวย
+     </h1>
+     <p>
+      เลือกหวยก่อน แล้ววางโพยรวมในหน้าถัดไป
+     </p>
+    </header>
+    <div class="lotto-body">
+     <div class="lotto-grid" id="lottoGrid">
+     </div>
+     <div class="empty" id="lottoEmpty" style="display:none">
+      ยังไม่มีหวยที่เปิดรับ
+     </div>
+    </div>
+   </section>
+   <section class="screen" id="betScreen">
+    <header class="topbar">
+     <div class="toprow">
+      <button class="back" id="backBtn">
+       ‹
+      </button>
+      <div class="lotto-selected">
+       <small>
+        หวยที่เลือก
+       </small>
+       <div class="selected-name" id="selectedName">
+        -
+       </div>
+       <div class="selected-sub">
+        <span id="selectedRound">
+         รอบ -
+        </span>
+        <span>
+         •
+        </span>
+        <span id="selectedClose">
+         ปิด --:--
+        </span>
+        <span>
+         •
+        </span>
+        <span class="selected-count" id="selectedCount">
+         --:--:--
+        </span>
+       </div>
+      </div>
+     </div>
+     <div class="liff-gate" id="liffGate">
+      <span id="liffGateText">
+       ต้องเปิดผ่าน LINE ก่อนส่งโพย
+      </span>
+      <button class="open-line" id="openLine">
+       เปิดใน LINE
+      </button>
+     </div>
+    </header>
+    <div class="content">
+     <section class="card">
+      <div class="card-title">
+       วางโพยรวม
+      </div>
+      <div class="card-help">
+       ใส่ 3 ตัว, 2 ตัว, รูด และ 6 กลับรวมกันได้ ระบบจะแยกประเภทให้เอง แล้วค่อยแก้ราคา/กลับเลขในแต่ละกลุ่ม
+      </div>
+      <textarea class="slip" id="slipInput" placeholder="ตัวอย่าง
+3 ตัวตรงโต๊ด
+495
+549
+270
+5*5
+
+2 ตัวบนล่าง
+94 96 90 46 40 60 บลก 1*1
+
+รูด 6-9 1*1
+
+3 ตัว6กลับ
+015
+817
+807
+6กลับ5" spellcheck="false"></textarea>
+      <div class="parse-actions">
+       <button class="secondary" id="clearInput">
+        ล้าง
+       </button>
+       <button class="primary" id="parseBtn">
+        แยกโพย
+       </button>
+      </div>
+      <div class="parse-summary" id="parseSummary">
+       ยังไม่ได้แยกโพย
+      </div>
+      <div class="error" id="error">
+      </div>
+     </section>
+     <div class="groups-head">
+      <div class="groups-title">
+       รายการที่ระบบแยก
+      </div>
+      <div class="groups-count" id="groupsCount">
+       0 กลุ่ม
+      </div>
+     </div>
+     <div class="group-list" id="groupList">
+      <div class="empty">
+       วางโพยแล้วกด “แยกโพย”
+      </div>
+     </div>
+    </div>
+    <section class="bottom">
+     <div class="grand">
+      <small>
+       รวมยอดแทงทั้งหมด
+      </small>
+      <strong id="grandTotal">
+       0 บาท
+      </strong>
+     </div>
+     <button class="send" disabled="" id="submitBtn">
+      ตรวจสอบและยืนยันโพย
+     </button>
+    </section>
+   </section>
+  </main>
+  <div class="overlay" id="overlay">
+   <div class="dialog">
+    <div class="dialog-head">
+     <div>
+      <div class="dialog-title">
+       ตรวจสอบโพย
+      </div>
+      <div class="dialog-sub" id="dialogSub">
+      </div>
+     </div>
+     <button class="close" id="closeDialog">
+      ×
+     </button>
+    </div>
+    <div class="dialog-body" id="dialogBody">
+    </div>
+    <div class="dialog-foot">
+     <button class="cancel" id="cancelDialog">
+      แก้ไข
+     </button>
+     <button class="confirm" id="confirmSend">
+      ยืนยันส่งโพย
+     </button>
+    </div>
+   </div>
+  </div>
+  <div class="loading" id="loading">
+   <div class="spinner">
+   </div>
+  </div>
+  <div class="toast" id="toast">
+  </div>
+  <script>
+/* =====================================================
+   CONFIG / STATE
+===================================================== */
+
+var API = "https://script.google.com/macros/s/AKfycbxM3tDfZW_Xq5Du6UAp7qF3AkRwwq6qRt6x3xJ45SVVcXk_XtZJfRRVa6FvRSW5KOVWvA/exec";
+
+var LIFF_ID = "2001131713-zQoBGoGU";
+
+var AFTER_MIDNIGHT_CUTOFF_HOUR = 6;
+
+var state = { lottos: [], bank: null, selectedLotto: null, groups: [], liffReady: false, pendingPayloads: null };
+
+var els = {};
+
+var timer = null, toastTimer = null, liffUrl = "";
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () { ["lottoScreen", "betScreen", "lottoGrid", "lottoEmpty", "backBtn", "selectedName", "selectedRound", "selectedClose", "selectedCount", "liffGate", "liffGateText", "openLine", "slipInput", "clearInput", "parseBtn", "parseSummary", "error", "groupList", "groupsCount", "grandTotal", "submitBtn", "overlay", "dialogSub", "dialogBody", "closeDialog", "cancelDialog", "confirmSend", "loading", "toast"].forEach(function (id) { els[id] = document.getElementById(id); }); bindEvents(); apiGetBoot().then(initBoot).catch(showError); });
+
+
+/* =====================================================
+   INIT / EVENTS
+===================================================== */
+
+function bindEvents() { els.backBtn.onclick = backToLotto; els.openLine.onclick = function () { if (liffUrl)
+    location.href = liffUrl; }; els.clearInput.onclick = function () { els.slipInput.value = ""; state.groups = []; renderGroups(); clearError(); }; els.parseBtn.onclick = parseCurrentSlip; els.submitBtn.onclick = openConfirm; els.closeDialog.onclick = closeConfirm; els.cancelDialog.onclick = closeConfirm; els.confirmSend.onclick = confirmAndSend; els.overlay.onclick = function (e) { if (e.target === els.overlay)
+    closeConfirm(); }; }
+
+
+/* =====================================================
+   API / BOOT
+===================================================== */
+
+function apiGetBoot() { return fetch(API + "?action=boot", { cache: "no-store" }).then(readApiJson); }
+
+function apiCreateLiffOrder(payload) { return fetch(API, { method: "POST", headers: { "content-type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "createLiffOrder", payload: payload }) }).then(readApiJson); }
+
+function readApiJson(res) { return res.text().then(function (text) { var data; try {
+    data = text ? JSON.parse(text) : {};
+}
+catch (e) {
+    throw new Error(text && text.trim().charAt(0) === "<" ? "เชื่อมต่อ API ไม่สำเร็จ" : (text || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์"));
+} if (!res.ok || data.ok === false)
+    throw new Error(data.error || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์"); return data; }); }
+
+function initBoot(data) { state.lottos = data.lottos || []; state.bank = data.bank || null; renderLottos(); showLotto(); initLiff(); }
+
+
+/* =====================================================
+   LOTTO SCREEN
+===================================================== */
+
+function renderLottos() { els.lottoGrid.innerHTML = ""; els.lottoEmpty.style.display = state.lottos.length ? "none" : "block"; state.lottos.forEach(function (lotto) { var b = document.createElement("button"); b.className = "lotto"; b.type = "button"; b._lotto = lotto; b.innerHTML = '<div><div class="lotto-name"></div><div class="lotto-meta"></div></div><div class="lotto-right"><div class="lotto-date"></div><div class="countdown"></div></div>'; b.querySelector(".lotto-name").textContent = lotto.name || "-"; b.querySelector(".lotto-meta").textContent = "ปิดรับ " + getActualCloseText(lotto); b.querySelector(".lotto-date").textContent = "รอบ " + getRoundDateText(lotto); b.querySelector(".countdown")._lotto = lotto; b.onclick = function () { var t = getLottoCloseTarget(lotto); if (t && t.getTime() <= Date.now())
+    return; chooseLotto(lotto); }; els.lottoGrid.appendChild(b); }); startTimer(updateLottoCountdowns); }
+
+function chooseLotto(lotto) { state.selectedLotto = lotto; state.groups = []; els.slipInput.value = ""; els.selectedName.textContent = lotto.name || "-"; els.selectedRound.textContent = "รอบ " + getRoundDateText(lotto); els.selectedClose.textContent = "ปิด " + getActualCloseText(lotto); renderGroups(); showBet(); startTimer(updateSelectedCountdown); }
+
+function showLotto() { els.betScreen.classList.remove("active"); els.lottoScreen.classList.add("active"); startTimer(updateLottoCountdowns); scrollTo(0, 0); }
+
+function showBet() { els.lottoScreen.classList.remove("active"); els.betScreen.classList.add("active"); scrollTo(0, 0); }
+
+function backToLotto() { state.selectedLotto = null; state.groups = []; renderGroups(); showLotto(); }
+
+
+/* =====================================================
+   LIFF
+===================================================== */
+
+function initLiff() { liffUrl = "https://liff.line.me/" + encodeURIComponent(LIFF_ID); if (!window.liff || !liff.init) {
+    showLiffGate("LIFF SDK ยังไม่พร้อม");
+    return;
+} liff.init({ liffId: LIFF_ID, withLoginOnExternalBrowser: true }).then(function () { state.liffReady = true; if (liff.isInClient())
+    hideLiffGate();
+else
+    showLiffGate("การส่งโพยเข้าแชทต้องเปิดผ่าน LINE"); }).catch(function () { showLiffGate("กรุณาเปิดหน้านี้ผ่าน LINE"); }); }
+
+function showLiffGate(t) { els.liffGateText.textContent = t; els.liffGate.classList.add("show"); }
+
+function hideLiffGate() { els.liffGate.classList.remove("show"); }
+
+function canSendToChat() { return state.liffReady && window.liff && typeof liff.sendMessages === "function" && liff.isInClient(); }
+
+
+/* =====================================================
+   SLIP PARSER
+===================================================== */
+
+function parseCurrentSlip() { clearError(); var text = els.slipInput.value || ""; if (!text.trim()) {
+    showError("กรุณาวางโพยก่อน");
+    return;
+} var groups = parseSlip(text); if (!groups.length) {
+    showError("ยังแยกเลขจากข้อความนี้ไม่ได้");
+    return;
+} state.groups = groups; renderGroups(); showToast("แยกโพยแล้ว"); }
+
+function normalizeText(text) { return String(text || "").replace(/\\\*/g, "*").replace(/[×xX]/g, "*").replace(/\r/g, "").replace(/[–—]/g, "-").replace(/[：]/g, ":"); }
+
+function parseSlip(text) {
+    var lines = normalizeText(text).split("\n");
+    var groups = [], current = null, pending3 = [];
+    function newGroup(type, explicit) { var g = { id: createId(), type: type, sourceNumbers: [], reverse: false, priceA: 0, priceB: 0, _explicit: !!explicit }; groups.push(g); current = g; return g; }
+    function ensure(type) { if (current && current.type === type)
+        return current; for (var ei = groups.length - 1; ei >= 0; ei--) {
+        if (groups[ei].type === type && !groups[ei]._explicit) {
+            current = groups[ei];
+            return current;
+        }
+    } current = newGroup(type, false); return current; }
+    function pushNums(g, nums) { nums.forEach(function (n) { if (g.sourceNumbers.indexOf(n) === -1)
+        g.sourceNumbers.push(n); }); }
+    lines.forEach(function (raw) {
+        var line = raw.trim().replace(/^[-•]+\s*/, "");
+        if (!line)
+            return;
+        var lower = line.replace(/\s+/g, " ");
+        var isGate = /รูด|19\s*ประตู/i.test(lower);
+        var isSix = /6\s*กลับ|6กลับ|3\s*ตัว\s*6\s*กลับ/i.test(lower);
+        var isTwo = /2\s*ตัว|สอง\s*ตัว|บน\s*ล่าง|บลก|บล\b/i.test(lower);
+        var isThree = /3\s*ตัว|สาม\s*ตัว|ตรง\s*โต๊ด|ตรงโต๊ด/i.test(lower);
+        if (isGate) {
+            current = newGroup("gate19", true);
+            var noPrice = lower.replace(/(\d+(?:\.\d+)?)\s*\*\s*(\d+(?:\.\d+)?)/g, function (_, a, b) { current.priceA = num(a); current.priceB = num(b); return " "; });
+            var seedPart = noPrice.replace(/รูด|19\s*ประตู/ig, " ");
+            var seeds = (seedPart.match(/\d/g) || []);
+            pushNums(current, unique(seeds));
+            return;
+        }
+        if (isSix) {
+            if (current && current.sourceNumbers.length && /^6\s*กลับ\s*\d+(?:\.\d+)?$/i.test(lower) && (current.type === "six" || current.type === "three")) {
+                if (current.type === "three")
+                    current.type = "six";
+                current.reverse = true;
+                var pm = lower.match(/6\s*กลับ\s*(\d+(?:\.\d+)?)/i);
+                if (pm)
+                    current.priceA = num(pm[1]);
+                current.priceB = 0;
+                return;
+            }
+            current = newGroup("six", true);
+            current.reverse = true;
+            var sixPrice = lower.match(/6\s*กลับ\s*(\d+(?:\.\d+)?)/i);
+            if (sixPrice && sixPrice[1])
+                current.priceA = num(sixPrice[1]);
+            var nums6 = extractExactDigits(lower.replace(/6\s*กลับ\s*\d*(?:\.\d+)?/ig, " "), 3);
+            pushNums(current, nums6);
+            return;
+        }
+        if (isTwo) {
+            current = newGroup("two", true);
+            current.reverse = /บลก|กลับ/i.test(lower);
+            var pp = extractPairPrice(lower);
+            if (pp) {
+                current.priceA = pp[0];
+                current.priceB = pp[1];
+            }
+            var nums2 = extractExactDigits(removePricesAndMode(lower), 2);
+            pushNums(current, nums2);
+            return;
+        }
+        if (isThree) {
+            current = newGroup("three", true);
+            current.reverse = /กลับ/i.test(lower);
+            var p3 = extractPairPrice(lower);
+            if (p3) {
+                current.priceA = p3[0];
+                current.priceB = p3[1];
+            }
+            var nums3 = extractExactDigits(removePricesAndMode(lower), 3);
+            pushNums(current, nums3);
+            return;
+        }
+        var pair = extractPairPrice(lower);
+        if (pair && current) {
+            current.priceA = pair[0];
+            if (current.type !== "six")
+                current.priceB = pair[1];
+            return;
+        }
+        var sixOnly = lower.match(/^6\s*กลับ\s*(\d+(?:\.\d+)?)$/i);
+        if (sixOnly && current) {
+            if (current.type === "three")
+                current.type = "six";
+            current.reverse = true;
+            current.priceA = num(sixOnly[1]);
+            current.priceB = 0;
+            return;
+        }
+        if (current) {
+            var need = current.type === "gate19" ? 1 : (current.type === "two" ? 2 : 3);
+            var nums = extractExactDigits(lower, need);
+            if (nums.length) {
+                pushNums(current, nums);
+                return;
+            }
+        }
+        var n3 = extractExactDigits(lower, 3), n2 = extractExactDigits(lower, 2);
+        if (n3.length && n2.length) {
+            var before = current;
+            if (before && (before.type === "three" || before.type === "six"))
+                pushNums(before, n3);
+            else {
+                current = ensure("three");
+                pushNums(current, n3);
+            }
+            if (before && before.type === "two") {
+                pushNums(before, n2);
+                current = before;
+            }
+            else {
+                current = ensure("two");
+                pushNums(current, n2);
+            }
+            return;
+        }
+        if (n3.length && !n2.length) {
+            current = ensure("three");
+            pushNums(current, n3);
+        }
+        else if (n2.length && !n3.length) {
+            current = ensure("two");
+            pushNums(current, n2);
+        }
+    });
+    return groups.filter(function (g) { return g.sourceNumbers.length; }).map(cleanGroup);
+}
+
+function cleanGroup(g) { g.sourceNumbers = unique(g.sourceNumbers); if (g.type === "six")
+    g.reverse = true; delete g._explicit; return g; }
+
+function removePricesAndMode(s) { return s.replace(/\d+(?:\.\d+)?\s*\*\s*\d+(?:\.\d+)?/g, " ").replace(/3\s*ตัว|2\s*ตัว|สาม\s*ตัว|สอง\s*ตัว|ตรง|โต๊ด|บน|ล่าง|บลก|บล|กลับ/ig, " "); }
+
+function extractPairPrice(s) { var m = String(s).match(/(\d+(?:\.\d+)?)\s*\*\s*(\d+(?:\.\d+)?)/); return m ? [num(m[1]), num(m[2])] : null; }
+
+function extractExactDigits(s, len) { var groups = String(s || "").match(/\d+/g) || [], out = []; groups.forEach(function (x) { if (x.length === len)
+    out.push(x);
+else if (x.length > len && x.length % len === 0) {
+    for (var i = 0; i < x.length; i += len)
+        out.push(x.slice(i, i + len));
+} }); return unique(out); }
+
+
+/* =====================================================
+   GROUP UI / CALCULATION
+===================================================== */
+
+function renderGroups() {
+    els.groupList.innerHTML = "";
+    if (!state.groups.length) {
+        els.groupList.innerHTML = '<div class="empty">วางโพยแล้วกด “แยกโพย”</div>';
+        els.groupsCount.textContent = "0 กลุ่ม";
+        els.parseSummary.textContent = "ยังไม่ได้แยกโพย";
+        updateGrandTotal();
+        return;
+    }
+    state.groups.forEach(function (g, idx) {
+        var info = getGroupInfo(g);
+        var card = document.createElement("article");
+        card.className = "group";
+        var display = getGroupDisplayNumbers(g);
+        var betCount = getGroupBetCount(g);
+        card.innerHTML = '<div class="group-head"><div><div class="group-label"></div><div class="group-sub"></div></div><button class="delete">ลบ</button></div><div class="group-body"><div class="chips"></div><div class="source-note"></div><div class="tools"></div><div class="price-title">ใส่ราคาแยกสำหรับกลุ่มนี้</div><div class="price-grid"><div class="price-field"><span class="price-label price-a-label"></span><input class="price-input price-a" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div><div class="price-field field-b"><span class="price-label price-b-label"></span><input class="price-input price-b" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div></div><div class="group-total"><span>ยอดกลุ่มนี้</span><b>0 บาท</b></div></div>';
+        card.querySelector(".group-label").textContent = (idx + 1) + ". " + info.label;
+        card.querySelector(".group-sub").textContent = betCount + " รายการ" + (display.length !== betCount ? " • แสดง " + display.length + " เลข" : "");
+        var chipWrap = card.querySelector(".chips");
+        display.forEach(function (n) { var c = document.createElement("span"); c.className = "chip"; c.textContent = n; chipWrap.appendChild(c); });
+        card.querySelector(".source-note").textContent = buildSourceNote(g);
+        var tools = card.querySelector(".tools");
+        if (g.type === "two" || g.type === "three") {
+            var rb = document.createElement("button");
+            rb.type = "button";
+            rb.className = "reverse" + (g.reverse ? " active" : "");
+            rb.textContent = g.reverse ? "✓ กลับเลขแล้ว" : "↔ กลับเลข";
+            rb.onclick = function () { g.reverse = !g.reverse; renderGroups(); };
+            tools.appendChild(rb);
+        }
+        else if (g.type === "six") {
+            var tag = document.createElement("span");
+            tag.className = "reverse active";
+            tag.textContent = "✓ 6 กลับอัตโนมัติ";
+            tools.appendChild(tag);
+        }
+        else {
+            var tag2 = document.createElement("span");
+            tag2.className = "reverse active";
+            tag2.textContent = "✓ รูดเป็น 19 ประตู";
+            tools.appendChild(tag2);
+        }
+        var grid = card.querySelector(".price-grid"), a = card.querySelector(".price-a"), b = card.querySelector(".price-b");
+        card.querySelector(".price-a-label").textContent = info.priceA;
+        card.querySelector(".price-b-label").textContent = info.priceB || "";
+        a.value = g.priceA || "";
+        b.value = g.priceB || "";
+        if (!info.priceB) {
+            grid.classList.add("one");
+            card.querySelector(".field-b").style.display = "none";
+        }
+        a.oninput = function () { g.priceA = num(a.value); updateGroupTotal(card, g); updateGrandTotal(); };
+        b.oninput = function () { g.priceB = num(b.value); updateGroupTotal(card, g); updateGrandTotal(); };
+        card.querySelector(".delete").onclick = function () { state.groups = state.groups.filter(function (x) { return x.id !== g.id; }); renderGroups(); };
+        updateGroupTotal(card, g);
+        els.groupList.appendChild(card);
+    });
+    els.groupsCount.textContent = state.groups.length + " กลุ่ม";
+    var c3 = state.groups.filter(function (g) { return g.type === "three" || g.type === "six"; }).length, c2 = state.groups.filter(function (g) { return g.type === "two"; }).length, c19 = state.groups.filter(function (g) { return g.type === "gate19"; }).length;
+    els.parseSummary.textContent = "แยกแล้ว " + state.groups.length + " กลุ่ม • 3 ตัว " + c3 + " • 2 ตัว " + c2 + " • 19 ประตู " + c19;
+    updateGrandTotal();
+}
+
+function getGroupInfo(g) { if (g.type === "three")
+    return { label: "3 ตัวตรง / โต๊ด", priceA: "ตรง", priceB: "โต๊ด" }; if (g.type === "two")
+    return { label: "2 ตัวบน / ล่าง", priceA: "บน", priceB: "ล่าง" }; if (g.type === "gate19")
+    return { label: "19 ประตู", priceA: "บน", priceB: "ล่าง" }; return { label: "3 ตัว 6 กลับ", priceA: "6 กลับ", priceB: null }; }
+
+function getGroupDisplayNumbers(g) { var out = []; if (g.type === "gate19")
+    g.sourceNumbers.forEach(function (d) { out = out.concat(get19GateNumbers(d)); });
+else if (g.type === "six" || (g.type === "three" && g.reverse))
+    g.sourceNumbers.forEach(function (n) { out = out.concat(getPermutations3(n)); });
+else if (g.type === "two" && g.reverse)
+    g.sourceNumbers.forEach(function (n) { out = out.concat(getTwoReverseSet(n)); });
+else
+    out = g.sourceNumbers.slice(); return unique(out); }
+
+function getGroupBetCount(g) { var count = 0; if (g.type === "gate19")
+    g.sourceNumbers.forEach(function (d) { count += get19GateNumbers(d).length; });
+else if (g.type === "six" || (g.type === "three" && g.reverse))
+    g.sourceNumbers.forEach(function (n) { count += getPermutations3(n).length; });
+else if (g.type === "two" && g.reverse)
+    g.sourceNumbers.forEach(function (n) { count += getTwoReverseSet(n).length; });
+else
+    count = g.sourceNumbers.length; return count; }
+
+function buildSourceNote(g) { if (g.type === "gate19")
+    return "เลขตั้งต้น: " + g.sourceNumbers.join(", ") + " • คิดเงิน 19 รายการต่อเลขตั้งต้น"; if (g.type === "six")
+    return "เลขต้นฉบับ: " + g.sourceNumbers.join(" ") + " • แต่ละชุดสร้างเลขกลับแยกกัน"; if (g.reverse)
+    return "เลขต้นฉบับ: " + g.sourceNumbers.join(" ") + " • ระบบคิดจำนวนหลังกลับเลข"; return "เลขต้นฉบับ: " + g.sourceNumbers.join(" "); }
+
+function getGroupTotal(g) { var info = getGroupInfo(g), count = getGroupBetCount(g), p = g.priceA + (info.priceB ? g.priceB : 0); return count * p; }
+
+function updateGroupTotal(card, g) { card.querySelector(".group-total b").textContent = money(getGroupTotal(g)) + " บาท"; }
+
+function updateGrandTotal() { var total = state.groups.reduce(function (s, g) { return s + getGroupTotal(g); }, 0); els.grandTotal.textContent = money(total) + " บาท"; els.submitBtn.disabled = !state.groups.length || total <= 0; }
+
+function getGrandTotal() { return state.groups.reduce(function (s, g) { return s + getGroupTotal(g); }, 0); }
+
+
+/* =====================================================
+   CONFIRM / PAYLOAD
+===================================================== */
+
+function openConfirm() { clearError(); if (!state.groups.length) {
+    showError("ยังไม่มีรายการ");
+    return;
+} var missing = state.groups.some(function (g) { var i = getGroupInfo(g); return g.priceA <= 0 && (!i.priceB || g.priceB <= 0); }); if (missing) {
+    showError("กรุณาใส่ราคาอย่างน้อย 1 ช่องในทุกกลุ่ม");
+    return;
+} var close = getLottoCloseTarget(state.selectedLotto); if (close && close.getTime() <= Date.now()) {
+    showError("หวยนี้ปิดรับแล้ว");
+    return;
+} var payloads = buildPayloads(); if (!payloads.length) {
+    showError("สร้างรายการส่งไม่สำเร็จ");
+    return;
+} state.pendingPayloads = payloads; renderConfirm(); els.overlay.classList.add("show"); }
+
+function closeConfirm() { els.overlay.classList.remove("show"); }
+
+function renderConfirm() { els.dialogBody.innerHTML = ""; els.dialogSub.textContent = (state.selectedLotto ? state.selectedLotto.name : "") + " • รวม " + money(getGrandTotal()) + " บาท"; state.groups.forEach(function (g) { var info = getGroupInfo(g), c = document.createElement("section"); c.className = "confirm-card"; c.innerHTML = '<div class="confirm-card-head"><span></span><span></span></div><div class="confirm-card-body"></div>'; c.querySelector(".confirm-card-head span:first-child").textContent = info.label; c.querySelector(".confirm-card-head span:last-child").textContent = money(getGroupTotal(g)) + " บาท"; c.querySelector(".confirm-card-body").textContent = getGroupDisplayNumbers(g).join(" "); els.dialogBody.appendChild(c); }); }
+
+function buildPayloads() { var payloads = []; state.groups.forEach(function (g) { if (g.type === "two") {
+    var nums = [];
+    g.sourceNumbers.forEach(function (n) { nums = nums.concat(g.reverse ? getTwoReverseSet(n) : [n]); });
+    if (g.priceA > 0)
+        payloads.push(makePayload("two_top", "2 ตัวบน", nums, g.priceA, 0));
+    if (g.priceB > 0)
+        payloads.push(makePayload("two_bottom", "2 ตัวล่าง", nums, 0, g.priceB));
+}
+else if (g.type === "three") {
+    var nums3 = [];
+    g.sourceNumbers.forEach(function (n) { nums3 = nums3.concat(g.reverse ? getPermutations3(n) : [n]); });
+    if (g.priceA > 0)
+        payloads.push(makePayload("three_top", "3 ตัวตรง", nums3, g.priceA, 0));
+    if (g.priceB > 0)
+        payloads.push(makePayload("three_tod", "3 ตัวโต๊ด", nums3, 0, g.priceB));
+}
+else if (g.type === "six") {
+    g.sourceNumbers.forEach(function (source) { var perms = getPermutations3(source); payloads.push({ modeKey: "three_return", label: "6 กลับ", lottoName: state.selectedLotto.name, roundDate: getRoundDateText(state.selectedLotto), closeTime: state.selectedLotto.closeTime || "", kind: "three", numbers: source, displayNumbers: perms, betCount: perms.length, subtotal: perms.length * g.priceA, priceText: "6 กลับ " + g.priceA, top: g.priceA, bottom: 0 }); });
+}
+else if (g.type === "gate19") {
+    g.sourceNumbers.forEach(function (source) { var gate = get19GateNumbers(source); if (g.priceA > 0)
+        payloads.push(makePayload("two_top", "19 ประตู บน", gate, g.priceA, 0)); if (g.priceB > 0)
+        payloads.push(makePayload("two_bottom", "19 ประตู ล่าง", gate, 0, g.priceB)); });
+} }); return payloads; }
+
+function makePayload(modeKey, label, numbers, top, bottom) { var price = top || bottom; return { modeKey: modeKey, label: label, lottoName: state.selectedLotto.name, roundDate: getRoundDateText(state.selectedLotto), closeTime: state.selectedLotto.closeTime || "", kind: modeKey.indexOf("three") === 0 ? "three" : "two", numbers: numbers.join(" "), displayNumbers: unique(numbers), betCount: numbers.length, subtotal: numbers.length * price, priceText: top > 0 ? "บน " + top : "ล่าง " + bottom, top: top, bottom: bottom }; }
+
+function getApiPayload(i) { return { modeKey: i.modeKey, label: i.label, lottoName: i.lottoName, closeTime: i.closeTime, kind: i.kind, numbers: i.numbers, top: i.top, bottom: i.bottom }; }
+
+function confirmAndSend() { if (!state.pendingPayloads || !state.pendingPayloads.length)
+    return; if (!canSendToChat()) {
+    closeConfirm();
+    showLiffGate("ต้องเปิดผ่าน LINE ก่อนส่งโพย");
+    showError("กด เปิดใน LINE แล้วลองอีกครั้ง");
+    return;
+} var close = getLottoCloseTarget(state.selectedLotto); if (close && close.getTime() <= Date.now()) {
+    closeConfirm();
+    showError("หวยนี้ปิดรับแล้ว");
+    return;
+} var payloads = state.pendingPayloads.slice(); closeConfirm(); setLoading(true); Promise.all(payloads.map(function (i) { return apiCreateLiffOrder(getApiPayload(i)); })).then(function () { return sendToLine([buildCombinedFlex(payloads)]); }).catch(showError); }
+
+
+/* =====================================================
+   FLEX / LINE
+===================================================== */
+
+function buildCombinedFlex(payloads) { var groups = mergeDisplayGroups(payloads), total = groups.reduce(function (s, g) { return s + g.subtotal; }, 0), blocks = []; groups.forEach(function (g, idx) { blocks.push({ type: "box", layout: "horizontal", margin: idx ? "lg" : "none", contents: [{ type: "text", text: g.label, color: "#B91C1C", size: "sm", weight: "bold", flex: 0 }, { type: "text", text: g.priceText, color: "#9CA3AF", size: "xs", align: "end" }] }); blocks.push({ type: "box", layout: "horizontal", margin: "xs", contents: [{ type: "text", text: g.betCount + " รายการ", color: "#9CA3AF", size: "xs", flex: 0 }, { type: "text", text: "= " + money(g.subtotal) + " บาท", color: "#6B7280", size: "xs", weight: "bold", align: "end" }] }); blocks.push({ type: "box", layout: "vertical", margin: "sm", paddingAll: "10px", backgroundColor: "#FEF2F2", cornerRadius: "8px", contents: [{ type: "text", text: g.numbers.join(" "), color: "#7F1D1D", weight: "bold", size: "sm", wrap: true }] }); }); var bank = state.bank || {}, bankNumber = bank.number || "5054158114", bankName = bank.name || "น.ส. ทิพวรรณ ฮุ่งเมือง", bankTitle = bank.bank || "ไทยพาณิชย์ (SCB)"; return { type: "flex", altText: (state.selectedLotto ? state.selectedLotto.name : "โพยหวย") + " รวม " + total + " บาท", contents: { type: "bubble", size: "kilo", header: { type: "box", layout: "vertical", paddingAll: "18px", backgroundColor: "#B91C1C", contents: [{ type: "text", text: state.selectedLotto.name, color: "#FFFFFF", weight: "bold", size: "xl", wrap: true }, { type: "text", text: "รวม " + payloads.reduce(function (s, i) { return s + i.betCount; }, 0) + " รายการ", color: "#FEE2E2", size: "xs", margin: "sm" }] }, body: { type: "box", layout: "vertical", paddingAll: "18px", contents: blocks.concat([{ type: "separator", margin: "lg", color: "#FCA5A5" }, { type: "box", layout: "vertical", margin: "lg", paddingAll: "14px", backgroundColor: "#FEF2F2", cornerRadius: "10px", contents: [{ type: "text", text: "ยอดโอน", color: "#DC2626", size: "xs", align: "center", weight: "bold" }, { type: "text", text: money(total) + " บาท", color: "#B91C1C", size: "xxl", align: "center", weight: "bold", margin: "xs" }] }, { type: "box", layout: "vertical", margin: "md", paddingAll: "13px", backgroundColor: "#FFF7F7", cornerRadius: "10px", borderColor: "#FCA5A5", borderWidth: "1px", contents: [{ type: "text", text: "บัญชีโอน", color: "#DC2626", size: "xs", weight: "bold" }, { type: "text", text: bankNumber, color: "#7F1D1D", size: "xl", weight: "bold", margin: "xs", wrap: true }, { type: "text", text: bankTitle, color: "#991B1B", size: "sm", margin: "xs" }, { type: "text", text: bankName, color: "#991B1B", size: "sm", margin: "xs", wrap: true }, { type: "button", style: "secondary", height: "sm", margin: "md", action: { type: "clipboard", label: "คัดลอกเลขบัญชี", clipboardText: bankNumber } }] }]) } } }; }
+
+function mergeDisplayGroups(payloads) { var groups = [], map = {}; payloads.forEach(function (i) { var key = [i.label, i.top, i.bottom, i.priceText].join("|"); var nums = i.displayNumbers && i.displayNumbers.length ? i.displayNumbers.slice() : String(i.numbers || "").split(/\s+/).filter(Boolean); if (map[key] === undefined) {
+    map[key] = groups.length;
+    groups.push({ label: i.label, priceText: i.priceText, numbers: nums.slice(), betCount: num(i.betCount) || nums.length, subtotal: num(i.subtotal) });
+}
+else {
+    var g = groups[map[key]];
+    g.numbers = unique(g.numbers.concat(nums));
+    g.betCount += num(i.betCount) || nums.length;
+    g.subtotal += num(i.subtotal);
+} }); return groups; }
+
+function sendToLine(messages) { return ensureChatWritePermission().then(function () { return liff.sendMessages(messages); }).then(function () { state.pendingPayloads = null; setLoading(false); if (liff.isInClient())
+    liff.closeWindow(); }); }
+
+function ensureChatWritePermission() { if (!window.liff || !liff.permission || typeof liff.permission.query !== "function")
+    return Promise.resolve(); return liff.permission.query("chat_message.write").then(function (p) { if (!p || p.state === "granted")
+    return; if (typeof liff.permission.requestAll === "function")
+    return liff.permission.requestAll(); throw new Error("LIFF ยังไม่ได้เปิดสิทธิ์ chat_message.write"); }); }
+
+
+/* =====================================================
+   NUMBER GENERATORS
+===================================================== */
+
+function getTwoReverseSet(n) { var r = n.charAt(1) + n.charAt(0); return r === n ? [n] : [n, r]; }
+
+function getPermutations3(n) { if (String(n).length !== 3)
+    return []; var a = n[0], b = n[1], c = n[2]; return unique([a + b + c, a + c + b, b + a + c, b + c + a, c + a + b, c + b + a]); }
+
+function get19GateNumbers(d) { var out = []; for (var i = 0; i <= 9; i++) {
+    var o = String(i);
+    out.push(d + o);
+    if (o !== d)
+        out.push(o + d);
+} return unique(out); }
+
+
+/* =====================================================
+   COUNTDOWN / DATE
+===================================================== */
+
+function startTimer(fn) { clearInterval(timer); fn(); timer = setInterval(fn, 1000); }
+
+function updateLottoCountdowns() { document.querySelectorAll(".lotto").forEach(function (b) { var t = getLottoCloseTarget(b._lotto), closed = !!(t && t.getTime() <= Date.now()); b.classList.toggle("closed", closed); renderCountdown(b.querySelector(".countdown"), t); }); }
+
+function updateSelectedCountdown() { renderCountdown(els.selectedCount, getLottoCloseTarget(state.selectedLotto)); }
+
+function renderCountdown(el, t) { if (!t) {
+    el.textContent = "--:--:--";
+    return;
+} var diff = t.getTime() - Date.now(); if (diff <= 0) {
+    el.textContent = "ปิดรับแล้ว";
+    return;
+} var s = Math.floor(diff / 1000), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60; el.textContent = pad2(h) + ":" + pad2(m) + ":" + pad2(r); }
+
+function getRoundDateParts(l) { var text = l && (l.drawDate || l.date || l.roundDate) || "", m = String(text).match(/(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/); if (m)
+    return { day: +m[1], month: +m[2] - 1, year: +m[3] }; var iso = String(text).match(/(\d{4})-(\d{1,2})-(\d{1,2})/); if (iso)
+    return { day: +iso[3], month: +iso[2] - 1, year: +iso[1] }; var n = new Date; return { day: n.getDate(), month: n.getMonth(), year: n.getFullYear() }; }
+
+function getRoundDateText(l) { var p = getRoundDateParts(l); return pad2(p.day) + "-" + pad2(p.month + 1) + "-" + p.year; }
+
+function getCloseHour(l) { var m = String(l && l.closeTime || "").match(/(\d{1,2}):(\d{2})/); return m ? +m[1] : null; }
+
+function getLottoCloseTarget(l) { if (!l)
+    return null; var p = getRoundDateParts(l), m = String(l.closeTime || "").match(/(\d{1,2}):(\d{2})/); if (!m)
+    return null; var h = +m[1], d = new Date(p.year, p.month, p.day, h, +m[2], 0, 0); if (h < AFTER_MIDNIGHT_CUTOFF_HOUR)
+    d.setDate(d.getDate() + 1); return d; }
+
+function getActualCloseText(l) { var t = getLottoCloseTarget(l); return t ? formatDateOnly(t) + " " + (l.closeTime || "--:--") : (l.closeTime || "--:--"); }
+
+function formatDateOnly(d) { return pad2(d.getDate()) + "-" + pad2(d.getMonth() + 1) + "-" + d.getFullYear(); }
+
+
+/* =====================================================
+   UI HELPERS
+===================================================== */
+
+function showError(e) { setLoading(false); els.error.textContent = typeof e === "string" ? e : (e && e.message ? e.message : "เกิดข้อผิดพลาด"); }
+
+function clearError() { els.error.textContent = ""; }
+
+function setLoading(on) { els.loading.classList.toggle("show", !!on); }
+
+function showToast(t) { els.toast.textContent = t; els.toast.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(function () { els.toast.classList.remove("show"); }, 1200); }
+
+
+/* =====================================================
+   GENERAL HELPERS
+===================================================== */
+
+function unique(a) { var seen = {}; return a.filter(function (x) { if (seen[x])
+    return false; seen[x] = 1; return true; }); }
+
+function num(v) { return Number(v || 0) || 0; }
+
+function money(v) { return Number(v || 0).toLocaleString("en-US"); }
+
+function pad2(v) { return String(v).padStart(2, "0"); }
+
+function createId() { return Date.now() + "-" + Math.random().toString(36).slice(2); }
+</script>
+ </body>
+</html>
