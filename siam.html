@@ -26,7 +26,9 @@
       --red-soft: #fff1f2;
       --red-soft-2: #fff7f8;
 
-      --green: #22c55e;
+      --green: #46ad34;
+      --green-dark: #328629;
+      --green-soft: #f5fbf1;
 
       --ink: #18181b;
       --ink-soft: #3f3f46;
@@ -34,15 +36,19 @@
 
       --line: #e4e4e7;
       --line-red: #fecdd3;
+      --line-green: #96c985;
 
-      --bg: #f5f5f7;
+      --bg: #f6f6f8;
       --card: #ffffff;
 
       --radius: 18px;
       --radius-lg: 24px;
 
-      --shadow: 0 8px 26px rgba(24,24,27,.06);
-      --shadow-red: 0 10px 26px rgba(201,21,45,.20);
+      --shadow:
+        0 8px 26px rgba(24,24,27,.06);
+
+      --shadow-red:
+        0 10px 26px rgba(201,21,45,.20);
     }
 
     * {
@@ -86,6 +92,7 @@
     button {
       cursor: pointer;
       touch-action: manipulation;
+
       transition:
         transform .12s ease,
         opacity .15s ease,
@@ -94,7 +101,7 @@
     }
 
     button:active {
-      transform: scale(.97);
+      transform: scale(.98);
     }
 
     button:disabled {
@@ -115,7 +122,9 @@
     .app {
       width: 100%;
       max-width: 680px;
+
       min-height: 100vh;
+
       margin: 0 auto;
     }
 
@@ -130,7 +139,7 @@
 
 
     /* =====================================================
-       หน้าเลือกหวย
+       SELECT LOTTO HEADER
     ===================================================== */
 
     .select-header {
@@ -139,7 +148,7 @@
       padding:
         calc(28px + env(safe-area-inset-top))
         18px
-        25px;
+        26px;
 
       overflow: hidden;
 
@@ -149,24 +158,29 @@
         radial-gradient(
           circle at 100% 0%,
           rgba(255,255,255,.17),
-          transparent 36%
+          transparent 37%
         ),
         radial-gradient(
           circle at 0% 100%,
           rgba(0,0,0,.11),
-          transparent 46%
+          transparent 47%
         ),
         linear-gradient(
           140deg,
           #721221 0%,
-          #a81730 48%,
+          #a81730 49%,
           #df2341 100%
         );
 
-      border-radius: 0 0 30px 30px;
+      border-radius:
+        0
+        0
+        30px
+        30px;
 
       box-shadow:
-        0 12px 32px rgba(153,27,46,.21);
+        0 12px 32px
+        rgba(153,27,46,.21);
     }
 
     .select-header::after {
@@ -180,7 +194,10 @@
       right: -120px;
       bottom: -145px;
 
-      border: 34px solid rgba(255,255,255,.035);
+      border:
+        34px solid
+        rgba(255,255,255,.035);
+
       border-radius: 50%;
     }
 
@@ -188,7 +205,8 @@
       position: relative;
       z-index: 2;
 
-      color: rgba(255,255,255,.63);
+      color:
+        rgba(255,255,255,.64);
 
       font-size: 10px;
       font-weight: 900;
@@ -214,11 +232,17 @@
 
       margin-top: 6px;
 
-      color: rgba(255,255,255,.72);
+      color:
+        rgba(255,255,255,.74);
 
       font-size: 12px;
       font-weight: 700;
     }
+
+
+    /* =====================================================
+       LOTTO LIST
+    ===================================================== */
 
     .lotto-screen-body {
       padding:
@@ -229,78 +253,71 @@
 
     .lotto-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 9px;
+
+      grid-template-columns:
+        1fr;
+
+      gap: 10px;
     }
 
     .lotto-card-button {
-      position: relative;
-
       width: 100%;
-      min-height: 88px;
+      min-height: 92px;
 
-      padding: 11px 12px;
+      padding:
+        13px
+        14px;
 
       display: grid;
 
       grid-template-columns:
-        55px
         minmax(0,1fr)
         auto;
 
       align-items: center;
 
-      gap: 11px;
+      gap: 12px;
 
-      border: 1.5px solid #78be5d;
-      border-radius: 17px;
+      border:
+        1.5px solid
+        var(--line-green);
+
+      border-radius: 18px;
 
       background:
         linear-gradient(
           135deg,
-          #f8fff4,
-          #eff9e9
+          #fbfff9,
+          #f3fbed
         );
 
-      color: #18181b;
+      color: var(--ink);
 
       text-align: left;
 
       box-shadow:
-        0 4px 13px rgba(46,125,50,.055);
+        0 4px 14px
+        rgba(46,125,50,.05);
+    }
+
+    .lotto-card-button:not(.closed):active {
+      background: #eff9e9;
     }
 
     .lotto-card-button.closed {
+      cursor: default;
+
       opacity: .55;
-      filter: grayscale(.4);
+
+      filter:
+        saturate(.65);
     }
 
     .lotto-card-button.closed:active {
       transform: none;
     }
 
-    .lotto-flag {
-      width: 55px;
-      height: 43px;
-
-      overflow: hidden;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 7px;
-
-      background: #fff;
-
-      font-size: 35px;
-
-      line-height: 1;
-
-      box-shadow:
-        0 2px 7px rgba(0,0,0,.08);
-    }
-
-    .lotto-center {
+    .lotto-card-main {
       min-width: 0;
     }
 
@@ -309,7 +326,7 @@
 
       color: #111;
 
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 950;
 
       line-height: 1.3;
@@ -318,57 +335,74 @@
       text-overflow: ellipsis;
     }
 
-    .lotto-close-text {
-      margin-top: 5px;
+    .lotto-close {
+      margin-top: 7px;
 
       color: #3f3f46;
 
       font-size: 12px;
       font-weight: 700;
 
-      font-variant-numeric: tabular-nums;
+      line-height: 1.35;
+
+      font-variant-numeric:
+        tabular-nums;
     }
 
-    .lotto-right {
-      min-width: 83px;
+    .lotto-after-midnight {
+      margin-left: 4px;
+
+      color: #9f1239;
+
+      font-size: 9px;
+      font-weight: 850;
+    }
+
+    .lotto-card-right {
+      min-width: 92px;
 
       display: grid;
 
       justify-items: end;
 
-      gap: 6px;
+      gap: 7px;
     }
 
-    .lotto-date {
+    .lotto-round-date {
       color: #3f3f46;
 
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 750;
 
       white-space: nowrap;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
     }
 
     .lotto-countdown {
-      color: #53b632;
+      color: var(--green);
 
       font-size: 13px;
-      font-weight: 900;
+      font-weight: 950;
 
       white-space: nowrap;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
     }
 
     .lotto-countdown.closed {
-      color: #dc2626;
+      color: #c95d68;
     }
 
     .lotto-empty {
       padding: 35px 20px;
 
-      border: 1px dashed #d4d4d8;
+      border:
+        1px dashed
+        #d4d4d8;
+
       border-radius: 18px;
 
       background: #fff;
@@ -383,7 +417,7 @@
 
 
     /* =====================================================
-       Header หน้าการแทง
+       SELECTED LOTTO HEADER
     ===================================================== */
 
     .selected-header {
@@ -412,7 +446,8 @@
         );
 
       box-shadow:
-        0 8px 25px rgba(153,27,46,.20);
+        0 8px 25px
+        rgba(153,27,46,.20);
     }
 
     .selected-header-row {
@@ -428,10 +463,14 @@
 
       flex: 0 0 auto;
 
-      border: 1px solid rgba(255,255,255,.18);
+      border:
+        1px solid
+        rgba(255,255,255,.18);
+
       border-radius: 13px;
 
-      background: rgba(255,255,255,.11);
+      background:
+        rgba(255,255,255,.11);
 
       color: #fff;
 
@@ -446,7 +485,8 @@
     }
 
     .selected-label {
-      color: rgba(255,255,255,.58);
+      color:
+        rgba(255,255,255,.58);
 
       font-size: 9px;
       font-weight: 900;
@@ -474,9 +514,12 @@
       display: flex;
       align-items: center;
 
+      flex-wrap: wrap;
+
       gap: 6px;
 
-      color: rgba(255,255,255,.72);
+      color:
+        rgba(255,255,255,.72);
 
       font-size: 10px;
       font-weight: 800;
@@ -487,7 +530,8 @@
 
       font-weight: 950;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
     }
 
     .liff-gate {
@@ -502,10 +546,14 @@
 
       gap: 8px;
 
-      border: 1px solid rgba(255,255,255,.12);
+      border:
+        1px solid
+        rgba(255,255,255,.12);
+
       border-radius: 12px;
 
-      background: rgba(0,0,0,.16);
+      background:
+        rgba(0,0,0,.16);
     }
 
     .liff-gate.show {
@@ -524,7 +572,9 @@
 
       flex: 0 0 auto;
 
-      padding: 6px 11px;
+      padding:
+        6px
+        11px;
 
       border: 0;
       border-radius: 10px;
@@ -539,7 +589,7 @@
 
 
     /* =====================================================
-       CONTENT
+       BET CONTENT
     ===================================================== */
 
     .bet-content {
@@ -551,7 +601,7 @@
 
 
     /* =====================================================
-       MODE
+       MODES
     ===================================================== */
 
     .mode-tabs {
@@ -564,7 +614,10 @@
 
       gap: 3px;
 
-      border: 1px solid var(--line);
+      border:
+        1px solid
+        var(--line);
+
       border-radius: 17px;
 
       background: #fff;
@@ -576,7 +629,9 @@
       min-width: 0;
       min-height: 50px;
 
-      padding: 4px 2px;
+      padding:
+        4px
+        2px;
 
       border: 0;
       border-radius: 13px;
@@ -602,7 +657,8 @@
       color: #fff;
 
       box-shadow:
-        0 5px 14px rgba(201,21,45,.20);
+        0 5px 14px
+        rgba(201,21,45,.20);
     }
 
 
@@ -615,8 +671,12 @@
 
       padding: 14px;
 
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
+      border:
+        1px solid
+        var(--line);
+
+      border-radius:
+        var(--radius-lg);
 
       background: #fff;
 
@@ -638,9 +698,14 @@
     }
 
     .number-count {
-      padding: 5px 9px;
+      padding:
+        5px
+        9px;
 
-      border: 1px solid #fee2e2;
+      border:
+        1px solid
+        #fee2e2;
+
       border-radius: 999px;
 
       background: var(--red-soft);
@@ -678,7 +743,10 @@
         0
         15px;
 
-      border: 1.5px solid #d4d4d8;
+      border:
+        1.5px solid
+        #d4d4d8;
+
       border-radius: 16px;
 
       background: #fff;
@@ -688,14 +756,16 @@
       font-size: 20px;
       font-weight: 900;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
     }
 
     .number-input:focus {
       border-color: var(--red);
 
       box-shadow:
-        0 0 0 3px rgba(225,29,53,.08);
+        0 0 0 3px
+        rgba(225,29,53,.08);
     }
 
     .number-input::placeholder {
@@ -711,7 +781,8 @@
       right: 13px;
       top: 50%;
 
-      transform: translateY(-50%);
+      transform:
+        translateY(-50%);
 
       width: 29px;
       height: 29px;
@@ -757,7 +828,9 @@
     }
 
     .clear-preview {
-      padding: 4px 7px;
+      padding:
+        4px
+        7px;
 
       border: 0;
 
@@ -786,7 +859,10 @@
       align-items: center;
       justify-content: center;
 
-      border: 1.5px dashed #e4e4e7;
+      border:
+        1.5px dashed
+        #e4e4e7;
+
       border-radius: 15px;
 
       background: #fafafa;
@@ -803,7 +879,9 @@
       min-width: 55px;
       height: 44px;
 
-      padding: 0 9px;
+      padding:
+        0
+        9px;
 
       display: inline-flex;
       align-items: center;
@@ -824,10 +902,12 @@
       font-size: 17px;
       font-weight: 900;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
 
       box-shadow:
-        0 4px 11px rgba(225,29,53,.18);
+        0 4px 11px
+        rgba(225,29,53,.18);
     }
 
     .number-chip.locked {
@@ -855,9 +935,14 @@
     .tool-btn {
       min-height: 43px;
 
-      padding: 0 14px;
+      padding:
+        0
+        14px;
 
-      border: 1px solid #d4d4d8;
+      border:
+        1px solid
+        #d4d4d8;
+
       border-radius: 12px;
 
       background: #fff;
@@ -898,7 +983,9 @@
 
       padding-top: 14px;
 
-      border-top: 1px solid #f1f1f1;
+      border-top:
+        1px solid
+        #f1f1f1;
     }
 
     .price-title {
@@ -940,7 +1027,10 @@
         9px
         5px;
 
-      border: 1.5px solid #d4d4d8;
+      border:
+        1.5px solid
+        #d4d4d8;
+
       border-radius: 15px;
 
       background: #fff;
@@ -952,14 +1042,16 @@
       font-size: 19px;
       font-weight: 950;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
     }
 
     .price-input:focus {
       border-color: var(--red);
 
       box-shadow:
-        0 0 0 3px rgba(225,29,53,.08);
+        0 0 0 3px
+        rgba(225,29,53,.08);
     }
 
     .price-label {
@@ -984,7 +1076,9 @@
 
       min-height: 50px;
 
-      padding: 8px 12px;
+      padding:
+        8px
+        12px;
 
       display: flex;
 
@@ -1016,7 +1110,8 @@
       font-size: 20px;
       font-weight: 950;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
     }
 
     .add-bill {
@@ -1040,7 +1135,8 @@
       font-size: 17px;
       font-weight: 950;
 
-      box-shadow: var(--shadow-red);
+      box-shadow:
+        var(--shadow-red);
     }
 
     .add-bill:disabled {
@@ -1066,7 +1162,7 @@
 
 
     /* =====================================================
-       BILLS
+       BILL
     ===================================================== */
 
     .bills-section {
@@ -1074,7 +1170,10 @@
     }
 
     .bills-head {
-      padding: 0 2px 7px;
+      padding:
+        0
+        2px
+        7px;
 
       display: flex;
 
@@ -1098,16 +1197,21 @@
 
     .bill-list {
       display: grid;
+
       gap: 8px;
     }
 
     .bill-empty {
       padding: 22px;
 
-      border: 1px dashed #d4d4d8;
+      border:
+        1px dashed
+        #d4d4d8;
+
       border-radius: 17px;
 
-      background: rgba(255,255,255,.65);
+      background:
+        rgba(255,255,255,.65);
 
       color: #a1a1aa;
 
@@ -1120,17 +1224,23 @@
     .bill-card {
       overflow: hidden;
 
-      border: 1px solid var(--line);
+      border:
+        1px solid
+        var(--line);
+
       border-radius: 17px;
 
       background: #fff;
 
       box-shadow:
-        0 3px 14px rgba(0,0,0,.035);
+        0 3px 14px
+        rgba(0,0,0,.035);
     }
 
     .bill-head {
-      padding: 10px 12px;
+      padding:
+        10px
+        12px;
 
       display: flex;
 
@@ -1139,7 +1249,9 @@
 
       gap: 10px;
 
-      border-bottom: 1px solid #fee2e2;
+      border-bottom:
+        1px solid
+        #fee2e2;
 
       background:
         linear-gradient(
@@ -1164,7 +1276,9 @@
     }
 
     .bill-body {
-      padding: 10px 12px;
+      padding:
+        10px
+        12px;
     }
 
     .bill-meta {
@@ -1188,7 +1302,8 @@
 
       word-break: break-word;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
     }
 
     .bill-foot {
@@ -1205,7 +1320,9 @@
     .delete-bill {
       min-height: 34px;
 
-      padding: 0 11px;
+      padding:
+        0
+        11px;
 
       border: 0;
       border-radius: 9px;
@@ -1227,35 +1344,48 @@
       position: fixed;
 
       left: 50%;
-      bottom: calc(7px + env(safe-area-inset-bottom));
+      bottom:
+        calc(
+          7px +
+          env(safe-area-inset-bottom)
+        );
 
-      transform: translateX(-50%);
+      transform:
+        translateX(-50%);
 
       z-index: 50;
 
-      width: min(
-        calc(100% - 14px),
-        666px
-      );
+      width:
+        min(
+          calc(100% - 14px),
+          666px
+        );
 
       padding: 9px;
 
-      border: 1px solid rgba(228,228,231,.86);
+      border:
+        1px solid
+        rgba(228,228,231,.86);
+
       border-radius: 19px;
 
-      background: rgba(255,255,255,.95);
+      background:
+        rgba(255,255,255,.95);
 
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
 
       box-shadow:
-        0 12px 38px rgba(0,0,0,.15);
+        0 12px 38px
+        rgba(0,0,0,.15);
     }
 
     .grand-total {
       min-height: 52px;
 
-      padding: 8px 12px;
+      padding:
+        8px
+        12px;
 
       display: flex;
 
@@ -1282,7 +1412,8 @@
     }
 
     .grand-label {
-      color: rgba(255,255,255,.72);
+      color:
+        rgba(255,255,255,.72);
 
       font-size: 10px;
       font-weight: 850;
@@ -1292,7 +1423,8 @@
       font-size: 21px;
       font-weight: 950;
 
-      font-variant-numeric: tabular-nums;
+      font-variant-numeric:
+        tabular-nums;
     }
 
     .bottom-actions {
@@ -1318,7 +1450,9 @@
     }
 
     .clear-bills {
-      border: 1px solid var(--line-red);
+      border:
+        1px solid
+        var(--line-red);
 
       background: #fff;
 
@@ -1354,7 +1488,8 @@
       align-items: flex-end;
       justify-content: center;
 
-      background: rgba(0,0,0,.55);
+      background:
+        rgba(0,0,0,.55);
 
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
@@ -1365,7 +1500,12 @@
     }
 
     .confirm-dialog {
-      width: min(100%,600px);
+      width:
+        min(
+          100%,
+          600px
+        );
+
       max-height: 88vh;
 
       overflow: hidden;
@@ -1377,12 +1517,17 @@
         minmax(0,1fr)
         auto;
 
-      border-radius: 24px 24px 0 0;
+      border-radius:
+        24px
+        24px
+        0
+        0;
 
       background: #fff;
 
       box-shadow:
-        0 -12px 50px rgba(0,0,0,.24);
+        0 -12px 50px
+        rgba(0,0,0,.24);
     }
 
     .confirm-head {
@@ -1395,7 +1540,9 @@
 
       gap: 10px;
 
-      border-bottom: 1px solid var(--line);
+      border-bottom:
+        1px solid
+        var(--line);
     }
 
     .confirm-title {
@@ -1434,6 +1581,7 @@
       overflow: auto;
 
       display: grid;
+
       gap: 9px;
 
       background: #fafafa;
@@ -1453,7 +1601,10 @@
 
       padding: 9px;
 
-      border: 1px solid #fee2e2;
+      border:
+        1px solid
+        #fee2e2;
+
       border-radius: 12px;
 
       background: #fff;
@@ -1482,14 +1633,19 @@
     .confirm-group {
       overflow: hidden;
 
-      border: 1px solid var(--line);
+      border:
+        1px solid
+        var(--line);
+
       border-radius: 14px;
 
       background: #fff;
     }
 
     .confirm-group-head {
-      padding: 9px 11px;
+      padding:
+        9px
+        11px;
 
       display: flex;
 
@@ -1498,7 +1654,9 @@
 
       gap: 9px;
 
-      border-bottom: 1px solid #fee2e2;
+      border-bottom:
+        1px solid
+        #fee2e2;
 
       background:
         linear-gradient(
@@ -1523,7 +1681,9 @@
     }
 
     .confirm-numbers {
-      padding: 10px 11px;
+      padding:
+        10px
+        11px;
 
       color: #3f3f46;
 
@@ -1539,7 +1699,10 @@
       padding:
         10px
         12px
-        calc(10px + env(safe-area-inset-bottom));
+        calc(
+          10px +
+          env(safe-area-inset-bottom)
+        );
 
       display: grid;
 
@@ -1549,7 +1712,9 @@
 
       gap: 8px;
 
-      border-top: 1px solid var(--line);
+      border-top:
+        1px solid
+        var(--line);
 
       background: #fff;
     }
@@ -1565,7 +1730,9 @@
     }
 
     .confirm-cancel {
-      border: 1px solid var(--line);
+      border:
+        1px solid
+        var(--line);
 
       background: #f4f4f5;
 
@@ -1587,7 +1754,7 @@
 
 
     /* =====================================================
-       LOADING + TOAST
+       LOADING / TOAST
     ===================================================== */
 
     .loading {
@@ -1597,9 +1764,11 @@
       z-index: 150;
 
       display: none;
+
       place-items: center;
 
-      background: rgba(255,255,255,.72);
+      background:
+        rgba(255,255,255,.72);
 
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
@@ -1613,25 +1782,40 @@
       width: 46px;
       height: 46px;
 
-      border: 5px solid #fee2e2;
+      border:
+        5px solid
+        #fee2e2;
+
       border-top-color: var(--red);
 
       border-radius: 50%;
 
-      animation: spin .7s linear infinite;
+      animation:
+        spin
+        .7s
+        linear
+        infinite;
     }
 
     .toast {
       position: fixed;
 
-      top: calc(14px + env(safe-area-inset-top));
+      top:
+        calc(
+          14px +
+          env(safe-area-inset-top)
+        );
+
       left: 50%;
 
       z-index: 170;
 
-      max-width: calc(100vw - 28px);
+      max-width:
+        calc(100vw - 28px);
 
-      padding: 9px 14px;
+      padding:
+        9px
+        14px;
 
       border-radius: 999px;
 
@@ -1650,7 +1834,8 @@
         translate(-50%,-8px)
         scale(.97);
 
-      transition: .18s ease;
+      transition:
+        .18s ease;
     }
 
     .toast.show {
@@ -1662,7 +1847,8 @@
     }
 
 
-    @media (min-width: 600px) {
+    @media (min-width:600px) {
+
       body {
         padding-top: 18px;
       }
@@ -1670,8 +1856,15 @@
       .app {
         overflow: hidden;
 
-        border: 1px solid var(--line);
-        border-radius: 28px 28px 0 0;
+        border:
+          1px solid
+          var(--line);
+
+        border-radius:
+          28px
+          28px
+          0
+          0;
 
         background: var(--bg);
       }
@@ -1683,6 +1876,7 @@
 
       .confirm-overlay {
         align-items: center;
+
         padding: 18px;
       }
 
@@ -1691,7 +1885,8 @@
       }
     }
 
-    @media (max-width: 380px) {
+    @media (max-width:380px) {
+
       .mode-btn {
         font-size: 11px;
       }
@@ -1708,6 +1903,7 @@
     }
   </style>
 </head>
+
 
 <body>
 
@@ -1770,9 +1966,6 @@
     id="betScreen"
   >
 
-
-    <!-- หวยที่เลือก -->
-
     <header class="selected-header">
 
       <div class="selected-header-row">
@@ -1802,14 +1995,20 @@
           <div class="selected-meta">
 
             <span
+              id="selectedRoundDate"
+            >
+              รอบ -
+            </span>
+
+            <span>•</span>
+
+            <span
               id="selectedCloseTime"
             >
               ปิด --:--
             </span>
 
-            <span>
-              •
-            </span>
+            <span>•</span>
 
             <span
               class="selected-countdown"
@@ -1916,7 +2115,7 @@
           class="input-help"
           id="inputHelp"
         >
-          พิมพ์ 2 ตัว หรือวางโพยได้ทันที
+          พิมพ์เลขหรือวางโพยได้ในช่องเดียว
         </div>
 
 
@@ -1975,7 +2174,7 @@
         </div>
 
 
-        <!-- TOOL -->
+        <!-- TOOLS -->
 
         <div class="tools">
 
@@ -2097,7 +2296,7 @@
       </section>
 
 
-      <!-- BILL -->
+      <!-- BILLS -->
 
       <section class="bills-section">
 
@@ -2127,7 +2326,7 @@
     </div>
 
 
-    <!-- FIXED BOTTOM -->
+    <!-- BOTTOM -->
 
     <section class="bottom-bar">
 
@@ -2273,6 +2472,30 @@
     "2001131713-hgaqA7mz";
 
 
+  /*
+   * สำคัญ
+   *
+   * หวยรอบวันที่วันนี้
+   * ถ้าปิดตั้งแต่ 00:00 - 05:59
+   *
+   * ให้ถือว่าเป็น "หลังเที่ยงคืน"
+   * ของวันถัดไป
+   *
+   * ตัวอย่าง
+   *
+   * รอบ 08-08-2026
+   * ปิด 00:10
+   *
+   * เวลาปิดจริงคือ
+   * 09-08-2026 00:10
+   *
+   * แต่ยังเป็นรอบ 08-08-2026
+   */
+
+  var AFTER_MIDNIGHT_CUTOFF_HOUR =
+    6;
+
+
   var MODES = {
 
     two: {
@@ -2314,6 +2537,10 @@
   };
 
 
+  /* =====================================================
+     STATE
+  ====================================================== */
+
   var state = {
 
     liffReady:
@@ -2325,35 +2552,14 @@
     mode:
       "two",
 
-
-    /*
-     * ตัวเลขต้นฉบับ
-     */
-
     sourceNumbers:
       [],
-
-
-    /*
-     * ตัวเลขที่โชว์หน้าจอ
-     * สามารถตัดเลขซ้ำ
-     */
 
     currentNumbers:
       [],
 
-
-    /*
-     * รายการเดิมพันจริง
-     *
-     * ห้าม unique ข้าม source
-     *
-     * ใช้คำนวณเงินจริง
-     */
-
     betNumbers:
       [],
-
 
     twoReverseActive:
       false,
@@ -2410,6 +2616,7 @@
         "backLotto",
 
         "selectedLottoName",
+        "selectedRoundDate",
         "selectedCloseTime",
         "selectedCountdown",
 
@@ -2419,6 +2626,7 @@
 
         "numberInput",
         "inputHelp",
+
         "numberCount",
         "chips",
         "clearPreview",
@@ -2645,14 +2853,11 @@
       API,
       {
 
-        method:
-          "POST",
+        method: "POST",
 
         headers: {
-
           "content-type":
             "text/plain;charset=utf-8"
-
         },
 
         body:
@@ -2761,7 +2966,7 @@
 
 
   /* =====================================================
-     LOTTO SELECT
+     LOTTO CARDS
   ====================================================== */
 
   function renderLottoCards() {
@@ -2803,30 +3008,22 @@
           "lotto-card-button";
 
 
-        var flag =
+        button._lotto =
+          lotto;
+
+
+        /*
+         * ซ้าย
+         */
+
+        var main =
           document.createElement(
             "div"
           );
 
 
-        flag.className =
-          "lotto-flag";
-
-
-        flag.textContent =
-          getLottoFlag(
-            lotto.name
-          );
-
-
-        var center =
-          document.createElement(
-            "div"
-          );
-
-
-        center.className =
-          "lotto-center";
+        main.className =
+          "lotto-card-main";
 
 
         var name =
@@ -2850,29 +3047,28 @@
 
 
         close.className =
-          "lotto-close-text";
+          "lotto-close";
 
 
-        close.textContent =
-          getLottoDateText(
+        close.innerHTML =
+          buildLottoCloseDisplay(
             lotto
-          ) +
-          " " +
-          (
-            lotto.closeTime ||
-            "--:--"
           );
 
 
-        center.appendChild(
+        main.appendChild(
           name
         );
 
 
-        center.appendChild(
+        main.appendChild(
           close
         );
 
+
+        /*
+         * ขวา
+         */
 
         var right =
           document.createElement(
@@ -2881,21 +3077,21 @@
 
 
         right.className =
-          "lotto-right";
+          "lotto-card-right";
 
 
-        var date =
+        var roundDate =
           document.createElement(
             "div"
           );
 
 
-        date.className =
-          "lotto-date";
+        roundDate.className =
+          "lotto-round-date";
 
 
-        date.textContent =
-          getLottoDateText(
+        roundDate.textContent =
+          getRoundDateText(
             lotto
           );
 
@@ -2915,7 +3111,7 @@
 
 
         right.appendChild(
-          date
+          roundDate
         );
 
 
@@ -2925,12 +3121,7 @@
 
 
         button.appendChild(
-          flag
-        );
-
-
-        button.appendChild(
-          center
+          main
         );
 
 
@@ -2951,7 +3142,8 @@
 
             if (
               target &&
-              target.getTime() <= Date.now()
+              target.getTime() <=
+              Date.now()
             ) {
 
               return;
@@ -2967,10 +3159,6 @@
         );
 
 
-        button._lotto =
-          lotto;
-
-
         els.lottoGrid.appendChild(
           button
         );
@@ -2983,6 +3171,588 @@
 
   }
 
+
+  function buildLottoCloseDisplay(
+    lotto
+  ) {
+
+    var target =
+      getLottoCloseTarget(
+        lotto
+      );
+
+
+    var time =
+      lotto.closeTime ||
+      "--:--";
+
+
+    /*
+     * รอบวันนี้ แต่ปิดหลังเที่ยงคืน
+     */
+
+    if (
+      isAfterMidnightLotto(
+        lotto
+      )
+    ) {
+
+      var actualDate =
+        target
+          ? formatDateOnly(
+              target
+            )
+          : "";
+
+
+      return (
+        "ปิดรับ " +
+        actualDate +
+        " " +
+        time +
+        '<span class="lotto-after-midnight">หลังเที่ยงคืน</span>'
+      );
+
+    }
+
+
+    return (
+      "ปิดรับ " +
+      getRoundDateText(
+        lotto
+      ) +
+      " " +
+      time
+    );
+
+  }
+
+
+  /* =====================================================
+     AFTER MIDNIGHT LOGIC
+  ====================================================== */
+
+  function getCloseHour(
+    lotto
+  ) {
+
+    var value =
+      String(
+        lotto &&
+        lotto.closeTime ||
+        ""
+      );
+
+
+    var match =
+      value.match(
+        /(\d{1,2}):(\d{2})/
+      );
+
+
+    if (!match) {
+
+      return null;
+
+    }
+
+
+    return Number(
+      match[1]
+    );
+
+  }
+
+
+  function isAfterMidnightLotto(
+    lotto
+  ) {
+
+    var hour =
+      getCloseHour(
+        lotto
+      );
+
+
+    if (
+      hour === null
+    ) {
+
+      return false;
+
+    }
+
+
+    return (
+      hour <
+      AFTER_MIDNIGHT_CUTOFF_HOUR
+    );
+
+  }
+
+
+  /* =====================================================
+     ROUND DATE
+  ====================================================== */
+
+  function getRoundDateParts(
+    lotto
+  ) {
+
+    var dateText =
+      lotto.drawDate ||
+      lotto.date ||
+      lotto.roundDate ||
+      "";
+
+
+    var match =
+      String(
+        dateText
+      )
+      .match(
+        /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/
+      );
+
+
+    if (match) {
+
+      return {
+
+        day:
+          Number(
+            match[1]
+          ),
+
+        month:
+          Number(
+            match[2]
+          ) - 1,
+
+        year:
+          Number(
+            match[3]
+          )
+
+      };
+
+    }
+
+
+    /*
+     * ISO yyyy-mm-dd
+     */
+
+    var iso =
+      String(
+        dateText
+      )
+      .match(
+        /(\d{4})-(\d{1,2})-(\d{1,2})/
+      );
+
+
+    if (iso) {
+
+      return {
+
+        day:
+          Number(
+            iso[3]
+          ),
+
+        month:
+          Number(
+            iso[2]
+          ) - 1,
+
+        year:
+          Number(
+            iso[1]
+          )
+
+      };
+
+    }
+
+
+    var now =
+      new Date();
+
+
+    return {
+
+      day:
+        now.getDate(),
+
+      month:
+        now.getMonth(),
+
+      year:
+        now.getFullYear()
+
+    };
+
+  }
+
+
+  function getRoundDateText(
+    lotto
+  ) {
+
+    var parts =
+      getRoundDateParts(
+        lotto
+      );
+
+
+    return (
+      pad2(
+        parts.day
+      ) +
+      "-" +
+      pad2(
+        parts.month + 1
+      ) +
+      "-" +
+      parts.year
+    );
+
+  }
+
+
+  /* =====================================================
+     CLOSE TARGET
+  ====================================================== */
+
+  function getLottoCloseTarget(
+    lotto
+  ) {
+
+    if (!lotto) {
+
+      return null;
+
+    }
+
+
+    /*
+     * ถ้า API มี closeAt แบบเต็ม
+     *
+     * ใช้ก่อน
+     */
+
+    var full =
+      lotto.closeAt ||
+      lotto.closeDateTime ||
+      lotto.closeDatetime ||
+      "";
+
+
+    if (full) {
+
+      var parsed =
+        parseDateTimeValue(
+          full
+        );
+
+
+      if (parsed) {
+
+        /*
+         * ถ้า backend ส่ง closeAt เป็น
+         * วันที่รอบ + เวลา 00:xx
+         *
+         * แต่หวยนั้นคือรอบก่อนเที่ยงคืน
+         * ให้เลื่อนไปวันถัดไป
+         */
+
+        if (
+          isAfterMidnightLotto(
+            lotto
+          )
+        ) {
+
+          var round =
+            getRoundDateParts(
+              lotto
+            );
+
+
+          var sameAsRound =
+            (
+              parsed.getFullYear() ===
+                round.year &&
+              parsed.getMonth() ===
+                round.month &&
+              parsed.getDate() ===
+                round.day
+            );
+
+
+          if (sameAsRound) {
+
+            parsed.setDate(
+              parsed.getDate() +
+              1
+            );
+
+          }
+
+        }
+
+
+        return parsed;
+
+      }
+
+    }
+
+
+    /*
+     * ใช้ round date + closeTime
+     */
+
+    var parts =
+      getRoundDateParts(
+        lotto
+      );
+
+
+    var closeTime =
+      String(
+        lotto.closeTime ||
+        ""
+      );
+
+
+    var match =
+      closeTime.match(
+        /(\d{1,2}):(\d{2})/
+      );
+
+
+    if (!match) {
+
+      return null;
+
+    }
+
+
+    var hour =
+      Number(
+        match[1]
+      );
+
+
+    var minute =
+      Number(
+        match[2]
+      );
+
+
+    var target =
+      new Date(
+
+        parts.year,
+
+        parts.month,
+
+        parts.day,
+
+        hour,
+
+        minute,
+
+        0,
+
+        0
+
+      );
+
+
+    /*
+     * =============================
+     * จุดแก้สำคัญ
+     * =============================
+     *
+     * รอบ 08-08
+     * เวลา 00:10
+     *
+     * => ปิดจริง 09-08 00:10
+     */
+
+    if (
+      hour <
+      AFTER_MIDNIGHT_CUTOFF_HOUR
+    ) {
+
+      target.setDate(
+        target.getDate() +
+        1
+      );
+
+    }
+
+
+    return target;
+
+  }
+
+
+  /* =====================================================
+     DATE PARSER
+  ====================================================== */
+
+  function parseDateTimeValue(
+    value
+  ) {
+
+    value =
+      String(
+        value || ""
+      )
+      .trim();
+
+
+    if (!value) {
+
+      return null;
+
+    }
+
+
+    /*
+     * DD-MM-YYYY HH:mm
+     */
+
+    var dmy =
+      value.match(
+        /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})\s+(\d{1,2}):(\d{2})/
+      );
+
+
+    if (dmy) {
+
+      return new Date(
+
+        Number(
+          dmy[3]
+        ),
+
+        Number(
+          dmy[2]
+        ) - 1,
+
+        Number(
+          dmy[1]
+        ),
+
+        Number(
+          dmy[4]
+        ),
+
+        Number(
+          dmy[5]
+        ),
+
+        0,
+
+        0
+
+      );
+
+    }
+
+
+    /*
+     * YYYY-MM-DD HH:mm
+     */
+
+    var ymd =
+      value.match(
+        /(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})[T\s]+(\d{1,2}):(\d{2})/
+      );
+
+
+    if (ymd) {
+
+      return new Date(
+
+        Number(
+          ymd[1]
+        ),
+
+        Number(
+          ymd[2]
+        ) - 1,
+
+        Number(
+          ymd[3]
+        ),
+
+        Number(
+          ymd[4]
+        ),
+
+        Number(
+          ymd[5]
+        ),
+
+        0,
+
+        0
+
+      );
+
+    }
+
+
+    var direct =
+      new Date(
+        value
+      );
+
+
+    if (
+      !isNaN(
+        direct.getTime()
+      )
+    ) {
+
+      return direct;
+
+    }
+
+
+    return null;
+
+  }
+
+
+  function formatDateOnly(
+    date
+  ) {
+
+    return (
+      pad2(
+        date.getDate()
+      ) +
+      "-" +
+      pad2(
+        date.getMonth() +
+        1
+      ) +
+      "-" +
+      date.getFullYear()
+    );
+
+  }
+
+
+  /* =====================================================
+     COUNTDOWN
+  ====================================================== */
 
   function startLottoListTimer() {
 
@@ -3010,26 +3780,29 @@
         ".lotto-countdown"
       )
       .forEach(
-        function (element) {
+        function (
+          element
+        ) {
 
           var lotto =
             element._lotto;
 
 
           if (!lotto) {
+
             return;
+
           }
 
 
-          var target =
+          renderCountdown(
+
+            element,
+
             getLottoCloseTarget(
               lotto
-            );
+            )
 
-
-          renderCountdown(
-            element,
-            target
           );
 
         }
@@ -3041,14 +3814,18 @@
         ".lotto-card-button"
       )
       .forEach(
-        function (button) {
+        function (
+          button
+        ) {
 
           var lotto =
             button._lotto;
 
 
           if (!lotto) {
+
             return;
+
           }
 
 
@@ -3062,7 +3839,7 @@
             !!(
               target &&
               target.getTime() <=
-              Date.now()
+                Date.now()
             );
 
 
@@ -3077,78 +3854,12 @@
   }
 
 
-  function chooseLotto(
-    lotto
-  ) {
-
-    state.selectedLotto =
-      lotto;
-
-
-    els.selectedLottoName.textContent =
-      lotto.name;
-
-
-    els.selectedCloseTime.textContent =
-      "ปิด " +
-      (
-        lotto.closeTime ||
-        "--:--"
-      );
-
-
-    showBetScreen();
-
-
-    clearInterval(
-      timer
-    );
-
-
-    updateSelectedCountdown();
-
-
-    timer =
-      setInterval(
-        updateSelectedCountdown,
-        1000
-      );
-
-  }
-
-
-  function updateSelectedCountdown() {
-
-    if (
-      !state.selectedLotto
-    ) {
-
-      els.selectedCountdown.textContent =
-        "--:--:--";
-
-      return;
-
-    }
-
-
-    renderCountdown(
-      els.selectedCountdown,
-      getLottoCloseTarget(
-        state.selectedLotto
-      )
-    );
-
-  }
-
-
   function renderCountdown(
     element,
     target
   ) {
 
-    if (
-      !target
-    ) {
+    if (!target) {
 
       element.textContent =
         "--:--:--";
@@ -3209,7 +3920,8 @@
 
 
     var remain =
-      seconds % 60;
+      seconds %
+      60;
 
 
     element.textContent =
@@ -3218,6 +3930,122 @@
       pad2(minutes) +
       ":" +
       pad2(remain);
+
+  }
+
+
+  /* =====================================================
+     CHOOSE LOTTO
+  ====================================================== */
+
+  function chooseLotto(
+    lotto
+  ) {
+
+    var target =
+      getLottoCloseTarget(
+        lotto
+      );
+
+
+    if (
+      target &&
+      target.getTime() <=
+      Date.now()
+    ) {
+
+      return;
+
+    }
+
+
+    state.selectedLotto =
+      lotto;
+
+
+    els.selectedLottoName.textContent =
+      lotto.name;
+
+
+    els.selectedRoundDate.textContent =
+      "รอบ " +
+      getRoundDateText(
+        lotto
+      );
+
+
+    if (
+      isAfterMidnightLotto(
+        lotto
+      )
+    ) {
+
+      els.selectedCloseTime.textContent =
+        "ปิด " +
+        formatDateOnly(
+          target
+        ) +
+        " " +
+        (
+          lotto.closeTime ||
+          "--:--"
+        );
+
+    } else {
+
+      els.selectedCloseTime.textContent =
+        "ปิด " +
+        (
+          lotto.closeTime ||
+          "--:--"
+        );
+
+    }
+
+
+    showBetScreen();
+
+
+    clearInterval(
+      timer
+    );
+
+
+    updateSelectedCountdown();
+
+
+    timer =
+      setInterval(
+        updateSelectedCountdown,
+        1000
+      );
+
+  }
+
+
+  function updateSelectedCountdown() {
+
+    if (
+      !state.selectedLotto
+    ) {
+
+      els.selectedCountdown.textContent =
+        "--:--:--";
+
+      return;
+
+    }
+
+
+    renderCountdown(
+
+      els.selectedCountdown,
+
+      getLottoCloseTarget(
+        state.selectedLotto
+      )
+
+    );
 
   }
 
@@ -3289,349 +4117,6 @@
     clearPrices();
 
     showLottoScreen();
-
-  }
-
-
-  /* =====================================================
-     DATE
-  ====================================================== */
-
-  function getLottoCloseTarget(
-    lotto
-  ) {
-
-    if (!lotto) {
-      return null;
-    }
-
-
-    var full =
-      lotto.closeAt ||
-      lotto.closeDateTime ||
-      lotto.closeDatetime ||
-      "";
-
-
-    if (full) {
-
-      var parsed =
-        parseDateTimeValue(
-          full
-        );
-
-
-      if (parsed) {
-        return parsed;
-      }
-
-    }
-
-
-    var dateText =
-      lotto.drawDate ||
-      lotto.date ||
-      "";
-
-
-    var closeTime =
-      lotto.closeTime ||
-      "";
-
-
-    var timeMatch =
-      String(
-        closeTime
-      )
-      .match(
-        /(\d{1,2}):(\d{2})/
-      );
-
-
-    if (!timeMatch) {
-      return null;
-    }
-
-
-    var now =
-      new Date();
-
-
-    var day =
-      now.getDate();
-
-
-    var month =
-      now.getMonth();
-
-
-    var year =
-      now.getFullYear();
-
-
-    var dateMatch =
-      String(
-        dateText
-      )
-      .match(
-        /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/
-      );
-
-
-    if (dateMatch) {
-
-      day =
-        Number(
-          dateMatch[1]
-        );
-
-
-      month =
-        Number(
-          dateMatch[2]
-        ) - 1;
-
-
-      year =
-        Number(
-          dateMatch[3]
-        );
-
-    }
-
-
-    return new Date(
-
-      year,
-      month,
-      day,
-
-      Number(
-        timeMatch[1]
-      ),
-
-      Number(
-        timeMatch[2]
-      ),
-
-      0,
-      0
-
-    );
-
-  }
-
-
-  function parseDateTimeValue(
-    value
-  ) {
-
-    value =
-      String(
-        value || ""
-      ).trim();
-
-
-    if (!value) {
-      return null;
-    }
-
-
-    var direct =
-      new Date(
-        value
-      );
-
-
-    if (
-      !isNaN(
-        direct.getTime()
-      )
-    ) {
-
-      return direct;
-
-    }
-
-
-    var match =
-      value.match(
-        /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})\s+(\d{1,2}):(\d{2})/
-      );
-
-
-    if (!match) {
-      return null;
-    }
-
-
-    return new Date(
-
-      Number(match[3]),
-
-      Number(match[2]) - 1,
-
-      Number(match[1]),
-
-      Number(match[4]),
-
-      Number(match[5]),
-
-      0,
-      0
-
-    );
-
-  }
-
-
-  function getLottoDateText(
-    lotto
-  ) {
-
-    var value =
-      lotto.drawDate ||
-      lotto.date ||
-      "";
-
-
-    if (value) {
-      return value;
-    }
-
-
-    var target =
-      getLottoCloseTarget(
-        lotto
-      );
-
-
-    if (!target) {
-      return "-";
-    }
-
-
-    return (
-      pad2(
-        target.getDate()
-      ) +
-      "-" +
-      pad2(
-        target.getMonth() + 1
-      ) +
-      "-" +
-      target.getFullYear()
-    );
-
-  }
-
-
-  /* =====================================================
-     FLAG
-  ====================================================== */
-
-  function getLottoFlag(
-    name
-  ) {
-
-    name =
-      String(
-        name || ""
-      )
-      .toLowerCase();
-
-
-    if (
-      /ฮานอย|เวียดนาม/.test(
-        name
-      )
-    ) {
-      return "🇻🇳";
-    }
-
-
-    if (
-      /ลาว/.test(
-        name
-      )
-    ) {
-      return "🇱🇦";
-    }
-
-
-    if (
-      /ดาวโจนส์|อเมริกา|usa/.test(
-        name
-      )
-    ) {
-      return "🇺🇸";
-    }
-
-
-    if (
-      /จีน/.test(
-        name
-      )
-    ) {
-      return "🇨🇳";
-    }
-
-
-    if (
-      /ฮั่งเส็ง|ฮ่องกง/.test(
-        name
-      )
-    ) {
-      return "🇭🇰";
-    }
-
-
-    if (
-      /นิเคอิ|ญี่ปุ่น/.test(
-        name
-      )
-    ) {
-      return "🇯🇵";
-    }
-
-
-    if (
-      /ไต้หวัน/.test(
-        name
-      )
-    ) {
-      return "🇹🇼";
-    }
-
-
-    if (
-      /เกาหลี/.test(
-        name
-      )
-    ) {
-      return "🇰🇷";
-    }
-
-
-    if (
-      /สิงคโปร์/.test(
-        name
-      )
-    ) {
-      return "🇸🇬";
-    }
-
-
-    if (
-      /ไทย|รัฐบาล/.test(
-        name
-      )
-    ) {
-      return "🇹🇭";
-    }
-
-
-    return "🎟️";
 
   }
 
@@ -3768,7 +4253,9 @@
   ) {
 
     if (!MODES[mode]) {
+
       return;
+
     }
 
 
@@ -3796,14 +4283,16 @@
         "[data-mode]"
       )
       .forEach(
-        function (button) {
+        function (
+          button
+        ) {
 
           button.classList.toggle(
 
             "active",
 
             button.dataset.mode ===
-            state.mode
+              state.mode
 
           );
 
@@ -3993,7 +4482,6 @@
 
     /*
      * 19 ประตู
-     * ไม่รับการวางโพยหลายเลข
      */
 
     if (
@@ -4020,7 +4508,7 @@
       }
 
 
-      var gateDigit =
+      var gate =
         raw.replace(
           /\D/g,
           ""
@@ -4028,7 +4516,7 @@
 
 
       if (
-        gateDigit.length >
+        gate.length >
         1
       ) {
 
@@ -4046,12 +4534,12 @@
 
 
       if (
-        gateDigit.length ===
+        gate.length ===
         1
       ) {
 
         addSourceNumber(
-          gateDigit
+          gate
         );
 
 
@@ -4067,7 +4555,7 @@
 
 
     /*
-     * วางโพย
+     * มีตัวคั่น
      */
 
     if (
@@ -4088,7 +4576,9 @@
       ) {
 
         numbers.forEach(
-          function (number) {
+          function (
+            number
+          ) {
 
             addSourceNumber(
               number
@@ -4097,10 +4587,6 @@
           }
         );
 
-
-        /*
-         * วางเสร็จแล้วช่องหาย
-         */
 
         els.numberInput.value =
           "";
@@ -4121,11 +4607,7 @@
 
 
     /*
-     * Paste เลขติดกัน
-     *
-     * 82898083
-     * =
-     * 82 89 80 83
+     * วางติดกัน
      */
 
     if (
@@ -4166,10 +4648,6 @@
     }
 
 
-    /*
-     * พิมพ์ครบ
-     */
-
     if (
       digits.length ===
       mode.len
@@ -4208,7 +4686,9 @@
 
 
     groups.forEach(
-      function (group) {
+      function (
+        group
+      ) {
 
         if (
           group.length ===
@@ -4292,10 +4772,6 @@
     }
 
 
-    /*
-     * ไม่เพิ่มเลขต้นฉบับเดิมซ้ำ
-     */
-
     if (
       state.sourceNumbers.indexOf(
         number
@@ -4329,7 +4805,6 @@
 
       }
 
-
       return;
 
     }
@@ -4351,7 +4826,6 @@
         rebuildSimple();
 
       }
-
 
       return;
 
@@ -4376,8 +4850,6 @@
     ) {
 
       rebuildGate19();
-
-      return;
 
     }
 
@@ -4404,7 +4876,7 @@
 
 
   /* =====================================================
-     2 ตัวกลับ
+     2 DIGIT REVERSE
   ====================================================== */
 
   function getTwoReverseSet(
@@ -4443,7 +4915,9 @@
 
 
     state.sourceNumbers.forEach(
-      function (number) {
+      function (
+        number
+      ) {
 
         bets =
           bets.concat(
@@ -4456,18 +4930,9 @@
     );
 
 
-    /*
-     * ห้าม unique
-     * ใช้สำหรับคิดเงิน
-     */
-
     state.betNumbers =
       bets;
 
-
-    /*
-     * ใช้โชว์
-     */
 
     state.currentNumbers =
       unique(
@@ -4483,7 +4948,7 @@
 
 
   /* =====================================================
-     3 ตัวกลับ / 6 กลับ
+     3 DIGIT PERMUTATIONS
   ====================================================== */
 
   function getPermutations3(
@@ -4513,28 +4978,12 @@
     var a =
       number.charAt(0);
 
-
     var b =
       number.charAt(1);
-
 
     var c =
       number.charAt(2);
 
-
-    /*
-     * ลำดับตาม 6 กลับ
-     *
-     * 495
-     * 459
-     * 945
-     * 954
-     * 549
-     * 594
-     *
-     * 112 = 3 ตัว
-     * 111 = 1 ตัว
-     */
 
     return unique([
 
@@ -4559,12 +5008,9 @@
 
 
     state.sourceNumbers.forEach(
-      function (number) {
-
-        /*
-         * แต่ละ source แยกกัน
-         * ห้าม unique ข้าม source
-         */
+      function (
+        number
+      ) {
 
         bets =
           bets.concat(
@@ -4594,6 +5040,10 @@
   }
 
 
+  /* =====================================================
+     6 BACK
+  ====================================================== */
+
   function rebuildSix() {
 
     var bets =
@@ -4601,16 +5051,17 @@
 
 
     state.sourceNumbers.forEach(
-      function (number) {
+      function (
+        number
+      ) {
 
         /*
-         * สำคัญ
+         * ห้าม unique ข้าม source
          *
          * 495 = 6
          * 549 = 6
          *
-         * แม้ชุดเลขกลับเหมือนกัน
-         * ก็คิดเป็น 12 รายการ
+         * รวม 12 รายการ
          */
 
         bets =
@@ -4625,9 +5076,7 @@
 
 
     /*
-     * ใช้คิดเงิน
-     *
-     * ห้าม unique
+     * สำหรับคิดเงิน
      */
 
     state.betNumbers =
@@ -4635,7 +5084,7 @@
 
 
     /*
-     * ใช้โชว์เท่านั้น
+     * สำหรับโชว์
      */
 
     state.currentNumbers =
@@ -4652,7 +5101,7 @@
 
 
   /* =====================================================
-     19 ประตู
+     19 GATE
   ====================================================== */
 
   function get19GateNumbers(
@@ -4708,7 +5157,9 @@
 
 
     state.sourceNumbers.forEach(
-      function (digit) {
+      function (
+        digit
+      ) {
 
         bets =
           bets.concat(
@@ -4739,7 +5190,7 @@
 
 
   /* =====================================================
-     REVERSE BUTTON
+     REVERSE
   ====================================================== */
 
   function reverseNumbers() {
@@ -4768,7 +5219,9 @@
       if (
         state.twoReverseActive
       ) {
+
         return;
+
       }
 
 
@@ -4793,7 +5246,9 @@
       if (
         state.threeReverseActive
       ) {
+
         return;
+
       }
 
 
@@ -4820,7 +5275,9 @@
       state.mode !==
       "two"
     ) {
+
       return;
+
     }
 
 
@@ -4939,14 +5396,14 @@
 
 
       state.currentNumbers.forEach(
-        function (number) {
+        function (
+          number
+        ) {
 
           var chip;
 
 
-          if (
-            locked
-          ) {
+          if (locked) {
 
             chip =
               document.createElement(
@@ -5044,7 +5501,9 @@
 
     state.sourceNumbers =
       state.sourceNumbers.filter(
-        function (item) {
+        function (
+          item
+        ) {
 
           return (
             item !==
@@ -5082,8 +5541,14 @@
       false;
 
 
-    els.numberInput.value =
-      "";
+    if (
+      els.numberInput
+    ) {
+
+      els.numberInput.value =
+        "";
+
+    }
 
 
     renderCurrentNumbers();
@@ -5150,13 +5615,6 @@
         : 0;
 
 
-    /*
-     * สำคัญ
-     *
-     * ต้องคิดจาก betNumbers
-     * ไม่ใช่ currentNumbers
-     */
-
     var count =
       state.betNumbers.length;
 
@@ -5203,6 +5661,27 @@
 
       showError(
         "กรุณาเลือกหวย"
+      );
+
+      return;
+
+    }
+
+
+    var closeTarget =
+      getLottoCloseTarget(
+        state.selectedLotto
+      );
+
+
+    if (
+      closeTarget &&
+      closeTarget.getTime() <=
+        Date.now()
+    ) {
+
+      showError(
+        "หวยนี้ปิดรับแล้ว"
       );
 
       return;
@@ -5266,34 +5745,26 @@
       lottoName:
         state.selectedLotto.name,
 
+      roundDate:
+        getRoundDateText(
+          state.selectedLotto
+        ),
+
       closeTime:
         state.selectedLotto.closeTime ||
         "",
 
-
       sourceNumbers:
         state.sourceNumbers.slice(),
-
-
-      /*
-       * ตัวเลขสำหรับโชว์
-       */
 
       numbers:
         state.currentNumbers.slice(),
 
-
-      /*
-       * รายการจริงสำหรับคิดเงิน
-       */
-
       betNumbers:
         state.betNumbers.slice(),
 
-
       betCount:
         state.betNumbers.length,
-
 
       reverseApplied:
         (
@@ -5301,13 +5772,11 @@
           state.threeReverseActive
         ),
 
-
       priceA:
         priceA,
 
       priceB:
         priceB,
-
 
       subtotal:
         state.betNumbers.length *
@@ -5339,7 +5808,7 @@
 
 
   /* =====================================================
-     BILL
+     BILL RENDER
   ====================================================== */
 
   function renderBills() {
@@ -5374,7 +5843,9 @@
 
 
     state.bills.forEach(
-      function (bill) {
+      function (
+        bill
+      ) {
 
         var card =
           document.createElement(
@@ -5407,7 +5878,9 @@
 
 
         mode.textContent =
-          MODES[bill.mode].label;
+          MODES[
+            bill.mode
+          ].label;
 
 
         var subtotal =
@@ -5523,7 +5996,9 @@
 
             state.bills =
               state.bills.filter(
-                function (item) {
+                function (
+                  item
+                ) {
 
                   return (
                     item.id !==
@@ -5586,15 +6061,16 @@
       MODES[bill.mode];
 
 
-    var priceTexts =
+    var prices =
       [];
 
 
     if (
-      bill.priceA > 0
+      bill.priceA >
+      0
     ) {
 
-      priceTexts.push(
+      prices.push(
         mode.priceA +
         " " +
         bill.priceA
@@ -5605,10 +6081,11 @@
 
     if (
       mode.priceB &&
-      bill.priceB > 0
+      bill.priceB >
+      0
     ) {
 
-      priceTexts.push(
+      prices.push(
         mode.priceB +
         " " +
         bill.priceB
@@ -5650,7 +6127,7 @@
         " ชุด • " +
         countText +
         " • " +
-        priceTexts.join(" / ")
+        prices.join(" / ")
       );
 
     }
@@ -5667,7 +6144,7 @@
         " • " +
         countText +
         " • " +
-        priceTexts.join(" / ")
+        prices.join(" / ")
       );
 
     }
@@ -5680,7 +6157,7 @@
       return (
         countText +
         " • กลับเลข • " +
-        priceTexts.join(" / ")
+        prices.join(" / ")
       );
 
     }
@@ -5689,7 +6166,7 @@
     return (
       countText +
       " • " +
-      priceTexts.join(" / ")
+      prices.join(" / ")
     );
 
   }
@@ -5742,7 +6219,7 @@
 
 
   /* =====================================================
-     BUILD PAYLOAD
+     PAYLOAD
   ====================================================== */
 
   function buildPayloads() {
@@ -5763,12 +6240,14 @@
 
 
     state.bills.forEach(
-      function (bill) {
+      function (
+        bill
+      ) {
 
 
-        /* ===============================================
+        /* ==============================
            2 ตัว
-        ================================================ */
+        ============================== */
 
         if (
           bill.mode ===
@@ -5776,28 +6255,24 @@
         ) {
 
 
-          /*
-           * กรณีกดกลับ
-           *
-           * แยก source ทีละชุด
-           * ป้องกัน backend ตัดเลขซ้ำข้าม source
-           */
-
           if (
             bill.reverseApplied
           ) {
 
             bill.sourceNumbers.forEach(
-              function (source) {
+              function (
+                source
+              ) {
 
-                var numbers =
+                var nums =
                   getTwoReverseSet(
                     source
                   );
 
 
                 if (
-                  bill.priceA > 0
+                  bill.priceA >
+                  0
                 ) {
 
                   payloads.push(
@@ -5813,13 +6288,13 @@
                         bill,
 
                       numbers:
-                        numbers,
+                        nums,
 
                       betCount:
-                        numbers.length,
+                        nums.length,
 
                       subtotal:
-                        numbers.length *
+                        nums.length *
                         bill.priceA,
 
                       priceText:
@@ -5839,7 +6314,8 @@
 
 
                 if (
-                  bill.priceB > 0
+                  bill.priceB >
+                  0
                 ) {
 
                   payloads.push(
@@ -5855,13 +6331,13 @@
                         bill,
 
                       numbers:
-                        numbers,
+                        nums,
 
                       betCount:
-                        numbers.length,
+                        nums.length,
 
                       subtotal:
-                        numbers.length *
+                        nums.length *
                         bill.priceB,
 
                       priceText:
@@ -5889,7 +6365,8 @@
 
 
           if (
-            bill.priceA > 0
+            bill.priceA >
+            0
           ) {
 
             payloads.push(
@@ -5931,7 +6408,8 @@
 
 
           if (
-            bill.priceB > 0
+            bill.priceB >
+            0
           ) {
 
             payloads.push(
@@ -5974,9 +6452,9 @@
         }
 
 
-        /* ===============================================
+        /* ==============================
            3 ตัว
-        ================================================ */
+        ============================== */
 
         if (
           bill.mode ===
@@ -5984,30 +6462,24 @@
         ) {
 
 
-          /*
-           * ถ้ากดกลับ
-           *
-           * แยก source ทีละชุด
-           *
-           * 495 กับ 549
-           * ต้องคิดคนละ 6 รายการ
-           */
-
           if (
             bill.reverseApplied
           ) {
 
             bill.sourceNumbers.forEach(
-              function (source) {
+              function (
+                source
+              ) {
 
-                var numbers =
+                var nums =
                   getPermutations3(
                     source
                   );
 
 
                 if (
-                  bill.priceA > 0
+                  bill.priceA >
+                  0
                 ) {
 
                   payloads.push(
@@ -6023,13 +6495,13 @@
                         bill,
 
                       numbers:
-                        numbers,
+                        nums,
 
                       betCount:
-                        numbers.length,
+                        nums.length,
 
                       subtotal:
-                        numbers.length *
+                        nums.length *
                         bill.priceA,
 
                       priceText:
@@ -6049,7 +6521,8 @@
 
 
                 if (
-                  bill.priceB > 0
+                  bill.priceB >
+                  0
                 ) {
 
                   payloads.push(
@@ -6065,13 +6538,13 @@
                         bill,
 
                       numbers:
-                        numbers,
+                        nums,
 
                       betCount:
-                        numbers.length,
+                        nums.length,
 
                       subtotal:
-                        numbers.length *
+                        nums.length *
                         bill.priceB,
 
                       priceText:
@@ -6099,7 +6572,8 @@
 
 
           if (
-            bill.priceA > 0
+            bill.priceA >
+            0
           ) {
 
             payloads.push(
@@ -6141,7 +6615,8 @@
 
 
           if (
-            bill.priceB > 0
+            bill.priceB >
+            0
           ) {
 
             payloads.push(
@@ -6184,29 +6659,19 @@
         }
 
 
-        /* ===============================================
+        /* ==============================
            6 กลับ
-        ================================================ */
+        ============================== */
 
         if (
           bill.mode ===
           "six"
         ) {
 
-          /*
-           * สำคัญมาก
-           *
-           * แยกเลขต้นฉบับทีละตัว
-           *
-           * 495 = 6
-           * 549 = 6
-           *
-           * backend จะไม่สามารถตัด
-           * ทั้งสอง source รวมกันได้
-           */
-
           bill.sourceNumbers.forEach(
-            function (source) {
+            function (
+              source
+            ) {
 
               var displayNumbers =
                 getPermutations3(
@@ -6225,45 +6690,39 @@
                 lottoName:
                   bill.lottoName,
 
+                roundDate:
+                  bill.roundDate,
+
                 closeTime:
                   bill.closeTime,
 
                 kind:
                   "three",
 
-
                 /*
-                 * ส่งต้นฉบับเพียงตัวเดียว
-                 * ให้ backend ทำ 6 กลับ
+                 * ส่งเลขต้นฉบับ
                  */
 
                 numbers:
                   source,
 
+                /*
+                 * ใช้โชว์ Flex
+                 */
 
                 displayNumbers:
                   displayNumbers.slice(),
 
-
-                sourceNumbers:
-                  [
-                    source
-                  ],
-
-
                 betCount:
                   displayNumbers.length,
-
 
                 subtotal:
                   displayNumbers.length *
                   bill.priceA,
 
-
                 priceText:
                   "บนตรง " +
                   bill.priceA,
-
 
                 top:
                   bill.priceA,
@@ -6279,9 +6738,9 @@
         }
 
 
-        /* ===============================================
+        /* ==============================
            19 ประตู
-        ================================================ */
+        ============================== */
 
         if (
           bill.mode ===
@@ -6289,16 +6748,19 @@
         ) {
 
           bill.sourceNumbers.forEach(
-            function (source) {
+            function (
+              source
+            ) {
 
-              var numbers =
+              var nums =
                 get19GateNumbers(
                   source
                 );
 
 
               if (
-                bill.priceA > 0
+                bill.priceA >
+                0
               ) {
 
                 payloads.push(
@@ -6314,13 +6776,13 @@
                       bill,
 
                     numbers:
-                      numbers,
+                      nums,
 
                     betCount:
-                      numbers.length,
+                      nums.length,
 
                     subtotal:
-                      numbers.length *
+                      nums.length *
                       bill.priceA,
 
                     priceText:
@@ -6340,7 +6802,8 @@
 
 
               if (
-                bill.priceB > 0
+                bill.priceB >
+                0
               ) {
 
                 payloads.push(
@@ -6356,13 +6819,13 @@
                       bill,
 
                     numbers:
-                      numbers,
+                      nums,
 
                     betCount:
-                      numbers.length,
+                      nums.length,
 
                     subtotal:
-                      numbers.length *
+                      nums.length *
                       bill.priceB,
 
                     priceText:
@@ -6408,6 +6871,9 @@
 
       lottoName:
         data.bill.lottoName,
+
+      roundDate:
+        data.bill.roundDate,
 
       closeTime:
         data.bill.closeTime,
@@ -6475,19 +6941,7 @@
         item.top,
 
       bottom:
-        item.bottom,
-
-
-      /*
-       * ส่ง metadata ไปด้วย
-       * backend จะใช้หรือไม่ใช้ก็ได้
-       */
-
-      betCount:
-        item.betCount,
-
-      subtotal:
-        item.subtotal
+        item.bottom
 
     };
 
@@ -6501,6 +6955,33 @@
   function openConfirm() {
 
     clearError();
+
+
+    if (
+      state.selectedLotto
+    ) {
+
+      var close =
+        getLottoCloseTarget(
+          state.selectedLotto
+        );
+
+
+      if (
+        close &&
+        close.getTime() <=
+        Date.now()
+      ) {
+
+        showError(
+          "หวยนี้ปิดรับแล้ว"
+        );
+
+        return;
+
+      }
+
+    }
 
 
     var payloads;
@@ -6646,7 +7127,9 @@
 
 
     state.bills.forEach(
-      function (bill) {
+      function (
+        bill
+      ) {
 
         var group =
           document.createElement(
@@ -6810,7 +7293,40 @@
       !state.pendingPayloads ||
       !state.pendingPayloads.length
     ) {
+
       return;
+
+    }
+
+
+    if (
+      state.selectedLotto
+    ) {
+
+      var target =
+        getLottoCloseTarget(
+          state.selectedLotto
+        );
+
+
+      if (
+        target &&
+        target.getTime() <=
+        Date.now()
+      ) {
+
+        closeConfirm();
+
+
+        showError(
+          "หวยนี้ปิดรับแล้ว"
+        );
+
+
+        return;
+
+      }
+
     }
 
 
@@ -6850,7 +7366,9 @@
     Promise.all(
 
       payloads.map(
-        function (item) {
+        function (
+          item
+        ) {
 
           return apiCreateLiffOrder(
             getApiPayload(
@@ -6863,14 +7381,18 @@
 
     )
     .then(
-      function (results) {
+      function (
+        results
+      ) {
 
         var fallbackMessages =
           [];
 
 
         results.forEach(
-          function (result) {
+          function (
+            result
+          ) {
 
             fallbackMessages =
               fallbackMessages.concat(
@@ -6889,20 +7411,20 @@
           );
 
 
-        var messages =
+        return sendToLine(
+
           flex
             ? [flex]
-            : fallbackMessages;
+            : fallbackMessages
 
-
-        return sendToLine(
-          messages
         );
 
       }
     )
     .catch(
-      function (err) {
+      function (
+        err
+      ) {
 
         setLoading(
           false
@@ -6931,12 +7453,14 @@
       [];
 
 
-    var indexByKey =
+    var indexes =
       {};
 
 
     payloads.forEach(
-      function (item) {
+      function (
+        item
+      ) {
 
         var key =
           [
@@ -6947,7 +7471,7 @@
           ].join("|");
 
 
-        var displayNumbers =
+        var nums =
           item.displayNumbers &&
           item.displayNumbers.length
 
@@ -6962,11 +7486,11 @@
 
 
         if (
-          indexByKey[key] ===
+          indexes[key] ===
           undefined
         ) {
 
-          indexByKey[key] =
+          indexes[key] =
             groups.length;
 
 
@@ -6980,12 +7504,12 @@
               "",
 
             numbers:
-              displayNumbers.slice(),
+              nums.slice(),
 
             betCount:
               Number(
                 item.betCount ||
-                displayNumbers.length
+                nums.length
               ),
 
             subtotal:
@@ -7004,14 +7528,14 @@
 
         var target =
           groups[
-            indexByKey[key]
+            indexes[key]
           ];
 
 
         target.numbers =
           unique(
             target.numbers.concat(
-              displayNumbers
+              nums
             )
           );
 
@@ -7019,7 +7543,7 @@
         target.betCount +=
           Number(
             item.betCount ||
-            displayNumbers.length
+            nums.length
           );
 
 
@@ -7100,11 +7624,9 @@
 
         blocks.push({
 
-          type:
-            "box",
+          type: "box",
 
-          layout:
-            "horizontal",
+          layout: "horizontal",
 
           margin:
             index === 0
@@ -7114,40 +7636,20 @@
           contents: [
 
             {
-              type:
-                "text",
-
-              text:
-                group.label,
-
-              color:
-                "#B91C1C",
-
-              size:
-                "sm",
-
-              weight:
-                "bold",
-
-              flex:
-                0
+              type: "text",
+              text: group.label,
+              color: "#B91C1C",
+              size: "sm",
+              weight: "bold",
+              flex: 0
             },
 
             {
-              type:
-                "text",
-
-              text:
-                group.priceText,
-
-              color:
-                "#9CA3AF",
-
-              size:
-                "xs",
-
-              align:
-                "end"
+              type: "text",
+              text: group.priceText,
+              color: "#9CA3AF",
+              size: "xs",
+              align: "end"
             }
 
           ]
@@ -7180,56 +7682,34 @@
 
         blocks.push({
 
-          type:
-            "box",
+          type: "box",
 
-          layout:
-            "horizontal",
+          layout: "horizontal",
 
-          margin:
-            "xs",
+          margin: "xs",
 
           contents: [
 
             {
-              type:
-                "text",
-
-              text:
-                countText,
-
-              color:
-                "#9CA3AF",
-
-              size:
-                "xs",
-
-              flex:
-                0
+              type: "text",
+              text: countText,
+              color: "#9CA3AF",
+              size: "xs",
+              flex: 0
             },
 
             {
-              type:
-                "text",
-
+              type: "text",
               text:
                 "= " +
                 numberWithCommas(
                   group.subtotal
                 ) +
                 " บาท",
-
-              color:
-                "#6B7280",
-
-              size:
-                "xs",
-
-              weight:
-                "bold",
-
-              align:
-                "end"
+              color: "#6B7280",
+              size: "xs",
+              weight: "bold",
+              align: "end"
             }
 
           ]
@@ -7239,17 +7719,13 @@
 
         blocks.push({
 
-          type:
-            "box",
+          type: "box",
 
-          layout:
-            "vertical",
+          layout: "vertical",
 
-          margin:
-            "sm",
+          margin: "sm",
 
-          paddingAll:
-            "10px",
+          paddingAll: "10px",
 
           backgroundColor:
             "#FEF2F2",
@@ -7260,25 +7736,15 @@
           contents: [
 
             {
-              type:
-                "text",
-
+              type: "text",
               text:
                 group.numbers.join(
                   " "
                 ),
-
-              color:
-                "#7F1D1D",
-
-              weight:
-                "bold",
-
-              size:
-                "sm",
-
-              wrap:
-                true
+              color: "#7F1D1D",
+              weight: "bold",
+              size: "sm",
+              wrap: true
             }
 
           ]
@@ -7311,8 +7777,7 @@
 
     return {
 
-      type:
-        "flex",
+      type: "flex",
 
       altText:
         lottoName +
@@ -7322,23 +7787,18 @@
 
       contents: {
 
-        type:
-          "bubble",
+        type: "bubble",
 
-        size:
-          "kilo",
+        size: "kilo",
 
 
         header: {
 
-          type:
-            "box",
+          type: "box",
 
-          layout:
-            "vertical",
+          layout: "vertical",
 
-          paddingAll:
-            "18px",
+          paddingAll: "18px",
 
           backgroundColor:
             "#B91C1C",
@@ -7346,82 +7806,46 @@
           contents: [
 
             {
-              type:
-                "text",
-
-              text:
-                lottoName,
-
-              color:
-                "#FFFFFF",
-
-              weight:
-                "bold",
-
-              size:
-                "xl",
-
-              wrap:
-                true
+              type: "text",
+              text: lottoName,
+              color: "#FFFFFF",
+              weight: "bold",
+              size: "xl",
+              wrap: true
             },
 
             {
-              type:
-                "box",
-
-              layout:
-                "horizontal",
-
-              margin:
-                "sm",
-
+              type: "box",
+              layout: "horizontal",
+              margin: "sm",
               contents: [
 
                 {
-                  type:
-                    "text",
-
+                  type: "text",
                   text:
                     "ปิด " +
                     (
                       closeTime ||
                       "--:--"
                     ),
-
-                  color:
-                    "#FEE2E2",
-
-                  size:
-                    "xs",
-
-                  flex:
-                    0
+                  color: "#FEE2E2",
+                  size: "xs",
+                  flex: 0
                 },
 
                 {
-                  type:
-                    "text",
-
+                  type: "text",
                   text:
                     "• " +
                     totalBets +
                     " รายการ",
-
-                  color:
-                    "#FEE2E2",
-
-                  size:
-                    "xs",
-
-                  margin:
-                    "sm",
-
-                  flex:
-                    0
+                  color: "#FEE2E2",
+                  size: "xs",
+                  margin: "sm",
+                  flex: 0
                 }
 
               ]
-
             }
 
           ]
@@ -7431,14 +7855,11 @@
 
         body: {
 
-          type:
-            "box",
+          type: "box",
 
-          layout:
-            "vertical",
+          layout: "vertical",
 
-          paddingAll:
-            "18px",
+          paddingAll: "18px",
 
           backgroundColor:
             "#FFFFFF",
@@ -7446,31 +7867,20 @@
           contents:
             blocks.concat([
 
-
               {
-                type:
-                  "separator",
-
-                margin:
-                  "lg",
-
-                color:
-                  "#FCA5A5"
+                type: "separator",
+                margin: "lg",
+                color: "#FCA5A5"
               },
 
-
               {
-                type:
-                  "box",
+                type: "box",
 
-                layout:
-                  "vertical",
+                layout: "vertical",
 
-                margin:
-                  "lg",
+                margin: "lg",
 
-                paddingAll:
-                  "14px",
+                paddingAll: "14px",
 
                 backgroundColor:
                   "#FEF2F2",
@@ -7481,34 +7891,20 @@
                 contents: [
 
                   {
-                    type:
-                      "text",
-
-                    text:
-                      "ยอดโอน",
-
-                    color:
-                      "#DC2626",
-
-                    size:
-                      "xs",
-
-                    align:
-                      "center",
-
-                    weight:
-                      "bold"
+                    type: "text",
+                    text: "ยอดโอน",
+                    color: "#DC2626",
+                    size: "xs",
+                    align: "center",
+                    weight: "bold"
                   },
 
                   {
-                    type:
-                      "box",
+                    type: "box",
 
-                    layout:
-                      "baseline",
+                    layout: "baseline",
 
-                    margin:
-                      "xs",
+                    margin: "xs",
 
                     justifyContent:
                       "center",
@@ -7516,45 +7912,24 @@
                     contents: [
 
                       {
-                        type:
-                          "text",
-
+                        type: "text",
                         text:
                           numberWithCommas(
                             total
                           ),
-
-                        color:
-                          "#B91C1C",
-
-                        size:
-                          "3xl",
-
-                        weight:
-                          "bold",
-
-                        flex:
-                          0
+                        color: "#B91C1C",
+                        size: "3xl",
+                        weight: "bold",
+                        flex: 0
                       },
 
                       {
-                        type:
-                          "text",
-
-                        text:
-                          " บาท",
-
-                        color:
-                          "#DC2626",
-
-                        size:
-                          "md",
-
-                        weight:
-                          "bold",
-
-                        flex:
-                          0
+                        type: "text",
+                        text: " บาท",
+                        color: "#DC2626",
+                        size: "md",
+                        weight: "bold",
+                        flex: 0
                       }
 
                     ]
@@ -7565,19 +7940,14 @@
 
               },
 
-
               {
-                type:
-                  "box",
+                type: "box",
 
-                layout:
-                  "vertical",
+                layout: "vertical",
 
-                margin:
-                  "md",
+                margin: "md",
 
-                paddingAll:
-                  "13px",
+                paddingAll: "13px",
 
                 backgroundColor:
                   "#FFF7F7",
@@ -7594,102 +7964,53 @@
                 contents: [
 
                   {
-                    type:
-                      "text",
-
-                    text:
-                      "บัญชีโอน",
-
-                    color:
-                      "#DC2626",
-
-                    size:
-                      "xs",
-
-                    weight:
-                      "bold"
+                    type: "text",
+                    text: "บัญชีโอน",
+                    color: "#DC2626",
+                    size: "xs",
+                    weight: "bold"
                   },
 
                   {
-                    type:
-                      "text",
-
-                    text:
-                      bankNumber,
-
-                    color:
-                      "#7F1D1D",
-
-                    size:
-                      "xl",
-
-                    weight:
-                      "bold",
-
-                    margin:
-                      "xs",
-
-                    wrap:
-                      true
+                    type: "text",
+                    text: bankNumber,
+                    color: "#7F1D1D",
+                    size: "xl",
+                    weight: "bold",
+                    margin: "xs",
+                    wrap: true
                   },
 
                   {
-                    type:
-                      "text",
-
-                    text:
-                      bankTitle,
-
-                    color:
-                      "#991B1B",
-
-                    size:
-                      "sm",
-
-                    margin:
-                      "xs",
-
-                    wrap:
-                      true
+                    type: "text",
+                    text: bankTitle,
+                    color: "#991B1B",
+                    size: "sm",
+                    margin: "xs",
+                    wrap: true
                   },
 
                   {
-                    type:
-                      "text",
-
-                    text:
-                      bankName,
-
-                    color:
-                      "#991B1B",
-
-                    size:
-                      "sm",
-
-                    margin:
-                      "xs",
-
-                    wrap:
-                      true
+                    type: "text",
+                    text: bankName,
+                    color: "#991B1B",
+                    size: "sm",
+                    margin: "xs",
+                    wrap: true
                   },
 
                   {
-                    type:
-                      "button",
+                    type: "button",
 
-                    style:
-                      "secondary",
+                    style: "secondary",
 
-                    height:
-                      "sm",
+                    height: "sm",
 
-                    margin:
-                      "md",
+                    margin: "md",
 
                     action: {
 
-                      type:
-                        "clipboard",
+                      type: "clipboard",
 
                       label:
                         "คัดลอกเลขบัญชี",
@@ -7717,7 +8038,7 @@
 
 
   /* =====================================================
-     SEND LINE
+     LINE
   ====================================================== */
 
   function sendToLine(
@@ -7769,7 +8090,13 @@
           );
 
 
-          liff.closeWindow();
+          if (
+            liff.isInClient()
+          ) {
+
+            liff.closeWindow();
+
+          }
 
         }
       );
@@ -7782,7 +8109,9 @@
   ) {
 
     if (!res) {
+
       return [];
+
     }
 
 
@@ -7791,7 +8120,9 @@
         res
       )
     ) {
+
       return res;
+
     }
 
 
@@ -7800,7 +8131,9 @@
         res.messages
       )
     ) {
+
       return res.messages;
+
     }
 
 
@@ -7809,14 +8142,18 @@
         res.flex
       )
     ) {
+
       return res.flex;
+
     }
 
 
     return [
+
       res.flex ||
       res.message ||
       res
+
     ];
 
   }
@@ -7827,7 +8164,9 @@
   ) {
 
     if (!message) {
+
       return null;
+
     }
 
 
@@ -7878,8 +8217,7 @@
 
       return {
 
-        type:
-          "flex",
+        type: "flex",
 
         altText:
           message.altText ||
@@ -7894,16 +8232,17 @@
 
 
     if (
-      message.type === "bubble" ||
-      message.type === "carousel" ||
+      message.type ===
+        "bubble" ||
+      message.type ===
+        "carousel" ||
       message.body ||
       message.hero
     ) {
 
       return {
 
-        type:
-          "flex",
+        type: "flex",
 
         altText:
           "โพยหวย",
@@ -7930,7 +8269,9 @@
 
 
     messages.forEach(
-      function (message) {
+      function (
+        message
+      ) {
 
         if (
           !message ||
@@ -7938,7 +8279,9 @@
             "flex" ||
           !message.contents
         ) {
+
           return;
+
         }
 
 
@@ -7970,7 +8313,9 @@
     if (
       !bubbles.length
     ) {
+
       return [];
+
     }
 
 
@@ -7981,8 +8326,7 @@
 
       return [{
 
-        type:
-          "flex",
+        type: "flex",
 
         altText:
           "โพยหวย",
@@ -7997,16 +8341,14 @@
 
     return [{
 
-      type:
-        "flex",
+      type: "flex",
 
       altText:
         "โพยหวย",
 
       contents: {
 
-        type:
-          "carousel",
+        type: "carousel",
 
         contents:
           bubbles.slice(
@@ -8040,7 +8382,9 @@
         "chat_message.write"
       )
       .then(
-        function (permission) {
+        function (
+          permission
+        ) {
 
           if (
             !permission ||
@@ -8132,18 +8476,30 @@
     );
 
 
-    els.error.textContent =
-      formatError(
-        err
-      );
+    if (
+      els.error
+    ) {
+
+      els.error.textContent =
+        formatError(
+          err
+        );
+
+    }
 
   }
 
 
   function clearError() {
 
-    els.error.textContent =
-      "";
+    if (
+      els.error
+    ) {
+
+      els.error.textContent =
+        "";
+
+    }
 
   }
 
@@ -8153,7 +8509,9 @@
   ) {
 
     if (!err) {
+
       return "เกิดข้อผิดพลาด";
+
     }
 
 
@@ -8161,14 +8519,18 @@
       typeof err ===
       "string"
     ) {
+
       return err;
+
     }
 
 
     if (
       err.message
     ) {
+
       return err.message;
+
     }
 
 
@@ -8192,12 +8554,16 @@
 
 
     return list.filter(
-      function (item) {
+      function (
+        item
+      ) {
 
         if (
           seen[item]
         ) {
+
           return false;
+
         }
 
 
