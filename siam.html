@@ -1,124 +1,1074 @@
-/* =========================
-   LOTTO SELECT - STICKY
-========================= */
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>แทงหวย - วางโพย</title>
+  <meta name="theme-color" content="#ff2b2b">
+  <style>
+    :root{
+      --red:#ff2b2b;
+      --red-dark:#e31b1b;
+      --red-soft:#fff1f1;
+      --line:#d9d9d9;
+      --bg:#f3f3f3;
+      --card:#ffffff;
+      --text:#111111;
+      --muted:#7f7f7f;
+      --green:#67c23a;
+      --shadow:0 8px 22px rgba(0,0,0,.06);
+      --radius:18px;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;min-height:100%;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai",sans-serif;color:var(--text)}
+    button,input,textarea,select{font:inherit}
+    .app{max-width:760px;margin:0 auto;padding:12px 12px 100px}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .top-accent{height:5px;width:46px;background:var(--red);border-radius:0 0 6px 0}
+    .lotto-card{padding:14px 16px 16px}
+    .lotto-title{
+      font-size:28px;
+      font-weight:900;
+      line-height:1.2;
+      margin-bottom:18px;
+    }
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px 10px;
+      align-items:center;
+    }
+    .info-label{
+      color:#666;
+      font-size:24px;
+      font-weight:500;
+    }
+    .info-value{
+      font-size:26px;
+      font-weight:500;
+      text-align:right;
+    }
+    .countdown{
+      margin-top:8px;
+      text-align:right;
+      font-size:26px;
+      color:var(--green);
+      font-weight:500;
+    }
 
-.lotto-card {
-  position: sticky;
-  top: calc(8px + env(safe-area-inset-top));
-  z-index: 30;
+    .section{margin-top:14px}
 
-  min-height: 72px;
+    .tabs-wrap{
+      position:sticky;
+      top:8px;
+      z-index:20;
+      background:transparent;
+    }
+    .tabs{
+      display:flex;
+      background:#fff;
+      border:1px solid #cfcfcf;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .tab{
+      flex:1;
+      min-height:62px;
+      border:0;
+      background:#fff;
+      color:#1b1b1b;
+      font-size:22px;
+      font-weight:500;
+      border-right:1px solid #d8d8d8;
+    }
+    .tab:last-child{border-right:0}
+    .tab.active{
+      color:var(--red-dark);
+      box-shadow:inset 0 0 0 2px var(--red);
+      background:#fff;
+    }
 
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 10px;
+    .chip-board{
+      margin-top:16px;
+      background:transparent;
+      min-height:86px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:flex-start;
+      padding-right:72px;
+      position:relative;
+    }
+    .chip{
+      min-width:78px;
+      height:54px;
+      padding:0 12px;
+      border-radius:14px;
+      border:0;
+      background:var(--red);
+      color:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      font-weight:500;
+      box-shadow:0 4px 10px rgba(255,43,43,.24);
+    }
+    .chip.digit1{min-width:58px}
+    .trash-btn{
+      position:absolute;
+      right:0;
+      top:0;
+      width:56px;
+      height:56px;
+      border-radius:18px;
+      border:2px solid #ef6b6b;
+      background:#fff;
+      color:#ef6b6b;
+      font-size:30px;
+      font-weight:700;
+    }
 
-  padding: 10px 12px 10px 15px;
+    .tool-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:14px;
+    }
+    .ghost-btn{
+      min-height:58px;
+      padding:0 24px;
+      border-radius:16px;
+      border:2px solid #d8d8d8;
+      background:#fff;
+      color:#111;
+      font-size:22px;
+      font-weight:500;
+      box-shadow:var(--shadow);
+    }
+    .ghost-btn[hidden]{display:none!important}
 
-  border: 2px solid #dc2626;
-  border-radius: 16px;
+    .paste-box{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+    .paste-input{
+      width:100%;
+      min-height:110px;
+      resize:vertical;
+      padding:16px 18px;
+      border:2px solid #dddddd;
+      border-radius:18px;
+      background:#fff;
+      font-size:22px;
+      color:#111;
+      outline:none;
+    }
+    .paste-input:focus{
+      border-color:#ff8f8f;
+      box-shadow:0 0 0 4px rgba(255,43,43,.08);
+    }
+    .paste-help{
+      color:#777;
+      font-size:16px;
+      line-height:1.45;
+      margin-top:-2px;
+    }
+    .paste-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .small-red{
+      min-height:50px;
+      padding:0 18px;
+      border-radius:14px;
+      border:0;
+      background:var(--red);
+      color:#fff;
+      font-size:18px;
+      font-weight:800;
+    }
+    .small-light{
+      min-height:50px;
+      padding:0 18px;
+      border-radius:14px;
+      border:2px solid #dcdcdc;
+      background:#fff;
+      color:#111;
+      font-size:18px;
+      font-weight:800;
+    }
 
-  background: rgba(255, 255, 255, .96);
+    .price-grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:minmax(0,1.6fr) minmax(0,.8fr) minmax(0,.8fr);
+      gap:12px;
+    }
+    .price-grid.one{
+      grid-template-columns:1fr;
+    }
+    .field{
+      width:100%;
+      height:74px;
+      border:2px solid #dddddd;
+      border-radius:18px;
+      background:#fff;
+      padding:0 20px;
+      font-size:22px;
+      outline:none;
+    }
+    .field::placeholder{color:#b8b8b8}
+    .field:focus{
+      border-color:#ff8f8f;
+      box-shadow:0 0 0 4px rgba(255,43,43,.08);
+    }
 
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+    .add-bill{
+      margin-top:18px;
+      width:100%;
+      height:74px;
+      border:0;
+      border-radius:22px;
+      background:linear-gradient(180deg,var(--red),#ff3636);
+      color:#fff;
+      font-size:30px;
+      font-weight:500;
+      box-shadow:0 10px 20px rgba(255,43,43,.24);
+    }
 
-  box-shadow:
-    0 8px 24px rgba(185, 28, 28, .16),
-    0 2px 8px rgba(0, 0, 0, .05);
-}
+    .summary{
+      margin-top:18px;
+      display:grid;
+      gap:12px;
+    }
+    .summary-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:0 2px;
+    }
+    .summary-title{
+      font-size:22px;
+      font-weight:900;
+    }
+    .summary-total{
+      color:var(--red-dark);
+      font-size:22px;
+      font-weight:900;
+    }
+    .bill-card{
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:18px;
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+    .bill-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:8px;
+    }
+    .bill-mode{
+      font-size:20px;
+      font-weight:900;
+      color:var(--red-dark);
+    }
+    .bill-meta{
+      color:#666;
+      font-size:15px;
+      line-height:1.4;
+    }
+    .bill-subtotal{
+      font-size:20px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .bill-numbers{
+      color:#222;
+      font-size:18px;
+      line-height:1.6;
+      word-break:break-word;
+      margin-top:6px;
+    }
+    .bill-actions{
+      margin-top:10px;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .bill-del{
+      height:42px;
+      padding:0 14px;
+      border-radius:12px;
+      border:0;
+      background:#fff2f2;
+      color:#ef4444;
+      font-size:16px;
+      font-weight:800;
+    }
 
+    .sticky-submit{
+      position:sticky;
+      bottom:8px;
+      z-index:30;
+      margin-top:18px;
+      background:rgba(255,255,255,.92);
+      border:1px solid #e3e3e3;
+      border-radius:22px;
+      padding:12px;
+      box-shadow:0 12px 32px rgba(0,0,0,.10);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+    .sticky-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .final-btn{
+      height:60px;
+      border-radius:16px;
+      border:0;
+      font-size:20px;
+      font-weight:900;
+    }
+    .btn-clear{
+      background:#f1f1f1;
+      color:#444;
+    }
+    .btn-submit{
+      background:var(--red);
+      color:#fff;
+    }
 
-/* แถบแดงด้านซ้าย */
-.lotto-card::before {
-  content: "";
+    .error{
+      margin-top:10px;
+      color:#d81818;
+      font-size:15px;
+      font-weight:800;
+      min-height:20px;
+      line-height:1.4;
+    }
 
-  position: absolute;
+    .json-box{
+      margin-top:12px;
+      padding:12px;
+      border-radius:16px;
+      background:#181818;
+      color:#e9e9e9;
+      font-size:13px;
+      line-height:1.55;
+      overflow:auto;
+      white-space:pre-wrap;
+      word-break:break-word;
+      max-height:260px;
+      display:none;
+    }
 
-  left: 0;
-  top: 12px;
-  bottom: 12px;
+    @media (max-width:560px){
+      .lotto-title{font-size:24px}
+      .info-label,.info-value,.countdown{font-size:20px}
+      .tab{font-size:18px;min-height:56px}
+      .chip{min-width:64px;height:46px;font-size:20px}
+      .ghost-btn{font-size:18px;min-height:52px;padding:0 18px}
+      .field{height:64px;font-size:18px}
+      .paste-input{font-size:18px;min-height:96px}
+      .add-bill{height:66px;font-size:26px}
+      .price-grid{grid-template-columns:1fr}
+      .sticky-row{grid-template-columns:1fr}
+      .trash-btn{width:52px;height:52px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
 
-  width: 5px;
+    <section class="card">
+      <div class="top-accent"></div>
+      <div class="lotto-card">
+        <div class="lotto-title" id="lottoTitle">[หวยรายวัน] ลาวสามัคคี</div>
 
-  border-radius: 0 999px 999px 0;
+        <div class="info-grid">
+          <div class="info-label">งวดที่</div>
+          <div class="info-value" id="lottoDate">08-08-2026</div>
 
-  background: linear-gradient(
-    180deg,
-    #b91c1c,
-    #ef4444
-  );
-}
+          <div class="info-label">เวลาปิดรับ</div>
+          <div class="info-value" id="closeDateTime">08-08-2026 20:25</div>
+        </div>
 
+        <div class="countdown" id="countdown">04:39:23</div>
+      </div>
+    </section>
 
-/* =========================
-   LOTTO DROPDOWN
-========================= */
+    <section class="section tabs-wrap">
+      <div class="tabs">
+        <button class="tab active" data-mode="two">2 ตัว</button>
+        <button class="tab" data-mode="three">3 ตัว</button>
+        <button class="tab" data-mode="six">6 กลับ</button>
+        <button class="tab" data-mode="gate19">19 ประตู</button>
+      </div>
+    </section>
 
-.lotto-card select {
-  min-width: 0;
-  width: 100%;
+    <section class="section">
+      <div class="chip-board" id="chipBoard">
+        <button class="trash-btn" id="clearCurrent" type="button" title="ล้างเลขทั้งหมด">🗑</button>
+      </div>
 
-  padding:
-    4px
-    28px
-    4px
-    8px;
+      <div class="tool-row">
+        <button class="ghost-btn" id="addDoubleBtn" type="button">เพิ่มเลขเบิ้ล</button>
+        <button class="ghost-btn" id="reverseBtn" type="button">กลับเลข</button>
+      </div>
 
-  border: 0;
+      <div class="paste-box">
+        <textarea id="pasteInput" class="paste-input" placeholder="วางโพยที่นี่ เช่น 82/89/80/83/84/90/92/93/94/02/03/04/23/24/34"></textarea>
+        <div class="paste-help" id="pasteHelp">
+          รองรับการคั่นด้วย / , เว้นวรรค หรือขึ้นบรรทัดใหม่
+        </div>
+        <div class="paste-actions">
+          <button class="small-red" id="parseBtn" type="button">วางโพย</button>
+          <button class="small-light" id="clearPasteBtn" type="button">ล้างช่องวางโพย</button>
+        </div>
+      </div>
 
-  background: transparent;
+      <div class="price-grid" id="priceGrid">
+        <input class="field" id="numberInput" type="text" placeholder="กรอกเลข">
+        <input class="field" id="priceA" type="number" inputmode="numeric" min="0" step="1" placeholder="บน">
+        <input class="field" id="priceB" type="number" inputmode="numeric" min="0" step="1" placeholder="ล่าง">
+      </div>
 
-  color: #991b1b;
+      <button class="add-bill" id="addBillBtn" type="button">เพิ่มบิล</button>
 
-  font-size: 20px;
-  font-weight: 950;
+      <div class="error" id="error"></div>
+    </section>
 
-  line-height: 1.25;
+    <section class="summary">
+      <div class="summary-head">
+        <div class="summary-title">รายการบิล</div>
+        <div class="summary-total" id="grandTotal">0 บาท</div>
+      </div>
+      <div id="billList"></div>
+    </section>
 
-  outline: none;
+    <section class="sticky-submit">
+      <div class="sticky-row">
+        <button class="final-btn btn-clear" id="clearBillsBtn" type="button">ล้างบิลทั้งหมด</button>
+        <button class="final-btn btn-submit" id="buildPayloadBtn" type="button">สร้าง Payload</button>
+      </div>
+      <div class="json-box" id="jsonBox"></div>
+    </section>
 
-  cursor: pointer;
-}
+  </main>
 
+  <script>
+    const MODE_META = {
+      two: {
+        label: "2 ตัว",
+        digits: 2,
+        help: "วางได้เช่น 82/89/80/83 หรือ 82 89 80 83",
+        placeholders: ["กรอกเลข", "บน", "ล่าง"],
+        showSecondPrice: true,
+        allowReverse: true,
+        allowDouble: true
+      },
+      three: {
+        label: "3 ตัว",
+        digits: 3,
+        help: "วางได้เช่น 123/456/789",
+        placeholders: ["กรอกเลข", "ตรง", "โต๊ด"],
+        showSecondPrice: true,
+        allowReverse: true,
+        allowDouble: false
+      },
+      six: {
+        label: "3 ตัว 6 กลับ",
+        digits: 3,
+        help: "วางได้เช่น 123/456/789 • ใส่ราคาเฉพาะ บนตรง",
+        placeholders: ["กรอกเลข", "บนตรง", ""],
+        showSecondPrice: false,
+        allowReverse: false,
+        allowDouble: false
+      },
+      gate19: {
+        label: "19 ประตู",
+        digits: 1,
+        help: "ใส่เลขเดี่ยว 1 ตัว เช่น 8 หรือวางหลายตัวเช่น 8/2/9",
+        placeholders: ["กรอกเลข", "บน", "ล่าง"],
+        showSecondPrice: true,
+        allowReverse: false,
+        allowDouble: false
+      }
+    };
 
-/* ถ้ายังไม่ได้เลือกหวย */
-.lotto-card select:invalid {
-  color: #dc2626;
-}
+    const state = {
+      mode: "two",
+      currentNumbers: [],
+      bills: []
+    };
 
+    const els = {
+      tabs: [...document.querySelectorAll(".tab")],
+      chipBoard: document.getElementById("chipBoard"),
+      clearCurrent: document.getElementById("clearCurrent"),
+      addDoubleBtn: document.getElementById("addDoubleBtn"),
+      reverseBtn: document.getElementById("reverseBtn"),
+      pasteInput: document.getElementById("pasteInput"),
+      pasteHelp: document.getElementById("pasteHelp"),
+      parseBtn: document.getElementById("parseBtn"),
+      clearPasteBtn: document.getElementById("clearPasteBtn"),
+      numberInput: document.getElementById("numberInput"),
+      priceA: document.getElementById("priceA"),
+      priceB: document.getElementById("priceB"),
+      priceGrid: document.getElementById("priceGrid"),
+      addBillBtn: document.getElementById("addBillBtn"),
+      error: document.getElementById("error"),
+      billList: document.getElementById("billList"),
+      grandTotal: document.getElementById("grandTotal"),
+      buildPayloadBtn: document.getElementById("buildPayloadBtn"),
+      clearBillsBtn: document.getElementById("clearBillsBtn"),
+      jsonBox: document.getElementById("jsonBox"),
+      countdown: document.getElementById("countdown")
+    };
 
-/* =========================
-   CLOSE TIME
-========================= */
+    document.addEventListener("DOMContentLoaded", function () {
+      bindEvents();
+      updateModeUI();
+      renderCurrentNumbers();
+      renderBills();
+      startFakeCountdown();
+    });
 
-.close-time {
-  min-height: 40px;
+    function bindEvents() {
+      els.tabs.forEach(btn => {
+        btn.addEventListener("click", () => setMode(btn.dataset.mode));
+      });
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+      els.parseBtn.addEventListener("click", parsePasteInput);
+      els.clearPasteBtn.addEventListener("click", () => {
+        els.pasteInput.value = "";
+        clearError();
+      });
 
-  padding: 7px 11px;
+      els.numberInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          addManualNumbers();
+        }
+      });
 
-  border: 0;
-  border-radius: 999px;
+      els.clearCurrent.addEventListener("click", clearCurrentNumbers);
+      els.reverseBtn.addEventListener("click", reverseCurrentNumbers);
+      els.addDoubleBtn.addEventListener("click", addDoubleNumbers);
+      els.addBillBtn.addEventListener("click", addBill);
+      els.buildPayloadBtn.addEventListener("click", buildPayloadPreview);
+      els.clearBillsBtn.addEventListener("click", clearAllBills);
+    }
 
-  background:
-    linear-gradient(
-      135deg,
-      #b91c1c,
-      #dc2626
-    );
+    function setMode(mode) {
+      if (!MODE_META[mode]) return;
+      state.mode = mode;
+      state.currentNumbers = [];
+      clearInputsOnly();
+      clearError();
+      els.tabs.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
+      updateModeUI();
+      renderCurrentNumbers();
+    }
 
-  color: #fff;
+    function updateModeUI() {
+      const meta = MODE_META[state.mode];
+      els.pasteHelp.textContent = meta.help;
+      els.numberInput.placeholder = meta.placeholders[0];
+      els.priceA.placeholder = meta.placeholders[1];
+      els.priceB.placeholder = meta.placeholders[2];
 
-  font-size: 12px;
-  font-weight: 900;
+      els.priceB.style.display = meta.showSecondPrice ? "" : "none";
 
-  white-space: nowrap;
+      if (meta.showSecondPrice) {
+        els.priceGrid.classList.remove("one");
+      } else {
+        els.priceGrid.classList.add("one");
+      }
 
-  box-shadow:
-    0 5px 12px rgba(220, 38, 38, .22);
-}
+      els.reverseBtn.hidden = !meta.allowReverse;
+      els.addDoubleBtn.hidden = !meta.allowDouble;
+
+      if (state.mode === "gate19") {
+        els.pasteInput.placeholder = "วางเลขประตู เช่น 8/2/9";
+      } else if (state.mode === "three") {
+        els.pasteInput.placeholder = "วางโพย เช่น 123/456/789";
+      } else if (state.mode === "six") {
+        els.pasteInput.placeholder = "วางโพย 3 ตัว 6 กลับ เช่น 123/456/789";
+      } else {
+        els.pasteInput.placeholder = "วางโพย เช่น 82/89/80/83/84/90/92/93/94/02/03/04/23/24/34";
+      }
+    }
+
+    function normalizeRawText(text) {
+      return String(text || "")
+        .replace(/[|,;\n\r\t ]+/g, "/")
+        .replace(/\/+/g, "/")
+        .trim();
+    }
+
+    function extractTokens(raw, digitLen) {
+      const text = normalizeRawText(raw);
+      if (!text) return [];
+      return text
+        .split("/")
+        .map(s => s.trim())
+        .filter(Boolean)
+        .filter(s => new RegExp("^\\d{" + digitLen + "}$").test(s));
+    }
+
+    function unique(list) {
+      const seen = new Set();
+      return list.filter(item => {
+        if (seen.has(item)) return false;
+        seen.add(item);
+        return true;
+      });
+    }
+
+    function parsePasteInput() {
+      clearError();
+      const meta = MODE_META[state.mode];
+      const tokens = extractTokens(els.pasteInput.value, meta.digits);
+
+      if (!tokens.length) {
+        showError("ไม่พบเลขที่ถูกต้องสำหรับโหมด " + meta.label);
+        return;
+      }
+
+      state.currentNumbers = unique(state.currentNumbers.concat(tokens));
+      renderCurrentNumbers();
+    }
+
+    function addManualNumbers() {
+      clearError();
+      const meta = MODE_META[state.mode];
+      const raw = els.numberInput.value.trim();
+      const tokens = extractTokens(raw, meta.digits);
+
+      if (!tokens.length) {
+        showError("กรุณากรอกเลขให้ถูกต้อง");
+        return;
+      }
+
+      state.currentNumbers = unique(state.currentNumbers.concat(tokens));
+      els.numberInput.value = "";
+      renderCurrentNumbers();
+    }
+
+    function clearCurrentNumbers() {
+      state.currentNumbers = [];
+      renderCurrentNumbers();
+      clearError();
+    }
+
+    function renderCurrentNumbers() {
+      [...els.chipBoard.querySelectorAll(".chip")].forEach(el => el.remove());
+
+      state.currentNumbers.forEach(num => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "chip" + (num.length === 1 ? " digit1" : "");
+        chip.textContent = num;
+        chip.title = "กดเพื่อลบ " + num;
+        chip.addEventListener("click", function () {
+          state.currentNumbers = state.currentNumbers.filter(n => n !== num);
+          renderCurrentNumbers();
+        });
+        els.chipBoard.insertBefore(chip, els.clearCurrent);
+      });
+    }
+
+    function addDoubleNumbers() {
+      if (state.mode !== "two") return;
+      const doubles = Array.from({ length: 10 }, (_, i) => String(i) + String(i));
+      state.currentNumbers = unique(state.currentNumbers.concat(doubles));
+      renderCurrentNumbers();
+    }
+
+    function reverseCurrentNumbers() {
+      clearError();
+
+      if (!state.currentNumbers.length) {
+        showError("ยังไม่มีเลขสำหรับกลับ");
+        return;
+      }
+
+      if (state.mode === "two") {
+        const reversed = state.currentNumbers.map(n => n[1] + n[0]);
+        state.currentNumbers = unique(state.currentNumbers.concat(reversed));
+        renderCurrentNumbers();
+        return;
+      }
+
+      if (state.mode === "three") {
+        let out = [...state.currentNumbers];
+        state.currentNumbers.forEach(num => {
+          out = out.concat(get3DigitPermutations(num));
+        });
+        state.currentNumbers = unique(out);
+        renderCurrentNumbers();
+      }
+    }
+
+    function get3DigitPermutations(num) {
+      const arr = num.split("");
+      const out = [];
+      for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr.length; j++) {
+          for (let k = 0; k < arr.length; k++) {
+            if (i !== j && i !== k && j !== k) {
+              out.push(arr[i] + arr[j] + arr[k]);
+            }
+          }
+        }
+      }
+      return unique(out);
+    }
+
+    function get19GateNumbers(digit) {
+      const out = [];
+      for (let i = 0; i <= 9; i++) {
+        const other = String(i);
+        out.push(digit + other);
+        if (other !== digit) out.push(other + digit);
+      }
+      return unique(out);
+    }
+
+    function countSixBackNumbers(num) {
+      return get3DigitPermutations(num).length;
+    }
+
+    function addBill() {
+      clearError();
+
+      addManualNumbersIfAny();
+
+      if (!state.currentNumbers.length) {
+        showError("กรุณาใส่เลขก่อน");
+        return;
+      }
+
+      const a = Number(els.priceA.value || 0) || 0;
+      const b = Number(els.priceB.value || 0) || 0;
+
+      if (state.mode === "two") {
+        if (a <= 0 && b <= 0) return showError("กรุณาใส่ราคา บน หรือ ล่าง");
+        state.bills.push({
+          id: createId(),
+          mode: "two",
+          numbers: [...state.currentNumbers],
+          top: a,
+          bottom: b,
+          subtotal: state.currentNumbers.length * (a + b)
+        });
+      }
+
+      if (state.mode === "three") {
+        if (a <= 0 && b <= 0) return showError("กรุณาใส่ราคา ตรง หรือ โต๊ด");
+        state.bills.push({
+          id: createId(),
+          mode: "three",
+          numbers: [...state.currentNumbers],
+          direct: a,
+          tod: b,
+          subtotal: state.currentNumbers.length * (a + b)
+        });
+      }
+
+      if (state.mode === "six") {
+        if (a <= 0) return showError("กรุณาใส่ราคา บนตรง");
+        const totalSets = state.currentNumbers.reduce((sum, n) => sum + countSixBackNumbers(n), 0);
+        state.bills.push({
+          id: createId(),
+          mode: "six",
+          numbers: [...state.currentNumbers],
+          direct: a,
+          expandedCount: totalSets,
+          subtotal: totalSets * a
+        });
+      }
+
+      if (state.mode === "gate19") {
+        if (a <= 0 && b <= 0) return showError("กรุณาใส่ราคา บน หรือ ล่าง");
+        const expanded = unique(state.currentNumbers.flatMap(get19GateNumbers));
+        state.bills.push({
+          id: createId(),
+          mode: "gate19",
+          baseDigits: [...state.currentNumbers],
+          numbers: expanded,
+          top: a,
+          bottom: b,
+          subtotal: expanded.length * (a + b)
+        });
+      }
+
+      state.currentNumbers = [];
+      clearInputsOnly();
+      renderCurrentNumbers();
+      renderBills();
+    }
+
+    function addManualNumbersIfAny() {
+      const raw = els.numberInput.value.trim();
+      if (!raw) return;
+      const tokens = extractTokens(raw, MODE_META[state.mode].digits);
+      if (tokens.length) {
+        state.currentNumbers = unique(state.currentNumbers.concat(tokens));
+      }
+      els.numberInput.value = "";
+    }
+
+    function renderBills() {
+      els.billList.innerHTML = "";
+
+      if (!state.bills.length) {
+        els.billList.innerHTML = '<div class="bill-card"><div class="bill-meta">ยังไม่มีบิล</div></div>';
+        els.grandTotal.textContent = "0 บาท";
+        return;
+      }
+
+      state.bills.forEach(bill => {
+        const card = document.createElement("div");
+        card.className = "bill-card";
+
+        const top = document.createElement("div");
+        top.className = "bill-top";
+
+        const left = document.createElement("div");
+        left.innerHTML = `
+          <div class="bill-mode">${getBillModeLabel(bill)}</div>
+          <div class="bill-meta">${getBillMeta(bill)}</div>
+        `;
+
+        const right = document.createElement("div");
+        right.className = "bill-subtotal";
+        right.textContent = numberWithCommas(bill.subtotal) + " บาท";
+
+        top.appendChild(left);
+        top.appendChild(right);
+
+        const nums = document.createElement("div");
+        nums.className = "bill-numbers";
+        nums.textContent = getBillNumbersText(bill);
+
+        const act = document.createElement("div");
+        act.className = "bill-actions";
+
+        const del = document.createElement("button");
+        del.className = "bill-del";
+        del.type = "button";
+        del.textContent = "ลบบิล";
+        del.addEventListener("click", function () {
+          state.bills = state.bills.filter(x => x.id !== bill.id);
+          renderBills();
+        });
+
+        act.appendChild(del);
+
+        card.appendChild(top);
+        card.appendChild(nums);
+        card.appendChild(act);
+        els.billList.appendChild(card);
+      });
+
+      const total = state.bills.reduce((sum, b) => sum + (Number(b.subtotal || 0) || 0), 0);
+      els.grandTotal.textContent = numberWithCommas(total) + " บาท";
+    }
+
+    function getBillModeLabel(bill) {
+      if (bill.mode === "two") return "2 ตัว";
+      if (bill.mode === "three") return "3 ตัว";
+      if (bill.mode === "six") return "3 ตัว 6 กลับ";
+      if (bill.mode === "gate19") return "19 ประตู";
+      return bill.mode;
+    }
+
+    function getBillMeta(bill) {
+      if (bill.mode === "two") {
+        const parts = [];
+        if (bill.top > 0) parts.push("บน " + bill.top);
+        if (bill.bottom > 0) parts.push("ล่าง " + bill.bottom);
+        return bill.numbers.length + " ตัว • " + parts.join(" / ");
+      }
+
+      if (bill.mode === "three") {
+        const parts = [];
+        if (bill.direct > 0) parts.push("ตรง " + bill.direct);
+        if (bill.tod > 0) parts.push("โต๊ด " + bill.tod);
+        return bill.numbers.length + " ตัว • " + parts.join(" / ");
+      }
+
+      if (bill.mode === "six") {
+        return bill.numbers.length + " ชุด • ขยายรวม " + bill.expandedCount + " เลข • บนตรง " + bill.direct;
+      }
+
+      if (bill.mode === "gate19") {
+        const parts = [];
+        if (bill.top > 0) parts.push("บน " + bill.top);
+        if (bill.bottom > 0) parts.push("ล่าง " + bill.bottom);
+        return "เลขตั้งต้น " + bill.baseDigits.join(", ") + " • ขยาย " + bill.numbers.length + " ตัว • " + parts.join(" / ");
+      }
+
+      return "";
+    }
+
+    function getBillNumbersText(bill) {
+      if (bill.mode === "gate19") {
+        return bill.numbers.join(" ");
+      }
+      return bill.numbers.join(" ");
+    }
+
+    function buildPayloadPreview() {
+      clearError();
+
+      if (!state.bills.length) {
+        showError("ยังไม่มีบิล");
+        return;
+      }
+
+      const payloads = buildApiPayloads();
+      els.jsonBox.style.display = "block";
+      els.jsonBox.textContent = JSON.stringify(payloads, null, 2);
+    }
+
+    function buildApiPayloads() {
+      const lottoName = document.getElementById("lottoTitle").textContent.trim();
+      const closeTime = document.getElementById("closeDateTime").textContent.trim();
+
+      const payloads = [];
+
+      state.bills.forEach(bill => {
+        if (bill.mode === "two") {
+          payloads.push({
+            modeKey: "two_mix",
+            label: "2 ตัว",
+            lottoName,
+            closeTime,
+            kind: "two",
+            numbers: bill.numbers.join(" "),
+            top: bill.top || 0,
+            bottom: bill.bottom || 0
+          });
+        }
+
+        if (bill.mode === "three") {
+          if (bill.direct > 0) {
+            payloads.push({
+              modeKey: "three_top",
+              label: "3 ตัวตรง",
+              lottoName,
+              closeTime,
+              kind: "three",
+              numbers: bill.numbers.join(" "),
+              top: bill.direct,
+              bottom: 0
+            });
+          }
+          if (bill.tod > 0) {
+            payloads.push({
+              modeKey: "three_tod",
+              label: "3 ตัวโต๊ด",
+              lottoName,
+              closeTime,
+              kind: "three",
+              numbers: bill.numbers.join(" "),
+              top: 0,
+              bottom: bill.tod
+            });
+          }
+        }
+
+        if (bill.mode === "six") {
+          payloads.push({
+            modeKey: "three_return",
+            label: "3 ตัว 6 กลับ",
+            lottoName,
+            closeTime,
+            kind: "three",
+            numbers: bill.numbers.join(" "),
+            top: bill.direct,
+            bottom: 0
+          });
+        }
+
+        if (bill.mode === "gate19") {
+          payloads.push({
+            modeKey: "two_19_gate",
+            label: "19 ประตู",
+            lottoName,
+            closeTime,
+            kind: "two",
+            numbers: bill.numbers.join(" "),
+            top: bill.top || 0,
+            bottom: bill.bottom || 0
+          });
+        }
+      });
+
+      return payloads;
+    }
+
+    function clearAllBills() {
+      state.bills = [];
+      renderBills();
+      els.jsonBox.style.display = "none";
+      els.jsonBox.textContent = "";
+      clearError();
+    }
+
+    function clearInputsOnly() {
+      els.pasteInput.value = "";
+      els.numberInput.value = "";
+      els.priceA.value = "";
+      els.priceB.value = "";
+    }
+
+    function showError(msg) {
+      els.error.textContent = msg || "เกิดข้อผิดพลาด";
+    }
+
+    function clearError() {
+      els.error.textContent = "";
+    }
+
+    function createId() {
+      return Date.now() + "-" + Math.random().toString(36).slice(2, 9);
+    }
+
+    function numberWithCommas(value) {
+      return String(Number(value || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function startFakeCountdown() {
+      // แค่ตัวอย่างแสดงผล ถ้าจะใช้จริงค่อยผูกกับเวลาปิดรับจริง
+      let remain = 4 * 3600 + 39 * 60 + 23;
+      setInterval(() => {
+        if (remain < 0) return;
+        const h = String(Math.floor(remain / 3600)).padStart(2, "0");
+        const m = String(Math.floor((remain % 3600) / 60)).padStart(2, "0");
+        const s = String(remain % 60).padStart(2, "0");
+        els.countdown.textContent = h + ":" + m + ":" + s;
+        remain--;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
