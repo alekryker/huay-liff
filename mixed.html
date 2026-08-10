@@ -934,7 +934,7 @@ var LIFF_ID = "2001131713-zQoBGoGU";
 
 var AFTER_MIDNIGHT_CUTOFF_HOUR = 6;
 
-var state = { lottos: [], bank: null, selectedLotto: null, groups: [], liffReady: false, pendingPayloads: null };
+var state = { lottos: [], bank: null, selectedLotto: null, groups: [], liffReady: false, pendingPayloads: null, lineUserId: "", lineDisplayName: "" };
 
 var els = {};
 
@@ -996,13 +996,128 @@ function backToLotto() { state.selectedLotto = null; state.groups = []; renderGr
    LIFF
 ===================================================== */
 
-function initLiff() { liffUrl = "https://liff.line.me/" + encodeURIComponent(LIFF_ID); if (!window.liff || !liff.init) {
-    showLiffGate("LIFF SDK ยังไม่พร้อม");
-    return;
-} liff.init({ liffId: LIFF_ID, withLoginOnExternalBrowser: true }).then(function () { state.liffReady = true; if (liff.isInClient())
-    hideLiffGate();
-else
-    showLiffGate("การส่งโพยเข้าแชทต้องเปิดผ่าน LINE"); }).catch(function () { showLiffGate("กรุณาเปิดหน้านี้ผ่าน LINE"); }); }
+function initLiff() {
+    liffUrl = "https://liff.line.me/" + encodeURIComponent(LIFF_ID);
+
+    if (!window.liff || !liff.init) {
+        showLiffGate("LIFF SDK ยังไม่พร้อม");
+        return;
+    }
+
+    liff.init({
+        liffId: LIFF_ID,
+        withLoginOnExternalBrowser: true
+    })
+    .then(function () {
+        state.liffReady = true;
+
+        if (liff.isInClient()) {
+            hideLiffGate();
+        }
+        else {
+            showLiffGate("การส่งโพยเข้าแชทต้องเปิดผ่าน LINE");
+        }
+
+        return loadLineIdentity();
+    })
+    .catch(function (err) {
+        console.error("LIFF init/profile error", err);
+        showLiffGate("กรุณาเปิดหน้านี้ผ่าน LINE");
+    });
+}
+
+
+/* =====================================================
+   LINE IDENTITY
+   ใช้ userId เพื่อบันทึกโพยลงชีต "โพยหวย"
+===================================================== */
+
+function loadLineIdentity() {
+    if (!window.liff || !state.liffReady) {
+        return Promise.reject(new Error("LIFF ยังไม่พร้อม"));
+    }
+
+    // วิธีหลัก: profile scope
+    if (typeof liff.getProfile === "function") {
+        return liff.getProfile()
+            .then(function (profile) {
+                state.lineUserId =
+                    String(profile && profile.userId || "").trim();
+
+                state.lineDisplayName =
+                    String(profile && profile.displayName || "").trim();
+
+                if (!state.lineUserId) {
+                    throw new Error("ไม่พบ LINE userId");
+                }
+
+                return {
+                    userId: state.lineUserId,
+                    displayName: state.lineDisplayName
+                };
+            })
+            .catch(function () {
+                // fallback: openid scope
+                var token =
+                    typeof liff.getDecodedIDToken === "function"
+                        ? liff.getDecodedIDToken()
+                        : null;
+
+                var userId =
+                    String(token && token.sub || "").trim();
+
+                if (!userId) {
+                    throw new Error(
+                        "ไม่สามารถอ่าน LINE userId ได้ กรุณาเปิด LIFF scope: profile หรือ openid"
+                    );
+                }
+
+                state.lineUserId = userId;
+                state.lineDisplayName =
+                    String(token && token.name || "").trim();
+
+                return {
+                    userId: state.lineUserId,
+                    displayName: state.lineDisplayName
+                };
+            });
+    }
+
+    var token =
+        typeof liff.getDecodedIDToken === "function"
+            ? liff.getDecodedIDToken()
+            : null;
+
+    var userId =
+        String(token && token.sub || "").trim();
+
+    if (!userId) {
+        return Promise.reject(
+            new Error("ไม่สามารถอ่าน LINE userId ได้")
+        );
+    }
+
+    state.lineUserId = userId;
+    state.lineDisplayName =
+        String(token && token.name || "").trim();
+
+    return Promise.resolve({
+        userId: state.lineUserId,
+        displayName: state.lineDisplayName
+    });
+}
+
+
+function ensureLineIdentity() {
+    if (state.lineUserId) {
+        return Promise.resolve({
+            userId: state.lineUserId,
+            displayName: state.lineDisplayName
+        });
+    }
+
+    return loadLineIdentity();
+}
 
 function showLiffGate(t) { els.liffGateText.textContent = t; els.liffGate.classList.add("show"); }
 
@@ -1322,19 +1437,80 @@ else if (g.type === "gate19") {
 
 function makePayload(modeKey, label, numbers, top, bottom) { var price = top || bottom; return { modeKey: modeKey, label: label, lottoName: state.selectedLotto.name, roundDate: getRoundDateText(state.selectedLotto), closeTime: state.selectedLotto.closeTime || "", kind: modeKey.indexOf("three") === 0 ? "three" : "two", numbers: numbers.join(" "), displayNumbers: unique(numbers), betCount: numbers.length, subtotal: numbers.length * price, priceText: top > 0 ? "บน " + top : "ล่าง " + bottom, top: top, bottom: bottom }; }
 
-function getApiPayload(i) { return { modeKey: i.modeKey, label: i.label, lottoName: i.lottoName, closeTime: i.closeTime, kind: i.kind, numbers: i.numbers, top: i.top, bottom: i.bottom }; }
+function getApiPayload(i) {
+    return {
+        modeKey: i.modeKey,
+        label: i.label,
+        lottoName: i.lottoName,
+        closeTime: i.closeTime,
 
-function confirmAndSend() { if (!state.pendingPayloads || !state.pendingPayloads.length)
-    return; if (!canSendToChat()) {
+        // 6 กลับ ต้องส่ง kind = three_return
+        kind:
+            i.modeKey === "three_return"
+                ? "three_return"
+                : i.kind,
+
+        numbers: i.numbers,
+        top: i.top,
+        bottom: i.bottom,
+
+        // สำคัญ: ฝั่ง Apps Script ใช้ userId นี้
+        // บันทึกเจ้าของโพยลงชีต "โพยหวย"
+        userId: state.lineUserId,
+        lineName: state.lineDisplayName
+    };
+}
+
+function confirmAndSend() {
+    if (!state.pendingPayloads || !state.pendingPayloads.length)
+        return;
+
+    if (!canSendToChat()) {
+        closeConfirm();
+        showLiffGate("ต้องเปิดผ่าน LINE ก่อนส่งโพย");
+        showError("กด เปิดใน LINE แล้วลองอีกครั้ง");
+        return;
+    }
+
+    var close =
+        getLottoCloseTarget(
+            state.selectedLotto
+        );
+
+    if (
+        close &&
+        close.getTime() <= Date.now()
+    ) {
+        closeConfirm();
+        showError("หวยนี้ปิดรับแล้ว");
+        return;
+    }
+
+    var payloads =
+        state.pendingPayloads.slice();
+
     closeConfirm();
-    showLiffGate("ต้องเปิดผ่าน LINE ก่อนส่งโพย");
-    showError("กด เปิดใน LINE แล้วลองอีกครั้ง");
-    return;
-} var close = getLottoCloseTarget(state.selectedLotto); if (close && close.getTime() <= Date.now()) {
-    closeConfirm();
-    showError("หวยนี้ปิดรับแล้ว");
-    return;
-} var payloads = state.pendingPayloads.slice(); closeConfirm(); setLoading(true); Promise.all(payloads.map(function (i) { return apiCreateLiffOrder(getApiPayload(i)); })).then(function () { return sendToLine([buildCombinedFlex(payloads)]); }).catch(showError); }
+    setLoading(true);
+
+    // ต้องรู้ userId ก่อน ถึงจะยอมส่ง API
+    // เพื่อให้ทุกโพยถูกบันทึกลงชีตและรู้ว่าเป็นของใคร
+    ensureLineIdentity()
+        .then(function () {
+            return Promise.all(
+                payloads.map(function (i) {
+                    return apiCreateLiffOrder(
+                        getApiPayload(i)
+                    );
+                })
+            );
+        })
+        .then(function () {
+            return sendToLine([
+                buildCombinedFlex(payloads)
+            ]);
+        })
+        .catch(showError);
+}
 
 
 /* =====================================================
